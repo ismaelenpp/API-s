@@ -1,16 +1,21 @@
 {
-  "name": "ejerciciodani",
-  "version": "1.0.0",
-  "description": "Empezamos el proyecto",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "seguros",
-  "license": "ISC",
   "dependencies": {
     "axios": "^1.4.0",
     "cors": "^2.8.5",
     "express": "^4.18.2"
+  },
+  "description": "Empezamos el proyecto",
+  "license": "ISC",
+  "main": "index.js",
+  "name": "ejerciciodani",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "commonjs",
+  "version": "1.0.0",
+  "devDependencies": {
+    "eslint": "^8.43.0",
+    "eslint-plugin-react": "^7.32.2"
   }
 }
