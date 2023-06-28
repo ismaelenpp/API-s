@@ -8,7 +8,6 @@
   "description": "Empezamos el proyecto",
   "license": "ISC",
   "main": "index.js",
-  
   "name": "ejerciciodani",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,6 +1,14 @@
 const express = require("express");
+const cors = require('cors');
 const app = express();
 const fs = require("fs");
+
+var corsOptions = {
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions));
 
 //GET EQUIPO
 app.get("/futbol", (req, res) => {
