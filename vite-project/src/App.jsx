@@ -1,35 +1,87 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const handleGet = () => {
+    window.location.href = "http://localhost:3000/futbol";
+  };
+
+  const handlePost = () => {
+    // Código para el método POST
+  };
+
+  const handleDelete = () => {
+    const userInput = window.prompt("Ingrese el nombre del equipo a eliminar:");
+
+    if (userInput) {
+      fetch("http://localhost:3000/eliminarEquipo/" + userInput, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nombreEquipo: userInput }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("DELETE response:", data);
+          // Realiza las acciones adicionales después de eliminar el equipo si es necesario
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  };
+
+  const handlePut = () => {
+    const userInput = window.prompt("Ingrese el nombre del equipo a actualizar:");
+    const newTeamName = window.prompt("Ingrese el nuevo nombre para el equipo:");
+    const newLeague = window.prompt("Ingrese la nueva liga para el equipo:");
+    const newCountry = window.prompt("Ingrese el nuevo país para el equipo:");
+
+    if (userInput && newTeamName && newLeague && newCountry) {
+      const updatedTeam = {
+        nombre: newTeamName,
+        liga: newLeague,
+        pais: newCountry,
+      };
+
+      fetch("http://localhost:3000/actualizarEquipo/" + userInput, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTeam),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("PUT response:", data);
+          // Realiza las acciones adicionales después de actualizar el equipo si es necesario
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <center>
+      <div className="App">
+        <button className="my-button" onClick={handleGet}>
+          GET
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <button className="my-button" onClick={handlePost}>
+          POST
+        </button>
+        <button className="my-button" onClick={handleDelete}>
+          DELETE
+        </button>
+        <button className="my-button" onClick={handlePut}>
+          PUT
+        </button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </center>
+  );
 }
 
-export default App
+export default App;

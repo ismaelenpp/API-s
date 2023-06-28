@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const fs = require("fs");
 
-//GET EQUIPO Y JUGADOR
+//GET EQUIPO
 app.get("/futbol", (req, res) => {
   // Leer el archivo JSON
   fs.readFile("src/bd.json", "utf8", (err, data) => {
@@ -14,9 +14,8 @@ app.get("/futbol", (req, res) => {
 
     // Parsear los datos del archivo JSON
     const equipos = JSON.parse(data).equipos;
-    const jugadores = JSON.parse(data).jugadores;
     // Enviar los datos de los equipos en la respuesta
-    res.json({ equipos, jugadores });
+    res.json({ equipos });
   });
 });
 
@@ -54,44 +53,6 @@ app.post("/meterEquipo", (req, res) => {
         return;
       }
       res.status(201).json(newTeam);
-    });
-  });
-});
-
-//POST DE JUGADOR
-app.post("/meterJugador", (req, res) => {
-  // Lee el archivo JSON
-  fs.readFile("src/bd.json", "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
-    }
-
-    // Parse al JSON
-    const jsonData = JSON.parse(data);
-
-    // Crea una constante para el nuevo jugador
-    const jugadores = jsonData.jugadores;
-
-    // Pone la información del nuevo jugador
-    const newPlayer = {
-      nombre: req.query.nombre,
-      equipo: req.query.equipo,
-      posicion: req.query.posicion,
-    };
-
-    // Añade el jugador
-    jugadores.push(newPlayer);
-
-    // Actualiza el JSON
-    fs.writeFile("src/bd.json", JSON.stringify(jsonData), (err) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-      }
-      res.status(201).json(newPlayer);
     });
   });
 });
@@ -135,46 +96,6 @@ app.put("/actualizarEquipo/:nombreEquipo", (req, res) => {
   });
 });
 
-//PUT DE JUGADOR
-app.put("/actualizarJugador/:nombreJugador", (req, res) => {
-  fs.readFile("src/bd.json", "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
-    }
-
-    const jsonData = JSON.parse(data);
-
-    const jugadores = jsonData.jugadores;
-
-    // Busca el jugador
-    const playerIndex = jugadores.findIndex(
-      (jugador) => jugador.nombre === req.params.nombreJugador
-    );
-
-    if (playerIndex === -1) {
-      res.status(404).json({ error: "Player not found" });
-      return;
-    }
-
-    // Actualiza la información del jugador
-    jugadores[playerIndex].nombre = req.query.nombre || jugadores[playerIndex].nombre;
-    jugadores[playerIndex].equipo = req.query.equipo || jugadores[playerIndex].equipo;
-    jugadores[playerIndex].posicion = req.query.posicion || jugadores[playerIndex].posicion;
-
-    // Actualiza el JSON
-    fs.writeFile("src/bd.json", JSON.stringify(jsonData), (err) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-      }
-      res.status(200).json({ message: "Player updated successfully" });
-    });
-  });
-});
-
 //Delete EQUIPO
 app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
 
@@ -208,34 +129,6 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
         return;
       }
       res.status(200).json({ message: "Team deleted successfully" });
-    });
-  });
-});
-
-//Delete jugador
-app.delete("/eliminarJugador/:nombreJugador", (req, res) => {
-  fs.readFile("src/bd.json", "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
-    }
-
-    const jsonData = JSON.parse(data);
-
-    // Busca el jugador
-    jsonData.jugadores = jsonData.jugadores.filter(
-      (jugador) => jugador.nombre !== req.params.nombreJugador
-    );
-
-    // Actualiza el JSON
-    fs.writeFile("src/bd.json", JSON.stringify(jsonData), (err) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-      }
-      res.status(200).json({ message: "Player deleted successfully" });
     });
   });
 });
