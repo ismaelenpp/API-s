@@ -1,25 +1,37 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
+  const [tableHtml, setTableHtml] = useState("");
+
   const handleGet = () => {
-    window.location.href = "http://localhost:3000/futbol";
+    fetch("http://localhost:3000/futbol")
+      .then((response) => response.text())
+      .then((data) => {
+        setTableHtml(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
+
+  useEffect(() => {
+    handleGet();
+  }, []);
 
   const handlePost = () => {
     const nombre = window.prompt("Ingrese el nombre del equipo:");
     const liga = window.prompt("Ingrese la liga del equipo:");
     const pais = window.prompt("Ingrese el país del equipo:");
-  
-    if (nombre) {
+
+    if (nombre && liga && pais) {
       const newTeam = {
         nombre: nombre,
         liga: liga,
         pais: pais,
       };
-      console.log(newTeam);
-      fetch("http://localhost:3000/meterEquipo?nombre="+newTeam.nombre+"&liga="+newTeam.liga+"&pais="+newTeam.pais, {
+
+      fetch("http://localhost:3000/meterEquipo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,30 +41,25 @@ function App() {
         .then((response) => response.json())
         .then((data) => {
           console.log("POST response:", data);
-          // Realiza las acciones adicionales después de realizar la solicitud POST si es necesario
+          handleGet(); // Refresh the table data after successful POST
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     }
   };
-  
 
   const handleDelete = () => {
     const userInput = window.prompt("Ingrese el nombre del equipo a eliminar:");
 
     if (userInput) {
-      fetch("http://localhost:3000/eliminarEquipo/" + userInput, {
+      fetch(`http://localhost:3000/eliminarEquipo/${userInput}`, {
         method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nombreEquipo: userInput }),
       })
         .then((response) => response.json())
         .then((data) => {
           console.log("DELETE response:", data);
-          // Realiza las acciones adicionales después de eliminar el equipo si es necesario
+          handleGet(); // Refresh the table data after successful DELETE
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -63,18 +70,21 @@ function App() {
   const handlePut = () => {
     const userInput = window.prompt("Ingrese el nombre del equipo a actualizar:");
     const nombre = window.prompt("Ingrese el nuevo nombre:");
-    const liga = window.prompt("Ingrese la liga: ");
-    const pais = window.prompt("Ingrese el pais: ");
-    if (userInput) {
+    const liga = window.prompt("Ingrese la nueva liga:");
+    const pais = window.prompt("Ingrese el nuevo país:");
+    const descripcion = window.prompt("Ingrese la descripcion:");
+    const imagen = window.prompt("Ingrese la link de imagen: ");
+    
+    if (userInput && nombre && liga && pais && descripcion && imagen) {
       const updatedData = {
         nombre: nombre,
-        liga: liga, // Agrega aquí la liga actualizada del equipo
-        pais: pais // Agrega aquí el país actualizado del equipo
+        liga: liga,
+        pais: pais,
+        descripcion: descripcion,
+        imagen: imagen
       };
-  
-      // Aquí debes agregar la lógica para obtener la liga y el país actualizados del formulario o de alguna otra fuente
-  
-      fetch("http://localhost:3000/actualizarEquipo/"+userInput+"?nombre="+nombre+"&liga="+liga+"&pais="+pais, {
+
+      fetch(`http://localhost:3000/actualizarEquipo/${userInput}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -84,32 +94,30 @@ function App() {
         .then((response) => response.json())
         .then((data) => {
           console.log("PUT response:", data);
-          // Realiza las acciones adicionales después de actualizar el equipo si es necesario
+          handleGet(); // Refresh the table data after successful PUT
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     }
-    location.reload()
   };
-  
-  
 
   return (
     <center>
-      <div className="App">
-        <button className="my-button" onClick={handleGet}>
+      <div className="App"  style={{ padding: '30px'}}>
+        <button class="btn btn-outline-success" onClick={handleGet} style={{ marginLeft: '22px' }}>
           GET
         </button>
-        <button className="my-button" onClick={handlePost}>
+        <button class="btn btn-outline-primary" onClick={handlePost} style={{ marginLeft: '22px' }}>
           POST
         </button>
-        <button className="my-button" onClick={handleDelete}>
+        <button class="btn btn-outline-danger" onClick={handleDelete} style={{ marginLeft: '22px' }}>
           DELETE
         </button>
-        <button className="my-button" onClick={handlePut}>
+        <button class="btn btn-outline-warning" onClick={handlePut} style={{ marginLeft: '22px' }}>
           PUT
         </button>
+        <div dangerouslySetInnerHTML={{ __html: tableHtml }}  style={{ padding: '30px' }}/>
       </div>
     </center>
   );
