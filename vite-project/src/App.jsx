@@ -23,12 +23,16 @@ function App() {
     const nombre = window.prompt("Ingrese el nombre del equipo:");
     const liga = window.prompt("Ingrese la liga del equipo:");
     const pais = window.prompt("Ingrese el país del equipo:");
+    const descripcion = window.prompt("Ingrese la descripcion del equipo:");
+    const imagen = window.prompt("Ingrese la imagen del equipo:");
 
-    if (nombre && liga && pais) {
+    if (nombre && liga && pais && descripcion && imagen) {
       const newTeam = {
         nombre: nombre,
         liga: liga,
         pais: pais,
+        descripcion: descripcion,
+        imagen: imagen
       };
 
       fetch("http://localhost:3000/meterEquipo", {
@@ -49,42 +53,38 @@ function App() {
     }
   };
 
-  const handleDelete = () => {
-    const userInput = window.prompt("Ingrese el nombre del equipo a eliminar:");
 
-    if (userInput) {
-      fetch(`http://localhost:3000/eliminarEquipo/${userInput}`, {
-        method: "DELETE",
+  const handleDelete = (equipoId) => {
+    fetch(`http://localhost:3000/eliminarEquipo/${equipoId}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("DELETE response:", data);
+        handleGet(); // Refresh the table data after successful DELETE
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("DELETE response:", data);
-          handleGet(); // Refresh the table data after successful DELETE
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    }
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
-
-  const handlePut = () => {
-    const userInput = window.prompt("Ingrese el nombre del equipo a actualizar:");
+  
+  const handlePut = (equipoId) => {
     const nombre = window.prompt("Ingrese el nuevo nombre:");
     const liga = window.prompt("Ingrese la nueva liga:");
     const pais = window.prompt("Ingrese el nuevo país:");
-    const descripcion = window.prompt("Ingrese la descripcion:");
-    const imagen = window.prompt("Ingrese la link de imagen: ");
-    
-    if (userInput && nombre && liga && pais && descripcion && imagen) {
+    const descripcion = window.prompt("Ingrese la descripción:");
+    const imagen = window.prompt("Ingrese el enlace de la imagen:");
+  
+    if (nombre && liga && pais && descripcion && imagen) {
       const updatedData = {
         nombre: nombre,
         liga: liga,
         pais: pais,
         descripcion: descripcion,
-        imagen: imagen
+        imagen: imagen,
       };
-
-      fetch(`http://localhost:3000/actualizarEquipo/${userInput}`, {
+  
+      fetch(`http://localhost:3000/actualizarEquipo/${equipoId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -101,6 +101,8 @@ function App() {
         });
     }
   };
+  
+  
 
   return (
     <center>
@@ -111,12 +113,13 @@ function App() {
         <button class="btn btn-outline-primary" onClick={handlePost} style={{ marginLeft: '22px' }}>
           POST
         </button>
+        
         <button class="btn btn-outline-danger" onClick={handleDelete} style={{ marginLeft: '22px' }}>
           DELETE
         </button>
         <button class="btn btn-outline-warning" onClick={handlePut} style={{ marginLeft: '22px' }}>
           PUT
-        </button>
+        </button> 
         <div dangerouslySetInnerHTML={{ __html: tableHtml }}  style={{ padding: '30px' }}/>
       </div>
     </center>
@@ -124,3 +127,5 @@ function App() {
 }
 
 export default App;
+
+

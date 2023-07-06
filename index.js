@@ -1,8 +1,9 @@
 const express = require("express");
-const cors = require('cors');
+const cors = require("cors");
 const app = express();
 const mysql = require("mysql");
-const bodyParser = require("body-parser"); 
+const bodyParser = require("body-parser");
+
 
 // MySQL connection configuration
 const connection = mysql.createConnection({
@@ -22,9 +23,9 @@ connection.connect((err) => {
 });
 
 var corsOptions = {
-  origin: 'http://localhost:5173',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+  origin: "http://localhost:5173",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -42,15 +43,17 @@ app.get("/futbol", (req, res) => {
 
     const equipos = results;
 
-    // Generate HTML table
-    let tableHtml = "<table class='table table-hover table-bordered'>";
-    tableHtml += "<tr style='background-color: gray; color: white;'><th>ID</th><th>Nombre</th><th>Liga</th><th>País</th><th>Descripcion</th><th>Imagen</th></tr>";
+// Generate HTML table
+let tableHtml = "<table class='table table-hover table-bordered'>";
+tableHtml +=
+  "<tr style='background-color: gray; color: white;'><th>ID</th><th>Nombre</th><th>Liga</th><th>País</th><th>Descripción</th><th>Imagen</th><th>Acciones</th></tr>";
 
-    for (const equipo of equipos) {
-      tableHtml += `<tr><td>${equipo.id}</td><td>${equipo.nombre}</td><td>${equipo.liga}</td><td>${equipo.pais}</td><td>${equipo.descripcion}</td><td>${equipo.imagen}</td></tr>`;
-    }
+for (const equipo of equipos) {
+  tableHtml += `<tr><td>${equipo.id}</td><td>${equipo.nombre}</td><td>${equipo.liga}</td><td>${equipo.pais}</td><td>${equipo.descripcion}</td><td>${equipo.imagen}</td><td><button class='btn btn-outline-danger'>🗑️</button> <button class='btn btn-outline-warning'>✏️</button></td></tr>`;
+}
 
-    tableHtml += "</table>";
+tableHtml += "</table>";
+
 
     // Send HTML response
     res.send(tableHtml);
@@ -59,9 +62,10 @@ app.get("/futbol", (req, res) => {
 
 // POST EQUIPO
 app.post("/meterEquipo", (req, res) => {
-  const { nombre, liga, pais } = req.body;
-  const query = "INSERT INTO `equipos`(`id`, `nombre`, `liga`, `pais`, `descripcion`, `imagen`) VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]','[value-6]')";
-  const values = [nombre, liga, pais];
+  const { nombre, liga, pais, descripcion, imagen } = req.body;
+  const query =
+    "INSERT INTO `equipos`(`nombre`, `liga`, `pais`, `descripcion`, `imagen`) VALUES (?,?,?,?,?)";
+  const values = [nombre, liga, pais, descripcion, imagen];
 
   connection.query(query, values, (error, result) => {
     if (error) {
@@ -75,6 +79,8 @@ app.post("/meterEquipo", (req, res) => {
       nombre,
       liga,
       pais,
+      descripcion,
+      imagen,
     };
 
     res.status(201).json(newTeam);
@@ -83,10 +89,11 @@ app.post("/meterEquipo", (req, res) => {
 
 // PUT DE EQUIPO
 app.put("/actualizarEquipo/:nombreEquipo", (req, res) => {
-  const { nombre, liga, pais } = req.body;
+  const { nombre, liga, pais, descripcion, imagen } = req.body;
   const { nombreEquipo } = req.params;
-  const query = "UPDATE equipos SET nombre = ?, liga = ?, pais = ? WHERE nombre = ?";
-  const values = [nombre, liga, pais, nombreEquipo];
+  const query =
+    "UPDATE equipos SET nombre = ?, liga = ?, pais = ?, descripcion = ?, imagen = ? WHERE nombre = ?";
+  const values = [nombre, liga, pais, descripcion, imagen, nombreEquipo];
 
   connection.query(query, values, (error, result) => {
     if (error) {
