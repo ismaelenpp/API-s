@@ -54,8 +54,9 @@ function App() {
   };
 
 
-  const handleDelete = (equipoId) => {
-    fetch(`http://localhost:3000/eliminarEquipo/${equipoId}`, {
+  const handleDelete = () => {
+    const nombre = window.prompt("Ingrese el nombre del equipo:");
+    fetch(`http://localhost:3000/eliminarEquipo/${nombre}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
@@ -68,7 +69,8 @@ function App() {
       });
   };
   
-  const handlePut = (equipoId) => {
+  const handlePut = () => {
+    const nombreC = window.prompt("Ingrese el nombre:");
     const nombre = window.prompt("Ingrese el nuevo nombre:");
     const liga = window.prompt("Ingrese la nueva liga:");
     const pais = window.prompt("Ingrese el nuevo país:");
@@ -84,7 +86,7 @@ function App() {
         imagen: imagen,
       };
   
-      fetch(`http://localhost:3000/actualizarEquipo/${equipoId}`, {
+      fetch(`http://localhost:3000/actualizarEquipo/`+ nombreC+`?nombre=`+nombre+`&liga=a&pais=a`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -127,5 +129,4 @@ function App() {
 }
 
 export default App;
-
 
