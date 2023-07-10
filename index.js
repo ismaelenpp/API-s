@@ -8,8 +8,8 @@ const bodyParser = require("body-parser");
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "ismael",
-  password: "ismaelenp1234",
+  user: "sergimg",
+  password: "admin1234",
   database: "futbol",
 });
 
@@ -49,7 +49,7 @@ tableHtml +=
   "<tr style='background-color: gray; color: white;'><th>ID</th><th>Nombre</th><th>Liga</th><th>País</th><th>Descripción</th><th>Imagen</th><th>Acciones</th></tr>";
 
 for (const equipo of equipos) {
-  tableHtml += `<tr><td>${equipo.id}</td><td>${equipo.nombre}</td><td>${equipo.liga}</td><td>${equipo.pais}</td><td>${equipo.descripcion}</td><td>${equipo.imagen}</td><td><button class='btn btn-outline-danger'>🗑️</button> <button class='btn btn-outline-warning'>✏️</button></td></tr>`;
+  tableHtml += `<tr><td>${equipo.id}</td><td>${equipo.nombre}</td><td>${equipo.liga}</td><td>${equipo.pais}</td><td>${equipo.descripcion}</td><td>${equipo.imagen}</td><td><button class='btn btn-outline-danger' onclick='${prueba1()}'>🗑️</button> <button class='btn btn-outline-warning'>✏️</button></td></tr>`;
 }
 
 tableHtml += "</table>";
@@ -137,6 +137,10 @@ process.on("SIGINT", () => {
   connection.end();
   process.exit();
 });
+
+function prueba1() {
+  console.log("Funciona")
+}
 
 // Start the server
 const port = 3000;
