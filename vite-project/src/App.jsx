@@ -128,12 +128,7 @@ function App() {
           POST
         </button>
         
-        <button class=  "" onClick={handleDelete} style={{ marginLeft: '22px' }}>
-          DELETE
-        </button>
-        <button class="" onClick={handlePut} style={{ marginLeft: '22px' }}>
-          PUT
-        </button>
+        
         <Button text={"DELETE"} onClick={handleClick} className={"btn btn-outline-warning"}></Button>
         <BtnPut text={"PUT"} onClick={handleClick} className={"btn btn-outline-warning"}></BtnPut>
         
