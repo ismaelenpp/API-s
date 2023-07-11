@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import Button from "./ComponentesReact/Button";
+import BtnPut from "./ComponentesReact/BtnPut";
+import TableComponent from './ComponentesReact/Tablecomp';
+
 
 function App() {
   const [tableHtml, setTableHtml] = useState("");
@@ -104,7 +108,15 @@ function App() {
     }
   };
   
-  
+  const handleClick = () => {
+    console.log('¡Haz hecho clic en el botón!');
+    console.log(setTableHtml);
+
+  };
+  const handleClick1 = () => {
+    console.log()
+
+  };
 
   return (
     <center>
@@ -116,17 +128,21 @@ function App() {
           POST
         </button>
         
-        <button class="btn btn-outline-danger" onClick={handleDelete} style={{ marginLeft: '22px' }}>
+        <button class=  "" onClick={handleDelete} style={{ marginLeft: '22px' }}>
           DELETE
         </button>
-        <button class="btn btn-outline-warning" onClick={handlePut} style={{ marginLeft: '22px' }}>
+        <button class="" onClick={handlePut} style={{ marginLeft: '22px' }}>
           PUT
-        </button> 
+        </button>
+        <Button text={"DELETE"} onClick={handleClick} className={"btn btn-outline-warning"}></Button>
+        <BtnPut text={"PUT"} onClick={handleClick} className={"btn btn-outline-warning"}></BtnPut>
+        
         <div dangerouslySetInnerHTML={{ __html: tableHtml }}  style={{ padding: '30px' }}/>
       </div>
+      {/* <TableComponent/> */}
     </center>
+    
   );
 }
 
 export default App;
-
