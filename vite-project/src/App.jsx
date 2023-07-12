@@ -120,7 +120,7 @@ function App() {
 
   return (
     <center>
-      <div className="App"  style={{ padding: '30px'}}>
+      {/* <div className="App"  style={{ padding: '30px'}}>
         <button class="btn btn-outline-success" onClick={handleGet} style={{ marginLeft: '22px' }}>
           GET
         </button>
@@ -128,13 +128,18 @@ function App() {
           POST
         </button>
         
-        
+        <button class=  "" onClick={handleDelete} style={{ marginLeft: '22px' }}>
+          DELETE
+        </button>
+        <button class="" onClick={handlePut} style={{ marginLeft: '22px' }}>
+          PUT
+        </button>
         <Button text={"DELETE"} onClick={handleClick} className={"btn btn-outline-warning"}></Button>
         <BtnPut text={"PUT"} onClick={handleClick} className={"btn btn-outline-warning"}></BtnPut>
         
         <div dangerouslySetInnerHTML={{ __html: tableHtml }}  style={{ padding: '30px' }}/>
-      </div>
-      {/* <TableComponent/> */}
+      </div> */}
+      <TableComponent/>
     </center>
     
   );
