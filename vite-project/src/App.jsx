@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import BtnPut from "./BtnPut";
+import BtnDelete from "./Button";
+import TableComponent from "./Tablecomp";
 
 function App() {
   const [tableHtml, setTableHtml] = useState("");
@@ -32,7 +35,7 @@ function App() {
         liga: liga,
         pais: pais,
         descripcion: descripcion,
-        imagen: imagen
+        imagen: imagen,
       };
 
       fetch("http://localhost:3000/meterEquipo", {
@@ -53,7 +56,6 @@ function App() {
     }
   };
 
-
   const handleDelete = () => {
     const nombre = window.prompt("Ingrese el nombre del equipo:");
     fetch(`http://localhost:3000/eliminarEquipo/${nombre}`, {
@@ -68,7 +70,7 @@ function App() {
         console.error("Error:", error);
       });
   };
-  
+
   const handlePut = () => {
     const nombreC = window.prompt("Ingrese el nombre:");
     const nombre = window.prompt("Ingrese el nuevo nombre:");
@@ -76,7 +78,7 @@ function App() {
     const pais = window.prompt("Ingrese el nuevo país:");
     const descripcion = window.prompt("Ingrese la descripción:");
     const imagen = window.prompt("Ingrese el enlace de la imagen:");
-  
+
     if (nombre && liga && pais && descripcion && imagen) {
       const updatedData = {
         nombre: nombre,
@@ -85,14 +87,21 @@ function App() {
         descripcion: descripcion,
         imagen: imagen,
       };
-  
-      fetch(`http://localhost:3000/actualizarEquipo/`+ nombreC+`?nombre=`+nombre+`&liga=a&pais=a`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedData),
-      })
+
+      fetch(
+        `http://localhost:3000/actualizarEquipo/` +
+          nombreC +
+          `?nombre=` +
+          nombre +
+          `&liga=a&pais=a`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+        }
+      )
         .then((response) => response.json())
         .then((data) => {
           console.log("PUT response:", data);
@@ -103,30 +112,32 @@ function App() {
         });
     }
   };
-  
-  
 
   return (
     <center>
-      <div className="App"  style={{ padding: '30px'}}>
-        <button class="btn btn-outline-success" onClick={handleGet} style={{ marginLeft: '22px' }}>
+      <div className="App" style={{ padding: "30px" }}>
+        <button
+          class="btn btn-outline-success"
+          onClick={handleGet}
+          style={{ marginLeft: "22px" }}
+        >
           GET
         </button>
-        <button class="btn btn-outline-primary" onClick={handlePost} style={{ marginLeft: '22px' }}>
+        <button
+          class="btn btn-outline-primary"
+          onClick={handlePost}
+          style={{ marginLeft: "22px" }}
+        >
           POST
         </button>
-        
-        <button class="btn btn-outline-danger" onClick={handleDelete} style={{ marginLeft: '22px' }}>
-          DELETE
-        </button>
-        <button class="btn btn-outline-warning" onClick={handlePut} style={{ marginLeft: '22px' }}>
-          PUT
-        </button> 
-        <div dangerouslySetInnerHTML={{ __html: tableHtml }}  style={{ padding: '30px' }}/>
+        <TableComponent />
+        {/* <div
+          dangerouslySetInnerHTML={{ __html: tableHtml }}
+          style={{ padding: "30px" }}
+        /> */}
       </div>
     </center>
   );
 }
 
 export default App;
-

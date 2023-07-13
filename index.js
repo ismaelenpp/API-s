@@ -4,12 +4,11 @@ const app = express();
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 
-
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "sergimg",
-  password: "admin1234",
+  user: "ismael",
+  password: "ismaelenp1234",
   database: "futbol",
 });
 
@@ -42,48 +41,44 @@ app.get("/futbol", (req, res) => {
     }
 
     const equipos = results;
-
-// Generate HTML table
-let tableHtml = "<table class='table table-hover table-bordered'>";
-tableHtml +=
-  "<tr style='background-color: gray; color: white;'><th>ID</th><th>Nombre</th><th>Liga</th><th>País</th><th>Descripción</th><th>Imagen</th><th>Acciones</th></tr>";
-
-for (const equipo of equipos) {
-  tableHtml += `<tr><td>${equipo.id}</td><td>${equipo.nombre}</td><td>${equipo.liga}</td><td>${equipo.pais}</td><td>${equipo.descripcion}</td><td>${equipo.imagen}</td><td><button class='btn btn-outline-danger' onclick='${prueba1()}'>🗑️</button> <button class='btn btn-outline-warning'>✏️</button></td></tr>`;
-}
-
-tableHtml += "</table>";
-
-
-    // Send HTML response
-    res.send(tableHtml);
+    res.status(200).json({ equipos });
   });
 });
 
 // POST EQUIPO
 app.post("/meterEquipo", (req, res) => {
   const { nombre, liga, pais, descripcion, imagen } = req.body;
-  const query =
-    "INSERT INTO `equipos`(`nombre`, `liga`, `pais`, `descripcion`, `imagen`) VALUES (?,?,?,?,?)";
-  const values = [nombre, liga, pais, descripcion, imagen];
-
-  connection.query(query, values, (error, result) => {
+  // Obtener la última ID
+  const getLastIdQuery = "SELECT MAX(id) AS lastId FROM equipos";
+  connection.query(getLastIdQuery, (error, result) => {
     if (error) {
       console.error("Error executing MySQL query:", error);
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
 
-    const newTeam = {
-      id: result.insertId,
-      nombre,
-      liga,
-      pais,
-      descripcion,
-      imagen,
-    };
+    let lastId = result[0].lastId || 0;
+    const newId = lastId + 1;
+    const query =
+      "INSERT INTO `equipos`(`id`, `nombre`, `liga`, `pais`, `descripcion`, `imagen`) VALUES (?,?,?,?,?,?)";
+    const values = [newId, nombre, liga, pais, descripcion, imagen];
+    connection.query(query, values, (error, result) => {
+      if (error) {
+        console.error("Error executing MySQL query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+      const newTeam = {
+        id: newId,
+        nombre,
+        liga,
+        pais,
+        descripcion,
+        imagen,
+      };
 
-    res.status(201).json(newTeam);
+      res.status(201).json(newTeam);
+    });
   });
 });
 
@@ -114,9 +109,9 @@ app.put("/actualizarEquipo/:nombreEquipo", (req, res) => {
 // DELETE EQUIPO
 app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
   const { nombreEquipo } = req.params;
-  const query = "DELETE FROM equipos WHERE nombre = ?";
+  const deleteQuery = "DELETE FROM equipos WHERE nombre = ?";
 
-  connection.query(query, nombreEquipo, (error, result) => {
+  connection.query(deleteQuery, nombreEquipo, (error, result) => {
     if (error) {
       console.error("Error executing MySQL query:", error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -128,7 +123,38 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
       return;
     }
 
-    res.status(200).json({ message: "Team deleted successfully" });
+    // Actualizar las IDs automáticamente
+    const updateQuery = "ALTER TABLE equipos AUTO_INCREMENT = 1";
+    connection.query(updateQuery, (error) => {
+      if (error) {
+        console.error("Error executing MySQL query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
+      // Obtener todos los equipos ordenados por su ID
+      const getTeamsQuery = "SELECT * FROM equipos ORDER BY id";
+      connection.query(getTeamsQuery, (error, results) => {
+        if (error) {
+          console.error("Error executing MySQL query:", error);
+          res.status(500).json({ error: "Internal Server Error" });
+          return;
+        }
+        // Actualizar las IDs de los equipos restantes
+        const updateTeamsQuery = "UPDATE equipos SET id = ? WHERE id = ?";
+        for (let i = 0; i < results.length; i++) {
+          const newId = i + 1;
+          const oldId = results[i].id;
+          connection.query(updateTeamsQuery, [newId, oldId], (error) => {
+            if (error) {
+              console.error("Error executing MySQL query:", error);
+              res.status(500).json({ error: "Internal Server Error" });
+              return;
+            }
+          });
+        }
+        res.status(200).json({ message: "Team deleted successfully" });
+      });
+    });
   });
 });
 
@@ -139,7 +165,7 @@ process.on("SIGINT", () => {
 });
 
 function prueba1() {
-  console.log("Funciona")
+  console.log("Funciona");
 }
 
 // Start the server
