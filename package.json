@@ -13,8 +13,10 @@
   "main": "index.js",
   "name": "ejerciciodani",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
+  "proxy": "http://localhost:3000",
   "type": "commonjs",
   "version": "1.0.0",
   "devDependencies": {

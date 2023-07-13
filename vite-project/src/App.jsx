@@ -108,11 +108,7 @@ function App() {
     }
   };
   
-  const handleClick = () => {
-    console.log('¡Haz hecho clic en el botón!');
-    console.log(setTableHtml);
-
-  };
+  
   const handleClick1 = () => {
     console.log()
 
@@ -139,10 +135,10 @@ function App() {
         
         <div dangerouslySetInnerHTML={{ __html: tableHtml }}  style={{ padding: '30px' }}/>
       </div> */}
+       <div dangerouslySetInnerHTML={{ __html: tableHtml }}  style={{ padding: '30px' }}/>
       <TableComponent/>
     </center>
     
   );
 }
-
 export default App;
