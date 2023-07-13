@@ -6,7 +6,7 @@ const ImageComponent = ({ imageString }) => {
       <img
         src={imageString}
         alt="Imagen"
-        style={{ width: "75px", height: "75px" }}
+        style={{ width: "69px", height: "69px" }}
       />
     </center>
   );

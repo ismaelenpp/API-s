@@ -27,7 +27,7 @@ function App() {
     const liga = window.prompt("Ingrese la liga del equipo:");
     const pais = window.prompt("Ingrese el país del equipo:");
     const descripcion = window.prompt("Ingrese la descripcion del equipo:");
-    const imagen = window.prompt("Ingrese la imagen del equipo:");
+    const imagen = window.prompt("Ingrese el enlace de la imagen del equipo:");
 
     if (nombre && liga && pais && descripcion && imagen) {
       const newTeam = {
