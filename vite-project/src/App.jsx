@@ -131,10 +131,6 @@ function App() {
           POST
         </button>
         <TableComponent />
-        {/* <div
-          dangerouslySetInnerHTML={{ __html: tableHtml }}
-          style={{ padding: "30px" }}
-        /> */}
       </div>
     </center>
   );
