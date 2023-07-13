@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
+
 import BtnPut from "./BtnPut";
 import BtnDelete from "./Button";
 import TableComponent from "./Tablecomp";
@@ -53,82 +53,84 @@ function App() {
         .catch((error) => {
           console.error("Error:", error);
         });
+      window.location.reload(false);
     }
   };
 
-  const handleDelete = () => {
-    const nombre = window.prompt("Ingrese el nombre del equipo:");
-    fetch(`http://localhost:3000/eliminarEquipo/${nombre}`, {
-      method: "DELETE",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("DELETE response:", data);
-        handleGet(); // Refresh the table data after successful DELETE
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
+  // const handleDelete = () => {
+  //   const nombre = window.prompt("Ingrese el nombre del equipo:");
+  //   fetch(`http://localhost:3000/eliminarEquipo/${nombre}`, {
+  //     method: "DELETE",
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("DELETE response:", data);
+  //       handleGet(); // Refresh the table data after successful DELETE
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error:", error);
+  //     });
+  // };
 
-  const handlePut = () => {
-    const nombreC = window.prompt("Ingrese el nombre:");
-    const nombre = window.prompt("Ingrese el nuevo nombre:");
-    const liga = window.prompt("Ingrese la nueva liga:");
-    const pais = window.prompt("Ingrese el nuevo país:");
-    const descripcion = window.prompt("Ingrese la descripción:");
-    const imagen = window.prompt("Ingrese el enlace de la imagen:");
+  // const handlePut = () => {
+  //   const nombreC = window.prompt("Ingrese el nombre:");
+  //   const nombre = window.prompt("Ingrese el nuevo nombre:");
+  //   const liga = window.prompt("Ingrese la nueva liga:");
+  //   const pais = window.prompt("Ingrese el nuevo país:");
+  //   const descripcion = window.prompt("Ingrese la descripción:");
+  //   const imagen = window.prompt("Ingrese el enlace de la imagen:");
 
-    if (nombre && liga && pais && descripcion && imagen) {
-      const updatedData = {
-        nombre: nombre,
-        liga: liga,
-        pais: pais,
-        descripcion: descripcion,
-        imagen: imagen,
-      };
+  //   if (nombre && liga && pais && descripcion && imagen) {
+  //     const updatedData = {
+  //       nombre: nombre,
+  //       liga: liga,
+  //       pais: pais,
+  //       descripcion: descripcion,
+  //       imagen: imagen,
+  //     };
 
-      fetch(
-        `http://localhost:3000/actualizarEquipo/` +
-          nombreC +
-          `?nombre=` +
-          nombre +
-          `&liga=a&pais=a`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedData),
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("PUT response:", data);
-          handleGet(); // Refresh the table data after successful PUT
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-    }
-  };
+  //     fetch(
+  //       `http://localhost:3000/actualizarEquipo/` +
+  //         nombreC +
+  //         `?nombre=` +
+  //         nombre +
+  //         `&liga=a&pais=a`,
+  //       {
+  //         method: "PUT",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(updatedData),
+  //       }
+  //     )
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         console.log("PUT response:", data);
+  //         handleGet(); // Refresh the table data after successful PUT
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error:", error);
+  //       });
+  //   }
+  // };
 
   return (
     <center>
+      <h1>EQUIPOS DE FUTBOL</h1>
       <div className="App" style={{ padding: "30px" }}>
-        <button
+        {/* <button
           class="btn btn-outline-success"
           onClick={handleGet}
           style={{ marginLeft: "22px" }}
         >
           GET
-        </button>
+        </button> */}
         <button
           class="btn btn-outline-primary"
           onClick={handlePost}
-          style={{ marginLeft: "22px" }}
+          style={{ marginBottom: "30px", marginTop: "-19px" }}
         >
-          POST
+          Añadir Equipo
         </button>
         <TableComponent />
       </div>

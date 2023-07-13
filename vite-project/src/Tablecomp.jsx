@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import BtnDelete from "./Button";
 import BtnPut from "./BtnPut";
 import ImageComponent from "./ImageComponent";
+import "./App.css";
 
 const TableComponent = () => {
   const [tableData, setTableData] = useState([]);
@@ -71,45 +72,47 @@ const TableComponent = () => {
   };
 
   return (
-    <table className="table table-hover table-bordered">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Liga</th>
-          <th>País</th>
-          <th>Descripción</th>
-          <th>Imagen</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {tableData.map((equipo) => (
-          <tr key={equipo.id}>
-            <td>{equipo.id}</td>
-            <td>{equipo.nombre.toString()}</td>
-            <td>{equipo.liga.toString()}</td>
-            <td>{equipo.pais.toString()}</td>
-            <td>{equipo.descripcion.toString()}</td>
-            <td>
-              <ImageComponent imageString={equipo.imagen.toString()} />
-            </td>
-            <td id="center">
-              <BtnDelete
-                text={"🗑️"}
-                onClick={() => handleDelete(equipo.nombre)}
-                className={"btn btn-outline-danger"}
-              />
-              <BtnPut
-                text={"✏️"}
-                onClick={() => handlePut(equipo)}
-                className={"btn btn-outline-warning"}
-              />
-            </td>
+    <div class="table-responsive">
+      <table className="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Liga</th>
+            <th>País</th>
+            <th>Descripción</th>
+            <th>Imagen</th>
+            <th>Acciones</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {tableData.map((equipo) => (
+            <tr key={equipo.id}>
+              <td id="center">{equipo.id}</td>
+              <td id="center">{equipo.nombre.toString()}</td>
+              <td id="center">{equipo.liga.toString()}</td>
+              <td id="center">{equipo.pais.toString()}</td>
+              <td id="center">{equipo.descripcion.toString()}</td>
+              <td id="center">
+                <ImageComponent imageString={equipo.imagen.toString()} />
+              </td>
+              <td id="center">
+                <BtnDelete
+                  text={"🗑️"}
+                  onClick={() => handleDelete(equipo.nombre)}
+                  className={"btn btn-outline-danger button-separation"}
+                />
+                <BtnPut
+                  text={"✏️"}
+                  onClick={() => handlePut(equipo)}
+                  className={"btn btn-outline-warning"}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
