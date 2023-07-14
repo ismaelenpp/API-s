@@ -123,38 +123,7 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
       return;
     }
 
-    // Actualizar las IDs automáticamente
-    const updateQuery = "ALTER TABLE equipos AUTO_INCREMENT = 1";
-    connection.query(updateQuery, (error) => {
-      if (error) {
-        console.error("Error executing MySQL query:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-      }
-      // Obtener todos los equipos ordenados por su ID
-      const getTeamsQuery = "SELECT * FROM equipos ORDER BY id";
-      connection.query(getTeamsQuery, (error, results) => {
-        if (error) {
-          console.error("Error executing MySQL query:", error);
-          res.status(500).json({ error: "Internal Server Error" });
-          return;
-        }
-        // Actualizar las IDs de los equipos restantes
-        const updateTeamsQuery = "UPDATE equipos SET id = ? WHERE id = ?";
-        for (let i = 0; i < results.length; i++) {
-          const newId = i + 1;
-          const oldId = results[i].id;
-          connection.query(updateTeamsQuery, [newId, oldId], (error) => {
-            if (error) {
-              console.error("Error executing MySQL query:", error);
-              res.status(500).json({ error: "Internal Server Error" });
-              return;
-            }
-          });
-        }
-        res.status(200).json({ message: "Team deleted successfully" });
-      });
-    });
+    // Actualizar las IDs automáticamenta
   });
 });
 

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-
+import { Button, Modal } from "react-bootstrap";
+import Formulario from "./Formulario";
 import BtnPut from "./BtnPut";
 import BtnDelete from "./Button";
 import TableComponent from "./Tablecomp";
 
 function App() {
   const [tableHtml, setTableHtml] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const handleGet = () => {
     fetch("http://localhost:3000/futbol")
@@ -22,16 +24,10 @@ function App() {
     handleGet();
   }, []);
 
-  const handlePost = () => {
-    const nombre = window.prompt("Ingrese el nombre del equipo:");
-    const liga = window.prompt("Ingrese la liga del equipo:");
-    const pais = window.prompt("Ingrese el país del equipo:");
-    const descripcion = window.prompt("Ingrese la descripcion del equipo:");
-    const imagen = window.prompt("Ingrese el enlace de la imagen del equipo:");
-
-    if (nombre && liga && pais && descripcion && imagen) {
+  const handlePost = (equipo, liga, pais, descripcion, imagen) => {
+    if (equipo && liga && pais && descripcion && imagen) {
       const newTeam = {
-        nombre: nombre,
+        nombre: equipo,
         liga: liga,
         pais: pais,
         descripcion: descripcion,
@@ -53,85 +49,36 @@ function App() {
         .catch((error) => {
           console.error("Error:", error);
         });
-      window.location.reload(false);
     }
   };
 
-  // const handleDelete = () => {
-  //   const nombre = window.prompt("Ingrese el nombre del equipo:");
-  //   fetch(`http://localhost:3000/eliminarEquipo/${nombre}`, {
-  //     method: "DELETE",
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log("DELETE response:", data);
-  //       handleGet(); // Refresh the table data after successful DELETE
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
-  // };
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
-  // const handlePut = () => {
-  //   const nombreC = window.prompt("Ingrese el nombre:");
-  //   const nombre = window.prompt("Ingrese el nuevo nombre:");
-  //   const liga = window.prompt("Ingrese la nueva liga:");
-  //   const pais = window.prompt("Ingrese el nuevo país:");
-  //   const descripcion = window.prompt("Ingrese la descripción:");
-  //   const imagen = window.prompt("Ingrese el enlace de la imagen:");
-
-  //   if (nombre && liga && pais && descripcion && imagen) {
-  //     const updatedData = {
-  //       nombre: nombre,
-  //       liga: liga,
-  //       pais: pais,
-  //       descripcion: descripcion,
-  //       imagen: imagen,
-  //     };
-
-  //     fetch(
-  //       `http://localhost:3000/actualizarEquipo/` +
-  //         nombreC +
-  //         `?nombre=` +
-  //         nombre +
-  //         `&liga=a&pais=a`,
-  //       {
-  //         method: "PUT",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(updatedData),
-  //       }
-  //     )
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         console.log("PUT response:", data);
-  //         handleGet(); // Refresh the table data after successful PUT
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error:", error);
-  //       });
-  //   }
-  // };
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
 
   return (
     <center>
       <h1>EQUIPOS DE FUTBOL</h1>
       <div className="App" style={{ padding: "30px" }}>
-        {/* <button
-          class="btn btn-outline-success"
-          onClick={handleGet}
-          style={{ marginLeft: "22px" }}
-        >
-          GET
-        </button> */}
-        <button
-          class="btn btn-outline-primary"
-          onClick={handlePost}
-          style={{ marginBottom: "30px", marginTop: "-19px" }}
+        <Button
+          variant="outline-primary"
+          onClick={handleShowModal}
+          style={{ marginBottom: "30px" }}
         >
           Añadir Equipo
-        </button>
+        </Button>
+        <Modal show={showModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Añadir Equipo</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Formulario onSubmit={handlePost} />
+          </Modal.Body>
+        </Modal>
         <TableComponent />
       </div>
     </center>
