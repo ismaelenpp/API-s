@@ -22,7 +22,6 @@ const Formulario = ({ onSubmit }) => {
 
   return (
     <div className="container">
-      <h1>Añadir Equipo</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label htmlFor="equipo" className="form-label">
