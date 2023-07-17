@@ -37,6 +37,7 @@ const TableComponent = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
+    window.location.reload(false);
   };
 
   const handlePut = (equipo) => {

@@ -62,7 +62,24 @@ function App() {
 
   return (
     <center>
-      <h1>EQUIPOS DE FUTBOL</h1>
+      <div
+        style={{
+          background: "linear-gradient(#c4c4c4, #fff)",
+          padding: "20px",
+        }}
+      >
+        <h1
+          style={{
+            fontFamily: "Arial, sans-serif",
+            fontSize: "48px",
+            fontWeight: "bold",
+            color: "#3f51b5",
+            textShadow: "2px 2px #000",
+          }}
+        >
+          EQUIPOS DE FÚTBOL
+        </h1>
+      </div>
       <div className="App" style={{ padding: "30px" }}>
         <Button
           variant="outline-primary"
@@ -78,6 +95,11 @@ function App() {
           <Modal.Body>
             <Formulario onSubmit={handlePost} />
           </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Cancelar
+            </Button>
+          </Modal.Footer>
         </Modal>
         <TableComponent />
       </div>
