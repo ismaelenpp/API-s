@@ -1,0 +1,65 @@
+[
+  {
+    "id": "IT1",
+    "name": "Serie A",
+    "country": "Italy",
+    "continent": "UEFA",
+    "clubs": "20",
+    "players": "633",
+    "marketValue": "€4.60bn"
+  },
+  {
+    "id": "L1",
+    "name": "Bundesliga",
+    "country": "Germany",
+    "continent": "UEFA",
+    "clubs": "18",
+    "players": "561",
+    "marketValue": "€4.03bn"
+  },
+  {
+    "id": "ES1",
+    "name": "LaLiga",
+    "country": "Spain",
+    "continent": "UEFA",
+    "clubs": "20",
+    "players": "523",
+    "marketValue": "€4.73bn"
+  },
+  {
+    "id": "FR1",
+    "name": "Ligue 1",
+    "country": "France",
+    "continent": "UEFA",
+    "clubs": "18",
+    "players": "511",
+    "marketValue": "€3.50bn"
+  },
+  {
+    "id": "GB1",
+    "name": "Premier League",
+    "country": "England",
+    "continent": "UEFA",
+    "clubs": "20",
+    "players": "585",
+    "marketValue": "€10.11bn"
+  },
+  {
+    "id": "MEX1",
+    "name": "Liga MX",
+    "country": "Mexico",
+    "continent": "CONCACAF",
+    "clubs": "18",
+    "players": "480",
+    "marketValue": "€825.25m"
+  },
+  {
+    "id": "COL1",
+    "name": "Liga Dimayor",
+    "country": "Colombia",
+    "continent": "CONMEBOL",
+    "clubs": "20",
+    "players": "622",
+    "marketValue": "€222.33m"
+  }
+]
