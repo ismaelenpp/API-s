@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 
-const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
+const Formulario2 = ({ equipoSeleccionado, onEdit, leaguesData }) => {
   const [equipo, setEquipo] = useState(equipoSeleccionado.nombre);
   const [liga, setLiga] = useState(equipoSeleccionado.liga);
   const [pais, setPais] = useState(equipoSeleccionado.pais);
-  const [descripcion, setDescripcion] = useState(
-    equipoSeleccionado.descripcion
-  );
+  const [descripcion, setDescripcion] = useState(equipoSeleccionado.descripcion);
   const [imagen, setImagen] = useState(equipoSeleccionado.imagen);
 
   const handleSubmit = (e) => {
@@ -51,14 +49,20 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
           <label htmlFor="liga" className="form-label">
             Liga
           </label>
-          <input
-            type="text"
+          <select
             className="form-control"
             id="liga"
             value={liga}
             onChange={(e) => setLiga(e.target.value)}
             required
-          />
+          >
+            {/* Map through the leaguesData to create options */}
+            {leaguesData.map((league) => (
+              <option key={league.id} value={league.name}>
+                {league.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-3">
           <label htmlFor="pais" className="form-label">
