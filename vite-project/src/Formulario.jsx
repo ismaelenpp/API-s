@@ -1,23 +1,36 @@
 import React, { useState } from "react";
+import DragAndDrop from "./drag_and_drop"; // Import the DragAndDrop component
 
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
   const [liga, setLiga] = useState("");
   const [pais, setPais] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [imagen, setImagen] = useState("");
+  const [imageFile, setImageFile] = useState(null);
 
   const handleSubmit = (e) => {
-    console.log(equipo.valueOf.toString);
     e.preventDefault();
     // Pasamos los valores de los campos al onSubmit uwu
-    onSubmit(equipo, liga, pais, descripcion, imagen);
+    onSubmit(equipo, liga, pais, descripcion, imageFile);
     // Luego puedes reiniciar los campos del formulario si lo deseas
     setEquipo("");
     setLiga("");
     setPais("");
     setDescripcion("");
-    setImagen("");
+    setImageFile(null);
+    window.location.reload(false);
+  };
+
+  const handleImageDrop = (file) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImageFile(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleClearImage = () => {
+    setImageFile(null);
   };
 
   return (
@@ -76,22 +89,29 @@ const Formulario = ({ onSubmit }) => {
         </div>
         <div className="mb-3">
           <label htmlFor="imagen" className="form-label">
-            Link de la Imagen
+            Imagen del Equipo
           </label>
-          <input
-            type="text"
-            className="form-control"
-            id="imagen"
-            value={imagen}
-            onChange={(e) => setImagen(e.target.value)}
-            required
-          />
+          {imageFile ? (
+            <div>
+              <img
+                src={imageFile}
+                alt="Uploaded"
+                style={{ maxWidth: "100%", maxHeight: "200px" }}
+              />
+              <br />
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={handleClearImage}
+              >
+                Eliminar Imagen
+              </button>
+            </div>
+          ) : (
+            <DragAndDrop onImageDrop={handleImageDrop} />
+          )}
         </div>
-        <button
-          type="submit"
-          className="btn btn-primary"
-          onClick={() => window.location.reload(false)}
-        >
+        <button type="submit" className="btn btn-primary">
           Añadir Equipo
         </button>
       </form>
