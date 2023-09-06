@@ -4,9 +4,6 @@ import cloudinary from 'cloudinary-core';
 import React, { useState } from 'react';
 import PropTypes from "prop-types";
 
-
-
-// Configura tu cliente Cloudinary (sustituye 'cloudName' por tu nombre de nube)
 const cl = new cloudinary.Cloudinary({
   cloud_name: 'dwodczt0e', 
   api_key: '246222394918621', 
@@ -27,13 +24,20 @@ const DragAndDrop = ({ onImageDrop }) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'images'); // Reemplaza con tu upload preset
-  
-        // Hacer una solicitud POST a la URL de carga de Cloudinary
-        const response = await fetch('https://api.cloudinary.com/v1_1/dwodczt0e/images/upload', {
+
+        const response = await fetch(cl.url('https://api.cloudinary.com/v1_1/dwodczt0e/image/upload', {
+          secure: true,
+          upload_preset: 'images',
+          cloud_name: 'dwodczt0e',
+          api_key: '246222394918621',
+          api_secret: '7R2jwsxRXL9VZrU5CH1YlgGGVxc'
+        }), {
           method: 'POST',
           body: formData,
         });
-  
+        
+        console.log(response);
+
         if (response.ok) {
           const data = await response.json();
           console.log('Imagen subida exitosamente:', data.secure_url);
