@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DragAndDrop from "./drag_and_drop"; // Import the DragAndDrop component
 
 const Formulario = ({ onSubmit }) => {
@@ -7,10 +7,25 @@ const Formulario = ({ onSubmit }) => {
   const [pais, setPais] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [imageFile, setImageFile] = useState(null);
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    // Fetch lista de países desde la API
+    fetch("https://restcountries.com/v2/all")
+      .then((response) => response.json())
+      .then((data) => {
+        // Mapea los nombres de los países
+        const countryNames = data.map((country) => country.name);
+        setCountries(countryNames);
+      })
+      .catch((error) => {
+        console.error("Error fetching countries:", error);
+      });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Pasamos los valores de los campos al onSubmit uwu
+    // Pasamos los valores de los campos al onSubmit
     onSubmit(equipo, liga, pais, descripcion, imageFile);
     // Luego puedes reiniciar los campos del formulario si lo deseas
     setEquipo("");
@@ -66,14 +81,23 @@ const Formulario = ({ onSubmit }) => {
           <label htmlFor="pais" className="form-label">
             País
           </label>
-          <input
-            type="text"
-            className="form-control"
+          <br />
+          <select
             id="pais"
+            className="form-control"
             value={pais}
             onChange={(e) => setPais(e.target.value)}
             required
-          />
+          >
+            <option value="" disabled>
+              Selecciona un país
+            </option>
+            {countries.map((country, index) => (
+              <option key={index} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-3">
           <label htmlFor="descripcion" className="form-label">

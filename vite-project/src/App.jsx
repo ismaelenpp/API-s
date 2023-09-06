@@ -63,6 +63,9 @@ function App() {
     setShowModal(true);
   };
 
+  // Personalizamos el título y agregamos interactividad
+  const [hovered, setHovered] = useState(false);
+
   return (
     <center>
       <div
@@ -76,11 +79,15 @@ function App() {
             fontFamily: "Arial, sans-serif",
             fontSize: "48px",
             fontWeight: "bold",
-            color: "#3f51b5",
+            color: hovered ? "#03a99a" : "#03a99a", // Cambiamos el color al hacer hover
             textShadow: "2px 2px #000",
+            cursor: "pointer", // Cambiamos el cursor al hacer hover
           }}
+          onMouseEnter={() => setHovered(true)} // Detectamos el hover del usuario
+          onMouseLeave={() => setHovered(false)} // Detectamos la salida del hover
+          // Agregamos interacción al hacer clic
         >
-          EQUIPOS DE FÚTBOL
+          {hovered ? "¡INETFUT!" : "EQUIPOS DE FÚTBOL"}
         </h1>
       </div>
       <div className="App" style={{ padding: "30px" }}>
