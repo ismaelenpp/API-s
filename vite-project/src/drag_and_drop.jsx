@@ -1,90 +1,112 @@
-import React, { useState } from "react";
-////////
-import axios from "axios";
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+import cloudinary from 'cloudinary-core';
+import React, { useState } from 'react';
+import PropTypes from "prop-types";
 
-const DragAndDrop = async ({ onImageDrop }) => {
+
+
+// Configura tu cliente Cloudinary (sustituye 'cloudName' por tu nombre de nube)
+const cl = new cloudinary.Cloudinary({
+  cloud_name: 'dwodczt0e', 
+  api_key: '246222394918621', 
+  api_secret: '7R2jwsxRXL9VZrU5CH1YlgGGVxc' 
+});
+
+const DragAndDrop = ({ onImageDrop }) => {
   const [dragging, setDragging] = useState(false);
 
   const handleDrop = async (e) => {
     e.preventDefault();
     setDragging(false);
     const file = e.dataTransfer.files[0];
-    onImageDrop(file);
+  
     if (file) {
       try {
+        // Crear un objeto FormData para la carga
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append('file', file);
+        formData.append('upload_preset', 'images'); // Reemplaza con tu upload preset
+  
+        // Hacer una solicitud POST a la URL de carga de Cloudinary
+        const response = await fetch('https://api.cloudinary.com/v1_1/dwodczt0e/images/upload', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Imagen subida exitosamente:', data.secure_url);
+        } else {
+          // Manejo de errores si la respuesta no es exitosa
+          const errorData = await response.json();
+          console.error('Error al subir la imagen:', errorData.message);
+        }
+      } catch (error) {
+        console.error('Error al subir la imagen:', error);
+      }
+    } else {
+      console.error('No se seleccionó ningún archivo.');
+    }
+  };
+  
+  
 
-        const cloudName = "dajnd6hfe";
-        const apiKey = "643243133882548";
-        const apiSecret = "Hqac499b90mUnZApKhIHUgpLCzc";
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragging(true);
+  };
 
-        const timestamp = Date.now() / 1000;
-        const signature = await generateSignature(cloudName, apiKey, apiSecret, timestamp
-        );
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragging(false);
+  };
 
-        const response = await axios.post(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, 
-          formData, { 
-            headers: { "X-Requested-With": "XMLHttpRequest", }, 
-            params: { timestamp, signature, }, 
-          });
-        
-          console.log("Imagen subida a Cloudinary:", response.data);  
-        
-        } catch (error) { console.error("Error al subir la imagen:", error); } }
-      };
+  return (
+    <div
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      style={{
+        width: "300px",
+        height: "200px",
+        border: dragging ? "2px dashed #999" : "2px dashed #ccc",
+        borderRadius: "4px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+      }}
+    >
+      <p>
+        {dragging
+          ? "Suelta la imagen aquí"
+          : "Arrastra y suelta la imagen aquí o haz clic para seleccionarla"}
+      </p>
 
-      const handleDragOver = (e) => {
-        e.preventDefault();
-        setDragging(true);
-      };
+      <input
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={(e) => {
+          const file = e.target.files[0];
+          onImageDrop(file);
+        }}
+      />
+      <button
+        onClick={() => {
+          const fileInput = document.querySelector("input[type='file']");
+          fileInput.click();
+        }}
+      >
+        Seleccionar imagen
+      </button>
+    </div>
+  );
+};
 
-      const handleDragLeave = (e) => {
-        e.preventDefault();
-        setDragging(false);
-      };
+DragAndDrop.propTypes = {
+  onImageDrop: PropTypes.func.isRequired,
+};
 
-
-
-      return (
-        <div
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          style={{
-            width: "300px",
-            height: "200px",
-            border: dragging ? "2px dashed #999" : "2px dashed #ccc",
-            borderRadius: "4px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
-          }}
-        >
-          <p>
-            {dragging
-              ? "Suelta la imagen aquí"
-              : "Arrastra y suelta la imagen aquí o haz clic para seleccionarla"}
-          </p>
-
-          <input
-            type="file"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={(e) => {
-              const file = e.target.files[0];
-              onImageDrop(file);
-            }}
-          />
-          <button
-            onClick={() => {
-              const fileInput = document.querySelector("input[type='file']"); fileInput.click();
-            }} > Seleccionar imagen </button>
-
-        </div>
-      );
-    };
-
-    export default DragAndDrop;
+export default DragAndDrop;
