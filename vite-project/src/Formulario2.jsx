@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
   const [equipo, setEquipo] = useState(equipoSeleccionado.nombre);
@@ -8,6 +8,21 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
     equipoSeleccionado.descripcion
   );
   const [imagen, setImagen] = useState(equipoSeleccionado.imagen);
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    // Fetch lista de países desde la API
+    fetch("https://restcountries.com/v2/all")
+      .then((response) => response.json())
+      .then((data) => {
+        // Mapea los nombres de los países
+        const countryNames = data.map((country) => country.name);
+        setCountries(countryNames);
+      })
+      .catch((error) => {
+        console.error("Error fetching countries:", error);
+      });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,14 +79,22 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
           <label htmlFor="pais" className="form-label">
             País
           </label>
-          <input
-            type="text"
-            className="form-control"
+          <select
             id="pais"
+            className="form-control"
             value={pais}
             onChange={(e) => setPais(e.target.value)}
             required
-          />
+          >
+            <option value="" disabled>
+              Selecciona un país
+            </option>
+            {countries.map((country, index) => (
+              <option key={index} value={country}>
+                {country}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-3">
           <label htmlFor="descripcion" className="form-label">
