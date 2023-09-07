@@ -1,16 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const mysql = require("mysql2");
+const mysql = require("mysql");
 const bodyParser = require("body-parser");
 
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "",
+  user: "ismael",
+  password: "ismaelenp1234",
   database: "futbol",
-  port: "3306"
 });
 
 // Connect to MySQL
