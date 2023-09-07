@@ -1,17 +1,14 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import Formulario from "./Formulario";
-//import BtnPut from "./BtnPut";
-//import BtnDelete from "./Button";
+import BtnPut from "./BtnPut";
+import BtnDelete from "./Button";
 import TableComponent from "./Tablecomp";
 
-
-
 function App() {
-  const [, setTableHtml] = useState("");
+  const [tableHtml, setTableHtml] = useState("");
   const [showModal, setShowModal] = useState(false);
-  
-  
+
   const handleGet = () => {
     fetch("http://localhost:3000/futbol")
       .then((response) => response.text())

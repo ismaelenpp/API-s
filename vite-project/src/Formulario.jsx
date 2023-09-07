@@ -27,27 +27,26 @@ const Formulario = ({ onSubmit }) => {
   }, []);
 
   const handleSubmit = (e) => {
-  e.preventDefault();
-  // Aquí puedes incluir la imagen seleccionada como un campo del formulario
-  const formData = new FormData();
-  formData.append("equipo", equipo);
-  formData.append("liga", liga);
-  formData.append("pais", pais);
-  formData.append("descripcion", descripcion);
-  formData.append("imagen", imageFile); // Agrega la imagen al formulario
+    e.preventDefault();
+    // Aquí puedes incluir la imagen seleccionada como un campo del formulario
+    const formData = new FormData();
+    formData.append("equipo", equipo);
+    formData.append("liga", liga);
+    formData.append("pais", pais);
+    formData.append("descripcion", descripcion);
+    formData.append("imagen", imageFile); // Agrega la imagen al formulario
 
-  // Luego puedes enviar el formulario con los datos y la imagen
-  onSubmit(formData);
+    // Luego puedes enviar el formulario con los datos y la imagen
+    onSubmit(formData);
 
-  // Luego puedes reiniciar los campos del formulario si lo deseas
-  setEquipo("");
-  setLiga("");
-  setPais("");
-  setDescripcion("");
-  setImageFile(null);
-  window.location.reload(false);
+    // Luego puedes reiniciar los campos del formulario si lo deseas
+    setEquipo("");
+    setLiga("");
+    setPais("");
+    setDescripcion("");
+    setImageFile(null);
+    window.location.reload(false);
   };
-
 
   const handleImageDrop = (file) => {
     const reader = new FileReader();
