@@ -1,64 +1,20 @@
-import cloudinary from "cloudinary-core";
+//import cloudinary from "cloudinary-core";
 
-import React, { useState, useRef } from "react"; // Agrega useRef a las importaciones
+import { useState, useRef } from "react"; // Agrega useRef a las importaciones
 import PropTypes from "prop-types";
 
-const cl = new cloudinary.Cloudinary({
-  cloud_name: "dwodczt0e",
 
-  api_key: "246222394918621",
-
-  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
-});
 const DragAndDrop = ({ onImageDrop }) => {
   const [dragging, setDragging] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage] = useState(null);
 
   const handleDrop = async (e) => {
     e.preventDefault();
     setDragging(false);
     const file = e.dataTransfer.files[0];
     onImageDrop(file);
-    if (file) {
-      try {
-        // Crear un objeto FormData para la carga
-
-        const formData = new FormData();
-
-        formData.append("file", file);
-
-        formData.append("upload_preset", "images"); // Reemplaza con tu upload preset
-
-        const response = await fetch(
-          cl.url("https://api.cloudinary.com/v1_1/dwodczt0e/image/upload", {
-            secure: true,
-            upload_preset: "images",
-            cloud_name: "dwodczt0e",
-            api_key: "246222394918621",
-            api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
-          }),
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setSelectedImage(data.secure_url); // Actualiza el estado con la URL de la imagen
-        } else {
-          // Manejo de errores si la respuesta no es exitosa
-
-          const errorData = await response.json();
-
-          console.error("Error al subir la imagen:", errorData.message);
-        }
-      } catch (error) {
-        console.error("Error al subir la imagen:", error);
-      }
-    } else {
-      console.error("No se seleccionó ningún archivo.");
-    }
+    
+    
   };
 
   const handleDragOver = (e) => {
