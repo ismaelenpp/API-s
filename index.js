@@ -1,15 +1,17 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const bodyParser = require("body-parser");
-
+const { CloudinaryImage } = require("@cloudinary/url-gen");
+const cloudinary = require('cloudinary').v2;
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "ismael",
-  password: "ismaelenp1234",
+  user: "root",
+  password: "",
   database: "futbol",
+  port: "3306"
 });
 
 // Connect to MySQL
@@ -25,6 +27,12 @@ var corsOptions = {
   origin: "http://localhost:5173",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
+
+cloudinary.config({ 
+  cloud_name: 'dajnd6hfe', 
+  api_key: '643243133882548', 
+  api_secret: 'Hqac499b90mUnZApKhIHUgpLCzc' 
+});
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -133,9 +141,7 @@ process.on("SIGINT", () => {
   process.exit();
 });
 
-function prueba1() {
-  console.log("Funciona");
-}
+console.log(prueba1());
 
 // Start the server
 const port = 3000;
