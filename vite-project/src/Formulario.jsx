@@ -7,6 +7,7 @@ const Formulario = ({ onSubmit }) => {
   const [pais, setPais] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [imageFile, setImageFile] = useState(null);
+
   const [countries, setCountries] = useState([]); // Agregamos el estado para countries
 
   useEffect(() => {

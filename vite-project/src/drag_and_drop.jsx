@@ -87,11 +87,7 @@ const DragAndDrop = ({ onImageDrop }) => {
         overflow: "hidden",
       }}
     >
-      <p>
-        {dragging
-          ? "Suelta la imagen aquí"
-          : "Arrastra y suelta la imagen aquí o haz clic para seleccionarla"}
-      </p>
+      <p>{dragging ? "Suelta la imagen aquí." : "Arrastra la imagen aquí."}</p>
       <input
         type="file"
         accept="image/*"

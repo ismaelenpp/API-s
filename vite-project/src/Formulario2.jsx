@@ -41,8 +41,6 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
     // Llama a la función onEdit para guardar los cambios
     onEdit(equipoEditado);
 
-    // No recargues la página aquí, en su lugar, actualiza el estado o realiza redirecciones
-
     // Restablecer los campos del formulario
     setEquipo("");
     setLiga("");
