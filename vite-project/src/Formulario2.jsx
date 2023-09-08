@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import DragAndDrop from "./drag_and_drop";
 
 const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
   const [equipo, setEquipo] = useState(equipoSeleccionado.nombre);
@@ -7,7 +8,8 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
   const [descripcion, setDescripcion] = useState(
     equipoSeleccionado.descripcion
   );
-  const [imagen, setImagen] = useState(equipoSeleccionado.imagen);
+  const [imagen, setImagen] = useState(equipoSeleccionado.imagen); // Actualizamos la imagen en el estado
+  const [imageFile, setImageFile] = useState(null);
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
@@ -33,9 +35,10 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
       liga: liga,
       pais: pais,
       descripcion: descripcion,
-      imagen: imagen,
+      imagen: imagen, // Actualizamos la imagen con el valor del estado
     };
 
+    // Llama a la función onEdit para guardar los cambios
     onEdit(equipoEditado);
 
     // Restablecer los campos del formulario
@@ -43,7 +46,23 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
     setLiga("");
     setPais("");
     setDescripcion("");
-    setImagen("");
+    setImageFile(null);
+  };
+
+  const handleImageDrop = (file) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImageFile(reader.result); // Actualiza el archivo de imagen
+      setImagen(reader.result); // Actualiza la imagen en el estado
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleClearImage = () => {
+    setImageFile(null);
+    setImagen(null); // Borra la imagen en el estado
   };
 
   return (
@@ -112,14 +131,28 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
           <label htmlFor="imagen" className="form-label">
             Link de la Imagen
           </label>
-          <input
-            type="text"
-            className="form-control"
-            id="imagen"
-            value={imagen}
-            onChange={(e) => setImagen(e.target.value)}
-            required
-          />
+
+          {imageFile ? (
+            <div>
+              <img
+                src={imageFile}
+                alt="Uploaded"
+                style={{ maxWidth: "100%", maxHeight: "200px" }}
+              />
+
+              <br />
+
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={handleClearImage}
+              >
+                Eliminar Imagen
+              </button>
+            </div>
+          ) : (
+            <DragAndDrop onImageDrop={handleImageDrop} />
+          )}
         </div>
         <button type="submit" className="btn btn-primary">
           Guardar Cambios

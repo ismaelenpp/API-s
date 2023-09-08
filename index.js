@@ -3,8 +3,7 @@ const cors = require("cors");
 const app = express();
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
-const { CloudinaryImage } = require("@cloudinary/url-gen");
-const cloudinary = require('cloudinary').v2;
+
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
