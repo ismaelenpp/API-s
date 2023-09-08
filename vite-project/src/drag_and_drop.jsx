@@ -4,11 +4,11 @@ import React, { useState, useRef } from "react"; // Agrega useRef a las importac
 import PropTypes from "prop-types";
 
 const cl = new cloudinary.Cloudinary({
-  cloud_name: "dwodczt0e",
+  cloud_name: "dajnd6hfe",
 
-  api_key: "246222394918621",
+  api_key: "643243133882548",
 
-  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
+  api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
 });
 const DragAndDrop = ({ onImageDrop }) => {
   const [dragging, setDragging] = useState(false);
@@ -30,12 +30,12 @@ const DragAndDrop = ({ onImageDrop }) => {
         formData.append("upload_preset", "images"); // Reemplaza con tu upload preset
 
         const response = await fetch(
-          cl.url("https://api.cloudinary.com/v1_1/dwodczt0e/image/upload", {
+          cl.url("https://api.cloudinary.com/v1_1/dajnd6hfe/image/upload", {
             secure: true,
             upload_preset: "images",
-            cloud_name: "dwodczt0e",
-            api_key: "246222394918621",
-            api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
+            cloud_name: "dajnd6hfe",
+            api_key: "643243133882548",
+            api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
           }),
           {
             method: "POST",
