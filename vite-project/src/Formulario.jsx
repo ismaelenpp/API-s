@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
 
 import DragAndDrop from "./drag_and_drop";
-
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
-
   const [liga, setLiga] = useState("");
-
   const [pais, setPais] = useState("");
-
   const [descripcion, setDescripcion] = useState("");
-
   const [imageFile, setImageFile] = useState(null);
-
   const [countries, setCountries] = useState([]); // Agregamos el estado para countries
 
   useEffect(() => {
@@ -52,6 +46,7 @@ const Formulario = ({ onSubmit }) => {
     setDescripcion("");
 
     setImageFile(null);
+    window.location.reload();
   };
 
   const handleImageDrop = (file) => {
