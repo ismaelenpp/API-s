@@ -13,8 +13,6 @@ const DragAndDrop = ({ onImageDrop }) => {
     setDragging(false);
     const file = e.dataTransfer.files[0];
     onImageDrop(file);
-    
-    
   };
 
   const handleDragOver = (e) => {

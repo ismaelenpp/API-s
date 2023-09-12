@@ -27,11 +27,6 @@ var corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
-cloudinary.config({ 
-  cloud_name: 'dajnd6hfe', 
-  api_key: '643243133882548', 
-  api_secret: 'Hqac499b90mUnZApKhIHUgpLCzc' 
-});
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -139,8 +134,6 @@ process.on("SIGINT", () => {
   connection.end();
   process.exit();
 });
-
-console.log(prueba1());
 
 // Start the server
 const port = 3000;
