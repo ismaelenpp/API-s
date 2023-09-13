@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+
 import DragAndDrop from "./drag_and_drop"; // Import the DragAndDrop component
+
 import cloudinary from "cloudinary-core";
+
+//import { response } from "express";
 
 const cl = new cloudinary.Cloudinary({
   cloud_name: "dajnd6hfe",
+
   api_key: "643243133882548",
+
   api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
 });
+
+// eslint-disable-next-line react/prop-types
 
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
@@ -58,7 +66,6 @@ const Formulario = ({ onSubmit }) => {
     setDescripcion("");
 
     setImageFile(null);
-    window.location.reload();
   };
 
   const handleImageDrop = (file) => {
@@ -77,33 +84,47 @@ const Formulario = ({ onSubmit }) => {
 
   const uploadImageToCloudinary = async (imageFile) => {
     console.log("Subiendo imagen a Cloudinary...");
+
     console.log(imageFile);
+
     try {
       const formData = new FormData();
+
       formData.append("file", imageFile);
+
       formData.append("upload_preset", "images"); // Reemplaza con tu upload preset
 
       const response = await fetch(
         cl.url("https://api.cloudinary.com/v1_1/dajnd6hfe/image/upload", {
           secure: true,
+
           upload_preset: "images",
+
           cloud_name: "dajnd6hfe",
+
           api_key: "643243133882548",
+
           api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
         }),
+
         {
           method: "POST",
+
           body: formData,
         }
       );
-      console.log(response);
+
       if (response.ok) {
         const data = await response.json();
+
         console.log("Imagen cargada exitosamente:", data.secure_url);
+
         // Puedes realizar cualquier acción adicional después de cargar la imagen aquí
       } else {
         // Manejo de errores si la respuesta no es exitosa
+
         const errorData = await response.json();
+
         console.error("Error al subir la imagen:", errorData.message);
       }
     } catch (error) {
@@ -211,6 +232,7 @@ const Formulario = ({ onSubmit }) => {
             <DragAndDrop onImageDrop={handleImageDrop} />
           )}
         </div>
+
         <button
           type="submit"
           className="btn btn-primary"
