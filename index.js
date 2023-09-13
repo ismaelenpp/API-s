@@ -4,6 +4,8 @@ const app = express();
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 
+app.use(bodyParser.json({ limit: "50mb" }));
+
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
