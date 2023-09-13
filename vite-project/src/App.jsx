@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable no-unused-vars */
+import { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import Formulario from "./Formulario";
-import BtnPut from "./BtnPut";
-import BtnDelete from "./Button";
+//import BtnPut from "./BtnPut";
+//import BtnDelete from "./Button";
 import TableComponent from "./Tablecomp";
 
 function App() {
