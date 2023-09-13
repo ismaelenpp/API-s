@@ -8,7 +8,6 @@ const cl = new cloudinary.Cloudinary({
   api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
 });
 
-import DragAndDrop from "./drag_and_drop";
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
 
