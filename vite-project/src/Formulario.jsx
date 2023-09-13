@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import DragAndDrop from "./drag_and_drop"; // Import the DragAndDrop component
 import cloudinary from "cloudinary-core";
+//import { response } from "express";
 
 const cl = new cloudinary.Cloudinary({
   cloud_name: "dajnd6hfe",
@@ -8,15 +9,12 @@ const cl = new cloudinary.Cloudinary({
   api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
 });
 
+// eslint-disable-next-line react/prop-types
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
-
   const [liga, setLiga] = useState("");
-
   const [pais, setPais] = useState("");
-
   const [descripcion, setDescripcion] = useState("");
-
   const [imageFile, setImageFile] = useState(null);
 
   const [countries, setCountries] = useState([]); // Agregamos el estado para countries
@@ -40,26 +38,24 @@ const Formulario = ({ onSubmit }) => {
       });
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Pasamos los valores de los campos al onSubmit
-
-    onSubmit(equipo, liga, pais, descripcion, imageFile);
-
+  
+    // Sube la imagen a Cloudinary y obtén la URL
+    const imageUrl = await uploadImageToCloudinary(imageFile);
+  
+    // Verifica que la URL de la imagen se haya obtenido correctamente
+    console.log("URL de la imagen:", imageUrl);
+    //Subir los datos a la base de datos
+    onSubmit(equipo, liga, pais, descripcion, imageUrl);
     // Luego puedes reiniciar los campos del formulario si lo deseas
-
-    setEquipo("");
-
-    setLiga("");
-
-    setPais("");
-
-    setDescripcion("");
-
+    setEquipo('');
+    setLiga('');
+    setPais('');
+    setDescripcion('');
     setImageFile(null);
-    window.location.reload();
   };
+  
 
   const handleImageDrop = (file) => {
     const reader = new FileReader();
@@ -96,18 +92,21 @@ const Formulario = ({ onSubmit }) => {
           body: formData,
         }
       );
-      console.log(response);
+
       if (response.ok) {
         const data = await response.json();
         console.log("Imagen cargada exitosamente:", data.secure_url);
+        return data.secure_url;
         // Puedes realizar cualquier acción adicional después de cargar la imagen aquí
       } else {
         // Manejo de errores si la respuesta no es exitosa
         const errorData = await response.json();
         console.error("Error al subir la imagen:", errorData.message);
+        return errorData.message;
       }
     } catch (error) {
       console.error("Error al subir la imagen:", error);
+      return error;
     }
   };
 
@@ -214,7 +213,7 @@ const Formulario = ({ onSubmit }) => {
         <button
           type="submit"
           className="btn btn-primary"
-          onClick={() => uploadImageToCloudinary(imageFile)}
+          onClick={onSubmit}
         >
           Añadir Equipo
         </button>
