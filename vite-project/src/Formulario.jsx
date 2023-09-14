@@ -3,9 +3,6 @@ import { useState, useEffect } from "react";
 import DragAndDrop from "./drag_and_drop"; // Import the DragAndDrop component
 
 import cloudinary from "cloudinary-core";
-//import { response } from "express";
-
-//import { response } from "express";
 
 const cl = new cloudinary.Cloudinary({
   cloud_name: "dajnd6hfe",
@@ -18,11 +15,16 @@ const cl = new cloudinary.Cloudinary({
 // eslint-disable-next-line react/prop-types
 
 // eslint-disable-next-line react/prop-types
+
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
+
   const [liga, setLiga] = useState("");
+
   const [pais, setPais] = useState("");
+
   const [descripcion, setDescripcion] = useState("");
+
   const [imageFile, setImageFile] = useState(null);
 
   const [countries, setCountries] = useState([]); // Agregamos el estado para countries
@@ -49,18 +51,20 @@ const Formulario = ({ onSubmit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Sube la imagen a Cloudinary y obtén la URL
     const imageUrl = await uploadImageToCloudinary(imageFile);
 
-    // Verifica que la URL de la imagen se haya obtenido correctamente
     console.log("URL de la imagen:", imageUrl);
-    //Subir los datos a la base de datos
+
     onSubmit(equipo, liga, pais, descripcion, imageUrl);
-    // Luego puedes reiniciar los campos del formulario si lo deseas
+
     setEquipo("");
+
     setLiga("");
+
     setPais("");
+
     setDescripcion("");
+
     setImageFile(null);
   };
 
@@ -114,6 +118,8 @@ const Formulario = ({ onSubmit }) => {
         const data = await response.json();
 
         console.log("Imagen cargada exitosamente:", data.secure_url);
+        return data.secure_url;
+
         // Puedes realizar cualquier acción adicional después de cargar la imagen aquí
       } else {
         // Manejo de errores si la respuesta no es exitosa
@@ -121,10 +127,12 @@ const Formulario = ({ onSubmit }) => {
         const errorData = await response.json();
 
         console.error("Error al subir la imagen:", errorData.message);
+
         return errorData.message;
       }
     } catch (error) {
       console.error("Error al subir la imagen:", error);
+
       return error;
     }
   };

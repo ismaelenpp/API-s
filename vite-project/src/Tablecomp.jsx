@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import BtnDelete from "./Button";
+import BtnDelete from "./ButtonDelete";
 import BtnPut from "./BtnPut";
 import ImageComponent from "./ImageComponent";
 import Formulario2 from "./Formulario2";
