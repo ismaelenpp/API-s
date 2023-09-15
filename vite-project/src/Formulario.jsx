@@ -28,23 +28,38 @@ const Formulario = ({ onSubmit }) => {
   const [imageFile, setImageFile] = useState(null);
 
   const [countries, setCountries] = useState([]); // Agregamos el estado para countries
-
+  const [tournaments, setTournaments] = useState([]);
   useEffect(() => {
     // Fetch lista de países desde la API
-
     fetch("https://restcountries.com/v2/all")
       .then((response) => response.json())
-
       .then((data) => {
         // Mapea los nombres de los países
-
         const countryNames = data.map((country) => country.name);
-
         setCountries(countryNames);
       })
-
       .catch((error) => {
         console.error("Error fetching countries:", error);
+      });
+
+    // Fetch lista de torneos desde la API de SofaScore
+    fetch("https://sofascore.p.rapidapi.com/tournaments/list?categoryId=1", {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": "85a44f5c53msh03d010cb82f7866p15c3b5jsn93a02268b61f",
+        "X-RapidAPI-Host": "sofascore.p.rapidapi.com",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Mapea los nombres de los torneos
+        const tournamentNames = data.groups[0].uniqueTournaments.map(
+          (tournament) => tournament.name
+        );
+        setTournaments(tournamentNames);
+      })
+      .catch((error) => {
+        console.error("Error fetching tournaments:", error);
       });
   }, []);
 
@@ -58,14 +73,11 @@ const Formulario = ({ onSubmit }) => {
     onSubmit(equipo, liga, pais, descripcion, imageUrl);
 
     setEquipo("");
-
     setLiga("");
-
     setPais("");
-
     setDescripcion("");
-
     setImageFile(null);
+    window.location.reload();
   };
 
   const handleImageDrop = (file) => {
@@ -159,15 +171,22 @@ const Formulario = ({ onSubmit }) => {
           <label htmlFor="liga" className="form-label">
             Liga
           </label>
-
-          <input
-            type="text"
+          <select
+            id="torneo"
             className="form-control"
-            id="liga"
             value={liga}
             onChange={(e) => setLiga(e.target.value)}
             required
-          />
+          >
+            <option value="" disabled>
+              Selecciona un torneo
+            </option>
+            {tournaments.map((tournament, index) => (
+              <option key={index} value={tournament}>
+                {tournament}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mb-3">
