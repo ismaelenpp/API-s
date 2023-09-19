@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./Formulario.css";
-import DragAndDrop from "./drag_and_drop"; // Importa el componente DragAndDrop
+import "./Formulario.css"; // Asegúrate de tener un archivo CSS para estilos personalizados
+import DragAndDrop from "./drag_and_drop";
 import cloudinary from "cloudinary-core";
 
 const cl = new cloudinary.Cloudinary({
@@ -18,6 +18,7 @@ const Formulario = ({ onSubmit }) => {
   const [descripcion, setDescripcion] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [countries, setCountries] = useState([]);
+  const [showTeamList, setShowTeamList] = useState(false);
 
   const fetchTeams = async (value) => {
     if (value.length < 3) {
@@ -49,6 +50,7 @@ const Formulario = ({ onSubmit }) => {
           new Set(footballTeams.map((team) => team.name))
         );
         setTeams(uniqueTeams);
+        setShowTeamList(true);
       } else {
         console.error("Error al buscar equipos");
       }
@@ -59,15 +61,10 @@ const Formulario = ({ onSubmit }) => {
     }
   };
 
-  useEffect(() => {
-    if (equipo) {
-      fetchTeams(equipo);
-    }
-  }, [equipo]);
-
   const handleTeamSelect = (selectedTeam) => {
     setEquipo(selectedTeam);
     setTeams([]);
+    setShowTeamList(false);
   };
 
   const handleSubmit = async (e) => {
@@ -100,7 +97,7 @@ const Formulario = ({ onSubmit }) => {
     try {
       const formData = new FormData();
       formData.append("file", imageFile);
-      formData.append("upload_preset", "images"); // Reemplaza con tu upload preset
+      formData.append("upload_preset", "images");
       const response = await fetch(
         cl.url("https://api.cloudinary.com/v1_1/dajnd6hfe/image/upload", {
           secure: true,
@@ -131,7 +128,6 @@ const Formulario = ({ onSubmit }) => {
   };
 
   useEffect(() => {
-    // Fetch lista de países desde la API
     fetch("https://restcountries.com/v2/all")
       .then((response) => response.json())
       .then((data) => {
@@ -157,9 +153,13 @@ const Formulario = ({ onSubmit }) => {
               className="form-control"
               placeholder="Buscar equipo..."
               value={equipo}
-              onChange={(e) => setEquipo(e.target.value)}
+              onChange={(e) => {
+                setEquipo(e.target.value);
+                setShowTeamList(false);
+                fetchTeams(e.target.value);
+              }}
             />
-            {teams.length > 0 && (
+            {showTeamList && teams.length > 0 && (
               <ul className="dropdown-list">
                 {teams.map((team, index) => (
                   <li
