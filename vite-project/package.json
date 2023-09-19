@@ -12,11 +12,13 @@
   "dependencies": {
     "@cloudinary/react": "^1.11.2",
     "@cloudinary/url-gen": "^1.11.2",
+    "@elastic/elasticsearch": "^8.9.0",
     "@strapi/provider-upload-cloudinary": "^4.13.2",
     "cloudinary": "^1.40.0",
     "cloudinary-core": "^2.13.0",
     "cloudinary-react": "^1.8.1",
     "react": "^18.2.0",
+    "react-autosuggest": "^10.1.0",
     "react-bootstrap": "^2.8.0",
     "react-dom": "^18.2.0",
     "reactstrap": "^9.2.0"

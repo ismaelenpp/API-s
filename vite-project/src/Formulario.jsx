@@ -1,77 +1,79 @@
-import { useState, useEffect } from "react";
-
-import DragAndDrop from "./drag_and_drop"; // Import the DragAndDrop component
-
+import React, { useState, useEffect } from "react";
+import "./Formulario.css";
+import DragAndDrop from "./drag_and_drop"; // Importa el componente DragAndDrop
 import cloudinary from "cloudinary-core";
 
 const cl = new cloudinary.Cloudinary({
   cloud_name: "dajnd6hfe",
-
   api_key: "643243133882548",
-
   api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
 });
 
-// eslint-disable-next-line react/prop-types
-
-// eslint-disable-next-line react/prop-types
-
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
-
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [liga, setLiga] = useState("");
-
   const [pais, setPais] = useState("");
-
   const [descripcion, setDescripcion] = useState("");
-
   const [imageFile, setImageFile] = useState(null);
+  const [countries, setCountries] = useState([]);
 
-  const [countries, setCountries] = useState([]); // Agregamos el estado para countries
-  const [tournaments, setTournaments] = useState([]);
-  useEffect(() => {
-    // Fetch lista de países desde la API
-    fetch("https://restcountries.com/v2/all")
-      .then((response) => response.json())
-      .then((data) => {
-        // Mapea los nombres de los países
-        const countryNames = data.map((country) => country.name);
-        setCountries(countryNames);
-      })
-      .catch((error) => {
-        console.error("Error fetching countries:", error);
-      });
+  const fetchTeams = async (value) => {
+    if (value.length < 3) {
+      setTeams([]);
+      return;
+    }
 
-    // Fetch lista de torneos desde la API de SofaScore
-    fetch("https://sofascore.p.rapidapi.com/tournaments/list?categoryId=1", {
-      method: "GET",
-      headers: {
-        "X-RapidAPI-Key": "85a44f5c53msh03d010cb82f7866p15c3b5jsn93a02268b61f",
-        "X-RapidAPI-Host": "sofascore.p.rapidapi.com",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Mapea los nombres de los torneos
-        const tournamentNames = data.groups[0].uniqueTournaments.map(
-          (tournament) => tournament.name
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        `https://sofascore.p.rapidapi.com/teams/search?name=${value}`,
+        {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key":
+              "85a44f5c53msh03d010cb82f7866p15c3b5jsn93a02268b61f",
+            "X-RapidAPI-Host": "sofascore.p.rapidapi.com",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const footballTeams = data.teams.filter(
+          (team) => team.sport.name === "Football"
         );
-        setTournaments(tournamentNames);
-      })
-      .catch((error) => {
-        console.error("Error fetching tournaments:", error);
-      });
-  }, []);
+        const uniqueTeams = Array.from(
+          new Set(footballTeams.map((team) => team.name))
+        );
+        setTeams(uniqueTeams);
+      } else {
+        console.error("Error al buscar equipos");
+      }
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (equipo) {
+      fetchTeams(equipo);
+    }
+  }, [equipo]);
+
+  const handleTeamSelect = (selectedTeam) => {
+    setEquipo(selectedTeam);
+    setTeams([]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const imageUrl = await uploadImageToCloudinary(imageFile);
-
-    console.log("URL de la imagen:", imageUrl);
-
     onSubmit(equipo, liga, pais, descripcion, imageUrl);
-
     setEquipo("");
     setLiga("");
     setPais("");
@@ -82,11 +84,9 @@ const Formulario = ({ onSubmit }) => {
 
   const handleImageDrop = (file) => {
     const reader = new FileReader();
-
     reader.onloadend = () => {
       setImageFile(reader.result);
     };
-
     reader.readAsDataURL(file);
   };
 
@@ -97,57 +97,51 @@ const Formulario = ({ onSubmit }) => {
   const uploadImageToCloudinary = async (imageFile) => {
     console.log("Subiendo imagen a Cloudinary...");
 
-    console.log(imageFile);
-
     try {
       const formData = new FormData();
-
       formData.append("file", imageFile);
-
       formData.append("upload_preset", "images"); // Reemplaza con tu upload preset
-
       const response = await fetch(
         cl.url("https://api.cloudinary.com/v1_1/dajnd6hfe/image/upload", {
           secure: true,
-
           upload_preset: "images",
-
           cloud_name: "dajnd6hfe",
-
           api_key: "643243133882548",
-
           api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
         }),
-
         {
           method: "POST",
-
           body: formData,
         }
       );
 
       if (response.ok) {
         const data = await response.json();
-
         console.log("Imagen cargada exitosamente:", data.secure_url);
         return data.secure_url;
-
-        // Puedes realizar cualquier acción adicional después de cargar la imagen aquí
       } else {
-        // Manejo de errores si la respuesta no es exitosa
-
         const errorData = await response.json();
-
         console.error("Error al subir la imagen:", errorData.message);
-
         return errorData.message;
       }
     } catch (error) {
       console.error("Error al subir la imagen:", error);
-
       return error;
     }
   };
+
+  useEffect(() => {
+    // Fetch lista de países desde la API
+    fetch("https://restcountries.com/v2/all")
+      .then((response) => response.json())
+      .then((data) => {
+        const countryNames = data.map((country) => country.name);
+        setCountries(countryNames);
+      })
+      .catch((error) => {
+        console.error("Error fetching countries:", error);
+      });
+  }, []);
 
   return (
     <div className="container">
@@ -156,46 +150,47 @@ const Formulario = ({ onSubmit }) => {
           <label htmlFor="equipo" className="form-label">
             Nombre del Equipo
           </label>
-
-          <input
-            type="text"
-            className="form-control"
-            id="equipo"
-            value={equipo}
-            onChange={(e) => setEquipo(e.target.value)}
-            required
-          />
+          <div className="custom-dropdown">
+            <input
+              type="text"
+              id="equipo"
+              className="form-control"
+              placeholder="Buscar equipo..."
+              value={equipo}
+              onChange={(e) => setEquipo(e.target.value)}
+            />
+            {teams.length > 0 && (
+              <ul className="dropdown-list">
+                {teams.map((team, index) => (
+                  <li
+                    key={index}
+                    className="dropdown-item"
+                    onClick={() => handleTeamSelect(team)}
+                  >
+                    {team}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-
         <div className="mb-3">
           <label htmlFor="liga" className="form-label">
             Liga
           </label>
-          <select
-            id="torneo"
+          <input
+            type="text"
             className="form-control"
+            id="liga"
             value={liga}
             onChange={(e) => setLiga(e.target.value)}
             required
-          >
-            <option value="" disabled>
-              Selecciona un torneo
-            </option>
-            {tournaments.map((tournament, index) => (
-              <option key={index} value={tournament}>
-                {tournament}
-              </option>
-            ))}
-          </select>
+          />
         </div>
-
         <div className="mb-3">
           <label htmlFor="pais" className="form-label">
             País
           </label>
-
-          <br />
-
           <select
             id="pais"
             className="form-control"
@@ -206,7 +201,6 @@ const Formulario = ({ onSubmit }) => {
             <option value="" disabled>
               Selecciona un país
             </option>
-
             {countries.map((country, index) => (
               <option key={index} value={country}>
                 {country}
@@ -214,12 +208,10 @@ const Formulario = ({ onSubmit }) => {
             ))}
           </select>
         </div>
-
         <div className="mb-3">
           <label htmlFor="descripcion" className="form-label">
             Descripción
           </label>
-
           <textarea
             className="form-control"
             id="descripcion"
@@ -228,12 +220,10 @@ const Formulario = ({ onSubmit }) => {
             required
           />
         </div>
-
         <div className="mb-3">
           <label htmlFor="imagen" className="form-label">
             Imagen del Equipo
           </label>
-
           {imageFile ? (
             <div>
               <img
@@ -241,9 +231,7 @@ const Formulario = ({ onSubmit }) => {
                 alt="Uploaded"
                 style={{ maxWidth: "100%", maxHeight: "200px" }}
               />
-
               <br />
-
               <button
                 type="button"
                 className="btn btn-danger"
@@ -256,8 +244,7 @@ const Formulario = ({ onSubmit }) => {
             <DragAndDrop onImageDrop={handleImageDrop} />
           )}
         </div>
-
-        <button type="submit" className="btn btn-primary" onClick={onSubmit}>
+        <button type="submit" className="btn btn-primary">
           Añadir Equipo
         </button>
       </form>
