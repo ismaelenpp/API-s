@@ -13,12 +13,10 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
-    // Fetch lista de países desde la API
-    fetch("https://restcountries.com/v2/all")
+    fetch("https://res.cloudinary.com/dajnd6hfe/raw/upload/v1695192766/countries_bth2oy.json")
       .then((response) => response.json())
       .then((data) => {
-        // Mapea los nombres de los países
-        const countryNames = data.map((country) => country.name);
+        const countryNames = data.countries.map((country) => country.name);
         setCountries(countryNames);
       })
       .catch((error) => {
