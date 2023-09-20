@@ -24,7 +24,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
       });
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const equipoEditado = {
@@ -36,6 +36,11 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
       imagen: imagen, // Actualizamos la imagen con el valor del estado
     };
 
+    console.log("equipo viejo", equipoSeleccionado.nombre);
+    console.log("equipo nuevo", equipoEditado.nombre);
+
+    await handleEliminarImagen(equipoSeleccionado.nombre);
+    
     // Llama a la función onEdit para guardar los cambios
     onEdit(equipoEditado);
 
@@ -62,6 +67,23 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
     setImageFile(null);
     setImagen(null); // Borra la imagen en el estado
   };
+
+  const handleEliminarImagen = async (public_id) => {
+    try {
+      const response = await fetch(`/eliminar-imagen/${public_id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        console.log("Imagen eliminada con éxito");
+      } else {
+        console.error("Error al eliminar la imagen");
+      }
+    } catch (error) {
+      console.error("Error al eliminar la imagen:", error);
+    }
+  };
+  
 
   return (
     <div className="container">

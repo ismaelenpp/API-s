@@ -7,6 +7,15 @@ const app = express();
 const mysql = require("mysql2");
 
 const bodyParser = require("body-parser");
+
+const cloudinary = require('cloudinary').v2;
+
+cloudinary.config({
+  cloud_name: "dwodczt0e",
+  api_key: "246222394918621",
+  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
+});
+
 app.use(bodyParser.json({ limit: "50mb" }));
 
 // MySQL connection configuration
@@ -38,6 +47,10 @@ var corsOptions = {
   origin: "http://localhost:5173",
 
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+
+  methods: "GET,PUT,POST,DELETE",
+
+  allowedHeaders: "Content-Type, Authorization, X-Requested-With",
 };
 
 app.use(cors(corsOptions));
@@ -174,6 +187,21 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
 
     // Actualizar las IDs automáticamenta
   });
+});
+
+// Delete de imagen en Cloudinary
+app.delete('/eliminar-imagen/:public_id', async (req, res) => {
+  const public_id = req.params.public_id;
+  console.log('Public ID:', public_id);
+  try {
+    // Realiza la eliminación en Cloudinary
+    const result = await cloudinary.uploader.destroy(public_id);
+    console.log('Imagen eliminada:', result);
+    res.status(200).json({ message: 'Imagen eliminada con éxito' });
+  } catch (error) {
+    console.error('Error al eliminar la imagen:', error);
+    res.status(500).json({ message: 'Error al eliminar la imagen' });
+  }
 });
 
 // Close the MySQL connection when the app is terminated

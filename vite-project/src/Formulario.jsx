@@ -4,9 +4,9 @@ import DragAndDrop from "./drag_and_drop";
 import cloudinary from "cloudinary-core";
 
 const cl = new cloudinary.Cloudinary({
-  cloud_name: "dajnd6hfe",
-  api_key: "643243133882548",
-  api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
+  cloud_name: "dwodczt0e",
+  api_key: "246222394918621",
+  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
 });
 
 const Formulario = ({ onSubmit }) => {
@@ -69,7 +69,7 @@ const Formulario = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const imageUrl = await uploadImageToCloudinary(imageFile);
+    const imageUrl = await uploadImageToCloudinary(imageFile, equipo);
     onSubmit(equipo, liga, pais, descripcion, imageUrl);
     setEquipo("");
     setLiga("");
@@ -91,20 +91,23 @@ const Formulario = ({ onSubmit }) => {
     setImageFile(null);
   };
 
-  const uploadImageToCloudinary = async (imageFile) => {
+  const uploadImageToCloudinary = async (imageFile, imageName) => {
     console.log("Subiendo imagen a Cloudinary...");
 
     try {
       const formData = new FormData();
       formData.append("file", imageFile);
       formData.append("upload_preset", "images");
+      formData.append("public_id", imageName);
+
       const response = await fetch(
-        cl.url("https://api.cloudinary.com/v1_1/dajnd6hfe/image/upload", {
+        cl.url("https://api.cloudinary.com/v1_1/dwodczt0e/image/upload", 
+        {
           secure: true,
           upload_preset: "images",
-          cloud_name: "dajnd6hfe",
-          api_key: "643243133882548",
-          api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
+          cloud_name: "dwodczt0e",
+          api_key: "246222394918621",
+          api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
         }),
         {
           method: "POST",
