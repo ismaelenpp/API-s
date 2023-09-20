@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Formulario.css"; // Asegúrate de tener un archivo CSS para estilos personalizados
+import "./Formulario.css";
 import DragAndDrop from "./drag_and_drop";
 import cloudinary from "cloudinary-core";
 
@@ -128,10 +128,10 @@ const Formulario = ({ onSubmit }) => {
   };
 
   useEffect(() => {
-    fetch("https://restcountries.com/v2/all")
+    fetch("https://res.cloudinary.com/dajnd6hfe/raw/upload/v1695192766/countries_bth2oy.json")
       .then((response) => response.json())
       .then((data) => {
-        const countryNames = data.map((country) => country.name);
+        const countryNames = data.countries.map((country) => country.name);
         setCountries(countryNames);
       })
       .catch((error) => {
