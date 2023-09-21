@@ -37,7 +37,7 @@ const Formulario = ({ onSubmit }) => {
           method: "GET",
           headers: {
             "X-RapidAPI-Key":
-              "85a44f5c53msh03d010cb82f7866p15c3b5jsn93a02268b61f",
+              "6de9dd7403msh1da91b169a0a5ccp1125c6jsnb1374dbe9438",
             "X-RapidAPI-Host": "sofascore.p.rapidapi.com",
           },
         }

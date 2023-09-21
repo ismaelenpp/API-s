@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import BtnDelete from "./ButtonDelete";
 import BtnPut from "./BtnPut";
+import BtnEstadio from "./BtnEstadio";
 import ImageComponent from "./ImageComponent";
 import Formulario2 from "./Formulario2";
 
@@ -108,6 +109,10 @@ const TableComponent = () => {
                   text={"✏️"}
                   onClick={() => handlePut(equipo)}
                   className={"btn btn-outline-warning"}
+                />
+                <BtnEstadio
+                  text={"🏟"}
+                  className={"btn btn-outline-success button-separation"}
                 />
               </td>
             </tr>
