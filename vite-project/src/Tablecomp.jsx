@@ -3,13 +3,17 @@ import { Modal, Button } from "react-bootstrap";
 import BtnDelete from "./ButtonDelete";
 import BtnPut from "./BtnPut";
 import BtnEstadio from "./BtnEstadio";
+import BtnVideo from "./BtnVideo";
 import ImageComponent from "./ImageComponent";
 import Formulario2 from "./Formulario2";
+
 
 const TableComponent = () => {
   const [tableData, setTableData] = useState([]);
   const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [teamToDelete, setTeamToDelete] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -27,18 +31,28 @@ const TableComponent = () => {
   };
 
   const handleDelete = (nombreEquipo) => {
-    fetch(`http://localhost:3000/eliminarEquipo/${nombreEquipo}`, {
+    setDeleteConfirmation(true);
+    setTeamToDelete(nombreEquipo);
+  };
+
+  const confirmDelete = () => {
+    fetch(`http://localhost:3000/eliminarEquipo/${teamToDelete}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("DELETE response:", data);
         fetchData();
+        setDeleteConfirmation(false); // Close the confirmation modal here
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-    window.location.reload(false);
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmation(false);
+    setTeamToDelete("");
   };
 
   const handlePut = (equipo) => {
@@ -114,6 +128,10 @@ const TableComponent = () => {
                   text={"🏟"}
                   className={"btn btn-outline-success button-separation"}
                 />
+                <BtnVideo
+                  text={"🎥"}
+                  className={"btn btn-outline-info button-separation"}
+                />
               </td>
             </tr>
           ))}
@@ -133,6 +151,26 @@ const TableComponent = () => {
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseModal}>
               Cancelar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmation && (
+        <Modal show={deleteConfirmation} onHide={cancelDelete}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmar Eliminación</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            ¿Quieres eliminar el equipo{" "} <strong>{teamToDelete}</strong>?{<br></br>} Clique dos veces en <strong>BORRAR</strong> para eliminarlo
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={cancelDelete}>
+              Cancelar
+            </Button>
+            <Button variant="danger" onClick={confirmDelete}>
+              Borrar
             </Button>
           </Modal.Footer>
         </Modal>
