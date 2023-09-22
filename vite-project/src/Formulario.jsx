@@ -4,10 +4,12 @@ import DragAndDrop from "./drag_and_drop";
 import cloudinary from "cloudinary-core";
 
 const cl = new cloudinary.Cloudinary({
-  cloud_name: "dwodczt0e",
-  api_key: "246222394918621",
-  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
+  cloud_name: "dajnd6hfe",
+  api_key: "643243133882548",
+  api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
 });
+
+
 
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
@@ -109,13 +111,13 @@ const Formulario = ({ onSubmit }) => {
       formData.append("public_id", imageName);
 
       const response = await fetch(
-        cl.url("https://api.cloudinary.com/v1_1/dwodczt0e/image/upload", 
+        cl.url("https://api.cloudinary.com/v1_1/dajnd6hfe/image/upload", 
         {
           secure: true,
           upload_preset: "images",
-          cloud_name: "dwodczt0e",
-          api_key: "246222394918621",
-          api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
+          cloud_name: "dajnd6hfe",
+          api_key: "643243133882548",
+          api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
         }),
         {
           method: "POST",
