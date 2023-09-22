@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "./Formulario.css";
+import "./Formulario.css"; // Asegúrate de tener un archivo CSS para estilos personalizados
 import DragAndDrop from "./drag_and_drop";
 import cloudinary from "cloudinary-core";
 
 const cl = new cloudinary.Cloudinary({
-  cloud_name: "dwodczt0e",
-  api_key: "246222394918621",
-  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
+  cloud_name: "dajnd6hfe",
+  api_key: "643243133882548",
+  api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
 });
 
 const Formulario = ({ onSubmit }) => {
@@ -19,8 +19,6 @@ const Formulario = ({ onSubmit }) => {
   const [imageFile, setImageFile] = useState(null);
   const [countries, setCountries] = useState([]);
   const [showTeamList, setShowTeamList] = useState(false);
-  const [showWarning, setShowWarning] = useState(false);
-  const [warningMessage, setWarningMessage] = useState("");
 
   const fetchTeams = async (value) => {
     if (value.length < 3) {
@@ -37,7 +35,7 @@ const Formulario = ({ onSubmit }) => {
           method: "GET",
           headers: {
             "X-RapidAPI-Key":
-              "85a44f5c53msh03d010cb82f7866p15c3b5jsn93a02268b61f",
+              "6de9dd7403msh1da91b169a0a5ccp1125c6jsnb1374dbe9438",
             "X-RapidAPI-Host": "sofascore.p.rapidapi.com",
           },
         }
@@ -71,19 +69,13 @@ const Formulario = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!equipo || !imageFile) {
-      setShowWarning(true);
-      setWarningMessage("Tienes que adjuntar una imagen antes de añadir el equipo.");
-      return;
-    }
-    const imageUrl = await uploadImageToCloudinary(imageFile, equipo);
+    const imageUrl = await uploadImageToCloudinary(imageFile);
     onSubmit(equipo, liga, pais, descripcion, imageUrl);
     setEquipo("");
     setLiga("");
     setPais("");
     setDescripcion("");
     setImageFile(null);
-    setShowWarning(false); // Oculta la advertencia después de enviar el formulario
     window.location.reload();
   };
 
@@ -99,23 +91,20 @@ const Formulario = ({ onSubmit }) => {
     setImageFile(null);
   };
 
-  const uploadImageToCloudinary = async (imageFile, imageName) => {
+  const uploadImageToCloudinary = async (imageFile) => {
     console.log("Subiendo imagen a Cloudinary...");
 
     try {
       const formData = new FormData();
       formData.append("file", imageFile);
       formData.append("upload_preset", "images");
-      formData.append("public_id", imageName);
-
       const response = await fetch(
-        cl.url("https://api.cloudinary.com/v1_1/dwodczt0e/image/upload", 
-        {
+        cl.url("https://api.cloudinary.com/v1_1/dajnd6hfe/image/upload", {
           secure: true,
           upload_preset: "images",
-          cloud_name: "dwodczt0e",
-          api_key: "246222394918621",
-          api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
+          cloud_name: "dajnd6hfe",
+          api_key: "643243133882548",
+          api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
         }),
         {
           method: "POST",
@@ -139,10 +128,10 @@ const Formulario = ({ onSubmit }) => {
   };
 
   useEffect(() => {
-    fetch("https://res.cloudinary.com/dajnd6hfe/raw/upload/v1695192766/countries_bth2oy.json")
+    fetch("https://restcountries.com/v2/all")
       .then((response) => response.json())
       .then((data) => {
-        const countryNames = data.countries.map((country) => country.name);
+        const countryNames = data.map((country) => country.name);
         setCountries(countryNames);
       })
       .catch((error) => {
@@ -153,11 +142,6 @@ const Formulario = ({ onSubmit }) => {
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
-        {showWarning && (
-          <div className="alert alert-danger" role="alert">
-            {warningMessage}
-          </div>
-        )}
         <div className="mb-3">
           <label htmlFor="equipo" className="form-label">
             Nombre del Equipo
@@ -174,7 +158,6 @@ const Formulario = ({ onSubmit }) => {
                 setShowTeamList(false);
                 fetchTeams(e.target.value);
               }}
-              required // Campo obligatorio
             />
             {showTeamList && teams.length > 0 && (
               <ul className="dropdown-list">
@@ -201,7 +184,7 @@ const Formulario = ({ onSubmit }) => {
             id="liga"
             value={liga}
             onChange={(e) => setLiga(e.target.value)}
-            required // Campo obligatorio
+            required
           />
         </div>
         <div className="mb-3">
@@ -213,7 +196,7 @@ const Formulario = ({ onSubmit }) => {
             className="form-control"
             value={pais}
             onChange={(e) => setPais(e.target.value)}
-            required // Campo obligatorio
+            required
           >
             <option value="" disabled>
               Selecciona un país
@@ -234,7 +217,7 @@ const Formulario = ({ onSubmit }) => {
             id="descripcion"
             value={descripcion}
             onChange={(e) => setDescripcion(e.target.value)}
-            required // Campo obligatorio
+            required
           />
         </div>
         <div className="mb-3">

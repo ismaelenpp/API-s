@@ -4,7 +4,7 @@ import BtnDelete from "./ButtonDelete";
 import BtnPut from "./BtnPut";
 import ImageComponent from "./ImageComponent";
 import Formulario2 from "./Formulario2";
-
+import BtnEstadio from "./BtnEstadio";
 const TableComponent = () => {
   const [tableData, setTableData] = useState([]);
   const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
@@ -108,6 +108,10 @@ const TableComponent = () => {
                   text={"✏️"}
                   onClick={() => handlePut(equipo)}
                   className={"btn btn-outline-warning"}
+                />
+                <BtnEstadio
+                  text={"🏟"}
+                  className={"btn btn-outline-success button-separation"}
                 />
               </td>
             </tr>

@@ -14,5 +14,4 @@ const ImageComponent = ({ imageString }) => {
     </center>
   );
 };
-
 export default ImageComponent;
