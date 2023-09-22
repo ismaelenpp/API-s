@@ -1,0 +1,16 @@
+/* CSS para la pantalla dividida */
+.estadio-container {
+    display: flex;
+  }
+  
+  .table-left {
+    flex: 1;
+    padding: 10px;
+  }
+  
+  .table-right {
+    flex: 1;
+    padding: 10px;
+    border-left: 1px solid #a16262cc; /* Agrega un borde izquierdo entre las dos pantallas */
+  }
+  
