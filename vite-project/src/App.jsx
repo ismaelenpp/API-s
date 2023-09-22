@@ -2,8 +2,6 @@
 import { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import Formulario from "./Formulario";
-//import BtnPut from "./BtnPut";
-//import BtnDelete from "./Button";
 import TableComponent from "./Tablecomp";
 
 function App() {
@@ -45,7 +43,7 @@ function App() {
         .then((response) => response.json())
         .then((data) => {
           console.log("POST response:", data);
-          handleGet(); // Refresh the table data after successful POST
+          handleGet();
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -61,7 +59,6 @@ function App() {
     setShowModal(true);
   };
 
-  // Personalizamos el título y agregamos interactividad
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -77,13 +74,12 @@ function App() {
             fontFamily: "Arial, sans-serif",
             fontSize: "48px",
             fontWeight: "bold",
-            color: hovered ? "#03a99a" : "#03a99a", // Cambiamos el color al hacer hover
+            color: hovered ? "#03a99a" : "#03a99a",
             textShadow: "2px 2px #000",
-            cursor: "pointer", // Cambiamos el cursor al hacer hover
+            cursor: "pointer",
           }}
-          onMouseEnter={() => setHovered(true)} // Detectamos el hover del usuario
-          onMouseLeave={() => setHovered(false)} // Detectamos la salida del hover
-          // Agregamos interacción al hacer clic
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
         >
           {hovered ? "¡INETFUT!" : "EQUIPOS DE FÚTBOL"}
         </h1>

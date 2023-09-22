@@ -1,8 +1,5 @@
-//import cloudinary from "cloudinary-core";
-
-import { useState, useRef } from "react"; // Agrega useRef a las importaciones
+import { useState, useRef } from "react";
 import PropTypes from "prop-types";
-
 
 const DragAndDrop = ({ onImageDrop }) => {
   const [dragging, setDragging] = useState(false);
@@ -64,8 +61,8 @@ const DragAndDrop = ({ onImageDrop }) => {
       <input
         ref={imageInputRef}
         type="hidden"
-        name="imagen" // Nombre del campo en el formulario
-        value={selectedImage || ""} // Valor del campo
+        name="imagen"
+        value={selectedImage || ""}
       />
     </div>
   );

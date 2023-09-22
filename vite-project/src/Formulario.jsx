@@ -19,6 +19,8 @@ const Formulario = ({ onSubmit }) => {
   const [imageFile, setImageFile] = useState(null);
   const [countries, setCountries] = useState([]);
   const [showTeamList, setShowTeamList] = useState(false);
+  const [showWarning, setShowWarning] = useState(false);
+  const [warningMessage, setWarningMessage] = useState("");
 
   const fetchTeams = async (value) => {
     if (value.length < 3) {
@@ -69,6 +71,13 @@ const Formulario = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!equipo || !imageFile) {
+      setShowWarning(true);
+      setWarningMessage(
+        "Tienes que adjuntar una imagen antes de añadir el equipo."
+      );
+      return;
+    }
     const imageUrl = await uploadImageToCloudinary(imageFile);
     onSubmit(equipo, liga, pais, descripcion, imageUrl);
     setEquipo("");
@@ -76,6 +85,7 @@ const Formulario = ({ onSubmit }) => {
     setPais("");
     setDescripcion("");
     setImageFile(null);
+    setShowWarning(false);
     window.location.reload();
   };
 
@@ -142,6 +152,11 @@ const Formulario = ({ onSubmit }) => {
   return (
     <div className="container">
       <form onSubmit={handleSubmit}>
+        {showWarning && (
+          <div className="alert alert-danger" role="alert">
+            {warningMessage}
+          </div>
+        )}
         <div className="mb-3">
           <label htmlFor="equipo" className="form-label">
             Nombre del Equipo
@@ -158,6 +173,7 @@ const Formulario = ({ onSubmit }) => {
                 setShowTeamList(false);
                 fetchTeams(e.target.value);
               }}
+              required
             />
             {showTeamList && teams.length > 0 && (
               <ul className="dropdown-list">
