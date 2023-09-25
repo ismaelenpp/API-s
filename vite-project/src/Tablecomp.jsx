@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Modal, Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Modal, Button, Row, Col } from "react-bootstrap";
 import BtnDelete from "./ButtonDelete";
 import BtnPut from "./BtnPut";
 import BtnVideo from "./BtnVideo";
@@ -7,7 +7,6 @@ import ImageComponent from "./ImageComponent";
 import Formulario2 from "./Formulario2";
 import BtnEstadio from "./BtnEstadio";
 import EstadioScreen from "./EstadioScreen";
-import "./Estadio.css";
 
 const TableComponent = () => {
   const [tableData, setTableData] = useState([]);
@@ -15,7 +14,7 @@ const TableComponent = () => {
   const [showModal, setShowModal] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [teamToDelete, setTeamToDelete] = useState("");
-  const [showEstadio, setShowEstadio] = useState(false);
+  const [showEstadio, setShowEstadio] = useState(false); // Ocultar Estadio al principio
 
   useEffect(() => {
     fetchData();
@@ -45,7 +44,7 @@ const TableComponent = () => {
       .then((data) => {
         console.log("DELETE response:", data);
         fetchData();
-        setDeleteConfirmation(false); // Close the confirmation modal here
+        setDeleteConfirmation(false); // Cerrar el modal de confirmación aquí
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -92,9 +91,75 @@ const TableComponent = () => {
 
   return (
     <div className="table-responsive">
-      {showEstadio ? (
-        <div className="estadio-container">
-          <div className="table-left">
+      <Row>
+        {showEstadio ? (
+          <React.Fragment>
+            <Col md={7}>
+              <Row>
+                <Col md={12}>
+                  <table className="table table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Liga</th>
+                        <th>País</th>
+                        <th>Descripción</th>
+                        <th>Imagen</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tableData.map((equipo) => (
+                        <tr key={equipo.id}>
+                          <td>{equipo.id}</td>
+                          <td>{equipo.nombre}</td>
+                          <td>{equipo.liga}</td>
+                          <td>{equipo.pais}</td>
+                          <td>{equipo.descripcion}</td>
+                          <td>
+                            <ImageComponent imageString={equipo.imagen} />
+                          </td>
+                          <td>
+                            <BtnDelete
+                              text={"🗑️"}
+                              onClick={() => handleDelete(equipo.nombre)}
+                              className={
+                                "btn btn-outline-danger button-separation"
+                              }
+                            />
+                            <BtnPut
+                              text={"✏️"}
+                              onClick={() => handlePut(equipo)}
+                              className={"btn btn-outline-warning"}
+                            />
+                            <BtnEstadio
+                              text={"🏟"}
+                              onClick={() => setShowEstadio(false)}
+                              className={
+                                "btn btn-outline-success button-separation"
+                              }
+                            />
+                            <BtnVideo
+                              text={"🎥"}
+                              className={
+                                "btn btn-outline-info button-separation"
+                              }
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </Col>
+              </Row>
+            </Col>
+            <Col md={5}>
+              <EstadioScreen />
+            </Col>
+          </React.Fragment>
+        ) : (
+          <Col md={12}>
             <table className="table table-hover table-bordered">
               <thead>
                 <tr>
@@ -131,10 +196,9 @@ const TableComponent = () => {
                       />
                       <BtnEstadio
                         text={"🏟"}
-                        onClick={() => setShowEstadio(false)} // Oculta el estadio al hacer clic
+                        onClick={() => setShowEstadio(true)}
                         className={"btn btn-outline-success button-separation"}
                       />
-
                       <BtnVideo
                         text={"🎥"}
                         className={"btn btn-outline-info button-separation"}
@@ -144,62 +208,10 @@ const TableComponent = () => {
                 ))}
               </tbody>
             </table>
-          </div>
-          <div className="table-right">
-            <EstadioScreen />
-          </div>
-        </div>
-      ) : (
-        <table className="table table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Liga</th>
-              <th>País</th>
-              <th>Descripción</th>
-              <th>Imagen</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tableData.map((equipo) => (
-              <tr key={equipo.id}>
-                <td>{equipo.id}</td>
-                <td>{equipo.nombre}</td>
-                <td>{equipo.liga}</td>
-                <td>{equipo.pais}</td>
-                <td>{equipo.descripcion}</td>
-                <td>
-                  <ImageComponent imageString={equipo.imagen} />
-                </td>
-                <td>
-                  <BtnDelete
-                    text={"🗑️"}
-                    onClick={() => handleDelete(equipo.nombre)}
-                    className={"btn btn-outline-danger button-separation"}
-                  />
-                  <BtnPut
-                    text={"✏️"}
-                    onClick={() => handlePut(equipo)}
-                    className={"btn btn-outline-warning"}
-                  />
-                  <BtnEstadio
-                    text={"🏟"}
-                    onClick={() => setShowEstadio(true)} // Muestra el estadio al hacer clic
-                    className={"btn btn-outline-success button-separation"}
-                  />
+          </Col>
+        )}
+      </Row>
 
-                  <BtnVideo
-                    text={"🎥"}
-                    className={"btn btn-outline-info button-separation"}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
       {equipoSeleccionado && (
         <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
@@ -218,8 +230,6 @@ const TableComponent = () => {
           </Modal.Footer>
         </Modal>
       )}
-
-      {/* Delete Confirmation Modal */}
       {deleteConfirmation && (
         <Modal show={deleteConfirmation} onHide={cancelDelete}>
           <Modal.Header closeButton>
@@ -243,5 +253,4 @@ const TableComponent = () => {
     </div>
   );
 };
-
 export default TableComponent;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./Formulario.css"; // Asegúrate de tener un archivo CSS para estilos personalizados
 import DragAndDrop from "./drag_and_drop";
 import cloudinary from "cloudinary-core";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const cl = new cloudinary.Cloudinary({
   cloud_name: "dajnd6hfe",
@@ -86,7 +86,7 @@ const Formulario = ({ onSubmit }) => {
     setDescripcion("");
     setImageFile(null);
     setShowWarning(false);
-    window.location.reload();
+    // No es recomendable recargar la página con window.location.reload()
   };
 
   const handleImageDrop = (file) => {
@@ -150,7 +150,8 @@ const Formulario = ({ onSubmit }) => {
   }, []);
 
   return (
-    <div className="container">
+    <div className="container mt-0">
+      <h1>Añadir equipo</h1>
       <form onSubmit={handleSubmit}>
         {showWarning && (
           <div className="alert alert-danger" role="alert">
@@ -161,7 +162,7 @@ const Formulario = ({ onSubmit }) => {
           <label htmlFor="equipo" className="form-label">
             Nombre del Equipo
           </label>
-          <div className="custom-dropdown">
+          <div className="input-group">
             <input
               type="text"
               id="equipo"
@@ -176,11 +177,11 @@ const Formulario = ({ onSubmit }) => {
               required
             />
             {showTeamList && teams.length > 0 && (
-              <ul className="dropdown-list">
+              <ul className="list-group dropdown-list">
                 {teams.map((team, index) => (
                   <li
                     key={index}
-                    className="dropdown-item"
+                    className="list-group-item"
                     onClick={() => handleTeamSelect(team)}
                   >
                     {team}
@@ -194,14 +195,16 @@ const Formulario = ({ onSubmit }) => {
           <label htmlFor="liga" className="form-label">
             Liga
           </label>
-          <input
-            type="text"
-            className="form-control"
-            id="liga"
-            value={liga}
-            onChange={(e) => setLiga(e.target.value)}
-            required
-          />
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              id="liga"
+              value={liga}
+              onChange={(e) => setLiga(e.target.value)}
+              required
+            />
+          </div>
         </div>
         <div className="mb-3">
           <label htmlFor="pais" className="form-label">
@@ -209,7 +212,7 @@ const Formulario = ({ onSubmit }) => {
           </label>
           <select
             id="pais"
-            className="form-control"
+            className="form-select"
             value={pais}
             onChange={(e) => setPais(e.target.value)}
             required
@@ -224,6 +227,7 @@ const Formulario = ({ onSubmit }) => {
             ))}
           </select>
         </div>
+
         <div className="mb-3">
           <label htmlFor="descripcion" className="form-label">
             Descripción
@@ -250,7 +254,7 @@ const Formulario = ({ onSubmit }) => {
               <br />
               <button
                 type="button"
-                className="btn btn-danger"
+                className="btn btn-danger mt-2"
                 onClick={handleClearImage}
               >
                 Eliminar Imagen

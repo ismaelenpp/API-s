@@ -6,7 +6,7 @@
     "@vitejs/plugin-react-swc": "^3.3.2",
     "axios": "^1.4.0",
     "body-parser": "^1.20.2",
-    "bootstrap": "^5.3.0",
+    "bootstrap": "^5.3.2",
     "cloudinary": "^1.40.0",
     "cloudinary-core": "^2.13.0",
     "cors": "^2.8.5",
@@ -16,6 +16,7 @@
     "mysql2": "^3.6.0",
     "node-vite": "^0.0.0-alpha.0",
     "react-bootstrap": "^2.8.0",
+    "reactstrap": "^9.2.0",
     "vite-node": "^0.34.3"
   },
   "description": "Empezamos el proyecto",
