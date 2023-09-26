@@ -98,7 +98,6 @@ const TableComponent = () => {
             <table className="table table-hover table-bordered table-responsive">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Nombre</th>
                   <th>Liga</th>
                   <th>País</th>
@@ -110,7 +109,6 @@ const TableComponent = () => {
               <tbody>
                 {tableData.map((equipo) => (
                   <tr key={equipo.id}>
-                    <td>{equipo.id}</td>
                     <td>{equipo.nombre}</td>
                     <td>{equipo.liga}</td>
                     <td>{equipo.pais}</td>
@@ -118,26 +116,30 @@ const TableComponent = () => {
                     <td>
                       <ImageComponent imageString={equipo.imagen} />
                     </td>
-                    <td className="container-row col-8">
-                      <BtnDelete
-                        text={"🗑️"}
-                        onClick={() => handleDelete(equipo.nombre)}
-                        className={"btn btn-outline-danger button-separation"}
-                      />
-                      <BtnPut
-                        text={"✏️"}
-                        onClick={() => handlePut(equipo)}
-                        className={"btn btn-outline-warning"}
-                      />
-                      <BtnEstadio
-                        text={"🏟"}
-                        onClick={() => setShowEstadio(false)}
-                        className={"btn btn-outline-success button-separation"}
-                      />
-                      <BtnVideo
-                        text={"🎥"}
-                        className={"btn btn-outline-info button-separation"}
-                      />
+                    <td className="container-row col-2">
+                      <center>
+                        <BtnDelete
+                          text={"🗑️"}
+                          onClick={() => handleDelete(equipo.nombre)}
+                          className={"btn btn-outline-danger button-separation"}
+                        />
+                        <BtnPut
+                          text={"✏️"}
+                          onClick={() => handlePut(equipo)}
+                          className={"btn btn-outline-warning"}
+                        />
+                        <BtnEstadio
+                          text={"🏟"}
+                          onClick={() => setShowEstadio(false)}
+                          className={
+                            "btn btn-outline-success button-separation"
+                          }
+                        />
+                        <BtnVideo
+                          text={"🎥"}
+                          className={"btn btn-outline-info button-separation"}
+                        />
+                      </center>
                     </td>
                   </tr>
                 ))}
@@ -149,10 +151,9 @@ const TableComponent = () => {
           </div>
         </React.Fragment>
       ) : (
-        <table className="table table-hover table border col-sm-12 col-md-12 col-xl-12">
+        <table className="table table-hover table-bordered col-sm-12 col-md-12 col-xl-12">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Nombre</th>
               <th>Liga</th>
               <th>País</th>
@@ -164,7 +165,6 @@ const TableComponent = () => {
           <tbody>
             {tableData.map((equipo) => (
               <tr key={equipo.id}>
-                <td>{equipo.id}</td>
                 <td>{equipo.nombre}</td>
                 <td>{equipo.liga}</td>
                 <td>{equipo.pais}</td>
@@ -173,25 +173,27 @@ const TableComponent = () => {
                   <ImageComponent imageString={equipo.imagen} />
                 </td>
                 <td className="">
-                  <BtnDelete
-                    text={"🗑️"}
-                    onClick={() => handleDelete(equipo.nombre)}
-                    className={"btn btn-outline-danger button-separation"}
-                  />
-                  <BtnPut
-                    text={"✏️"}
-                    onClick={() => handlePut(equipo)}
-                    className={"btn btn-outline-warning"}
-                  />
-                  <BtnEstadio
-                    text={"🏟"}
-                    onClick={() => setShowEstadio(true)}
-                    className={"btn btn-outline-success button-separation"}
-                  />
-                  <BtnVideo
-                    text={"🎥"}
-                    className={"btn btn-outline-info button-separation"}
-                  />
+                  <center>
+                    <BtnDelete
+                      text={"🗑️"}
+                      onClick={() => handleDelete(equipo.nombre)}
+                      className={"btn btn-outline-danger button-separation"}
+                    />
+                    <BtnPut
+                      text={"✏️"}
+                      onClick={() => handlePut(equipo)}
+                      className={"btn btn-outline-warning"}
+                    />
+                    <BtnEstadio
+                      text={"🏟"}
+                      onClick={() => setShowEstadio(true)}
+                      className={"btn btn-outline-success button-separation"}
+                    />
+                    <BtnVideo
+                      text={"🎥"}
+                      className={"btn btn-outline-info button-separation"}
+                    />
+                  </center>
                 </td>
               </tr>
             ))}
