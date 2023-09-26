@@ -7,6 +7,7 @@ import ImageComponent from "./ImageComponent";
 import Formulario2 from "./Formulario2";
 import BtnEstadio from "./BtnEstadio";
 import EstadioScreen from "./EstadioScreen";
+import { Background } from "@cloudinary/url-gen/qualifiers";
 
 const TableComponent = () => {
   const [tableData, setTableData] = useState([]);
@@ -90,77 +91,11 @@ const TableComponent = () => {
   };
 
   return (
-    <div className="table-responsive">
-      <Row>
-        {showEstadio ? (
-          <React.Fragment>
-            <Col md={7}>
-              <Row>
-                <Col md={12}>
-                  <table className="table table-hover table-bordered">
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Liga</th>
-                        <th>País</th>
-                        <th>Descripción</th>
-                        <th>Imagen</th>
-                        <th>Acciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tableData.map((equipo) => (
-                        <tr key={equipo.id}>
-                          <td>{equipo.id}</td>
-                          <td>{equipo.nombre}</td>
-                          <td>{equipo.liga}</td>
-                          <td>{equipo.pais}</td>
-                          <td>{equipo.descripcion}</td>
-                          <td>
-                            <ImageComponent imageString={equipo.imagen} />
-                          </td>
-                          <td>
-                            <BtnDelete
-                              text={"🗑️"}
-                              onClick={() => handleDelete(equipo.nombre)}
-                              className={
-                                "btn btn-outline-danger button-separation"
-                              }
-                            />
-                            <BtnPut
-                              text={"✏️"}
-                              onClick={() => handlePut(equipo)}
-                              className={"btn btn-outline-warning"}
-                            />
-                            <BtnEstadio
-                              text={"🏟"}
-                              onClick={() => setShowEstadio(false)}
-                              className={
-                                "btn btn-outline-success button-separation"
-                              }
-                            />
-                            <BtnVideo
-                              text={"🎥"}
-                              className={
-                                "btn btn-outline-info button-separation"
-                              }
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </Col>
-              </Row>
-            </Col>
-            <Col md={5}>
-              <EstadioScreen />
-            </Col>
-          </React.Fragment>
-        ) : (
-          <Col md={12}>
-            <table className="table table-hover table-bordered">
+    <div className="container row">
+      {showEstadio ? (
+        <React.Fragment>
+          <div className="col-sm-12 col-md-8 col-xl-8">
+            <table className="table table-hover table-bordered table-responsive">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -183,7 +118,7 @@ const TableComponent = () => {
                     <td>
                       <ImageComponent imageString={equipo.imagen} />
                     </td>
-                    <td>
+                    <td className="container-row col-8">
                       <BtnDelete
                         text={"🗑️"}
                         onClick={() => handleDelete(equipo.nombre)}
@@ -196,7 +131,7 @@ const TableComponent = () => {
                       />
                       <BtnEstadio
                         text={"🏟"}
-                        onClick={() => setShowEstadio(true)}
+                        onClick={() => setShowEstadio(false)}
                         className={"btn btn-outline-success button-separation"}
                       />
                       <BtnVideo
@@ -208,10 +143,61 @@ const TableComponent = () => {
                 ))}
               </tbody>
             </table>
-          </Col>
-        )}
-      </Row>
-
+          </div>
+          <div className="col-sm-12 col-md-4 col-xl-4">
+            <EstadioScreen />
+          </div>
+        </React.Fragment>
+      ) : (
+        <table className="table table-hover table border col-sm-12 col-md-12 col-xl-12">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Liga</th>
+              <th>País</th>
+              <th>Descripción</th>
+              <th>Imagen</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableData.map((equipo) => (
+              <tr key={equipo.id}>
+                <td>{equipo.id}</td>
+                <td>{equipo.nombre}</td>
+                <td>{equipo.liga}</td>
+                <td>{equipo.pais}</td>
+                <td>{equipo.descripcion}</td>
+                <td>
+                  <ImageComponent imageString={equipo.imagen} />
+                </td>
+                <td className="">
+                  <BtnDelete
+                    text={"🗑️"}
+                    onClick={() => handleDelete(equipo.nombre)}
+                    className={"btn btn-outline-danger button-separation"}
+                  />
+                  <BtnPut
+                    text={"✏️"}
+                    onClick={() => handlePut(equipo)}
+                    className={"btn btn-outline-warning"}
+                  />
+                  <BtnEstadio
+                    text={"🏟"}
+                    onClick={() => setShowEstadio(true)}
+                    className={"btn btn-outline-success button-separation"}
+                  />
+                  <BtnVideo
+                    text={"🎥"}
+                    className={"btn btn-outline-info button-separation"}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       {equipoSeleccionado && (
         <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
