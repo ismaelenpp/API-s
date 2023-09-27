@@ -103,7 +103,6 @@ const TableComponent = () => {
         <React.Fragment>
           <div className="container row">
             <div className="col-sm-12 col-md-8 col-xl-8">
-              {/* Agrega el campo de entrada para filtrar la tabla */}
               <input
                 type="text"
                 placeholder="Filtrar por nombre"
@@ -139,24 +138,20 @@ const TableComponent = () => {
                   {
                     name: "Acciones",
                     cell: (row) => (
-                      <div className="d-flex flex-wrap">
+                      <div>
                         <div className="row">
                           <div className="col-md-6 mb-2">
                             <BtnDelete
                               text={"🗑️"}
                               onClick={() => handleDelete(row.nombre)}
-                              className={
-                                "btn btn-outline-danger btn-sm btn-block"
-                              }
+                              className={"btn btn-outline-danger btn-sm"}
                             />
                           </div>
                           <div className="col-md-6 mb-2">
                             <BtnPut
                               text={"✏️"}
                               onClick={() => handlePut(row)}
-                              className={
-                                "btn btn-outline-warning btn-sm btn-block"
-                              }
+                              className={"btn btn-outline-warning btn-sm"}
                             />
                           </div>
                         </div>
@@ -165,17 +160,13 @@ const TableComponent = () => {
                             <BtnEstadio
                               text={"🏟"}
                               onClick={() => setShowEstadio(false)}
-                              className={
-                                "btn btn-outline-success btn-sm btn-block"
-                              }
+                              className={"btn btn-outline-success btn-sm"}
                             />
                           </div>
                           <div className="col-md-6 mb-2">
                             <BtnVideo
                               text={"🎥"}
-                              className={
-                                "btn btn-outline-info btn-sm btn-block"
-                              }
+                              className={"btn btn-outline-info btn-sm"}
                             />
                           </div>
                         </div>
@@ -185,6 +176,8 @@ const TableComponent = () => {
                 ]}
                 data={filteredData} // Usar los datos filtrados
                 pagination
+                striped
+                highlightOnHover
               />
             </div>
             <div className="col-sm-12 col-md-4 col-xl-4">
@@ -265,6 +258,8 @@ const TableComponent = () => {
             ]}
             data={filteredData}
             pagination
+            striped
+            highlightOnHover
           />
         </div>
       )}
