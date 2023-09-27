@@ -4,9 +4,9 @@ import cloudinary from "cloudinary-core";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const cl = new cloudinary.Cloudinary({
-  cloud_name: "dajnd6hfe",
-  api_key: "643243133882548",
-  api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
+  cloud_name: "dwodczt0e",
+  api_key: "246222394918621",
+  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
 });
 
 const Formulario = ({ onSubmit }) => {
@@ -86,7 +86,7 @@ const Formulario = ({ onSubmit }) => {
     setDescripcion("");
     setImageFile(null);
     setShowWarning(false);
-    // No es recomendable recargar la página con window.location.reload()
+    window.location.reload();
   };
 
   const handleImageDrop = (file) => {
@@ -109,12 +109,12 @@ const Formulario = ({ onSubmit }) => {
       formData.append("file", imageFile);
       formData.append("upload_preset", "images");
       const response = await fetch(
-        cl.url("https://api.cloudinary.com/v1_1/dajnd6hfe/image/upload", {
+        cl.url("https://api.cloudinary.com/v1_1/dwodczt0e/image/upload", {
           secure: true,
           upload_preset: "images",
-          cloud_name: "dajnd6hfe",
-          api_key: "643243133882548",
-          api_secret: "Hqac499b90mUnZApKhIHUgpLCzc",
+          cloud_name: "dwodczt0e",
+          api_key: "246222394918621",
+          api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
         }),
         {
           method: "POST",

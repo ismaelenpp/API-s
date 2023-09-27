@@ -13,7 +13,9 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
-    fetch("https://res.cloudinary.com/dajnd6hfe/raw/upload/v1695192766/countries_bth2oy.json")
+    fetch(
+      "https://res.cloudinary.com/dajnd6hfe/raw/upload/v1695192766/countries_bth2oy.json"
+    )
       .then((response) => response.json())
       .then((data) => {
         const countryNames = data.countries.map((country) => country.name);
@@ -40,7 +42,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
     console.log("equipo nuevo", equipoEditado.nombre);
 
     await handleEliminarImagen(equipoSeleccionado.nombre);
-    
+
     // Llama a la función onEdit para guardar los cambios
     onEdit(equipoEditado);
 
@@ -83,7 +85,6 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
       console.error("Error al eliminar la imagen:", error);
     }
   };
-  
 
   return (
     <div className="container">
