@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import DragAndDrop from "./drag_and_drop";
 
@@ -8,7 +10,8 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
   const [descripcion, setDescripcion] = useState(
     equipoSeleccionado.descripcion
   );
-  const [imagen, setImagen] = useState(equipoSeleccionado.imagen); // Actualizamos la imagen en el estado
+  const [videoLink, setVideoLink] = useState(equipoSeleccionado.videoLink); // Nuevo estado para el enlace de video
+  const [imagen, setImagen] = useState(equipoSeleccionado.imagen);
   const [imageFile, setImageFile] = useState(null);
   const [countries, setCountries] = useState([]);
 
@@ -28,46 +31,37 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const equipoEditado = {
       ...equipoSeleccionado,
       nombre: equipo,
       liga: liga,
       pais: pais,
       descripcion: descripcion,
-      imagen: imagen, // Actualizamos la imagen con el valor del estado
+      videoLink: videoLink, // Actualizamos el enlace de video con el valor del estado
+      imagen: imagen,
     };
-
-    console.log("equipo viejo", equipoSeleccionado.nombre);
-    console.log("equipo nuevo", equipoEditado.nombre);
-
     await handleEliminarImagen(equipoSeleccionado.nombre);
-
-    // Llama a la función onEdit para guardar los cambios
     onEdit(equipoEditado);
-
-    // Restablecer los campos del formulario
     setEquipo("");
     setLiga("");
     setPais("");
     setDescripcion("");
+    setVideoLink(""); // Limpiamos el enlace de video
     setImageFile(null);
   };
 
   const handleImageDrop = (file) => {
     const reader = new FileReader();
-
     reader.onloadend = () => {
-      setImageFile(reader.result); // Actualiza el archivo de imagen
-      setImagen(reader.result); // Actualiza la imagen en el estado
+      setImageFile(reader.result);
+      setImagen(reader.result);
     };
-
     reader.readAsDataURL(file);
   };
 
   const handleClearImage = () => {
     setImageFile(null);
-    setImagen(null); // Borra la imagen en el estado
+    setImagen(null);
   };
 
   const handleEliminarImagen = async (public_id) => {
@@ -75,7 +69,6 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
       const response = await fetch(`/eliminar-imagen/${public_id}`, {
         method: "DELETE",
       });
-
       if (response.ok) {
         console.log("Imagen eliminada con éxito");
       } else {
@@ -102,6 +95,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
             required
           />
         </div>
+
         <div className="mb-3">
           <label htmlFor="liga" className="form-label">
             Liga
@@ -115,6 +109,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
             required
           />
         </div>
+
         <div className="mb-3">
           <label htmlFor="pais" className="form-label">
             País
@@ -136,6 +131,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
             ))}
           </select>
         </div>
+
         <div className="mb-3">
           <label htmlFor="descripcion" className="form-label">
             Descripción
@@ -148,11 +144,24 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
             required
           />
         </div>
+
+        <div className="mb-3">
+          <label htmlFor="videoLink" className="form-label">
+            Enlace del Video
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="videoLink"
+            value={videoLink}
+            onChange={(e) => setVideoLink(e.target.value)}
+          />
+        </div>
+
         <div className="mb-3">
           <label htmlFor="imagen" className="form-label">
             Link de la Imagen
           </label>
-
           {imageFile ? (
             <div>
               <img
@@ -160,9 +169,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
                 alt="Uploaded"
                 style={{ maxWidth: "100%", maxHeight: "200px" }}
               />
-
               <br />
-
               <button
                 type="button"
                 className="btn btn-danger"
@@ -175,6 +182,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
             <DragAndDrop onImageDrop={handleImageDrop} />
           )}
         </div>
+
         <button type="submit" className="btn btn-primary">
           Guardar Cambios
         </button>
