@@ -13,9 +13,9 @@ app.use(bodyParser.json({ limit: "50mb" }));
 const connection = mysql.createConnection({
   host: "localhost",
 
-  user: "ismael",
+  user: "root",
 
-  password: "ismaelenp1234",
+  // password: "ismaelenp1234",
 
   database: "futbol",
 
