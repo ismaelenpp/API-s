@@ -125,7 +125,8 @@ const TableComponent = () => {
     <div>
       {showEstadio ? (
         <React.Fragment>
-          <div className="d-flex">
+          <div className="container row">
+            {/* d-flex */}{" "}
             <div className="col-sm-12 col-md-8 col-xl-8">
               <div className="input-group mb-3">
                 <input
@@ -238,7 +239,6 @@ const TableComponent = () => {
                 highlightOnHover
               />
             </div>
-
             <div className="col-sm-12 col-md-4 col-xl-4">
               <EstadioScreen />
             </div>
