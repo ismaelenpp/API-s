@@ -101,14 +101,28 @@ const TableComponent = () => {
     <div>
       {showEstadio ? (
         <React.Fragment>
-          <div className="container row">
+          <div className="d-flex">
             <div className="col-sm-12 col-md-8 col-xl-8">
-              <input
-                type="text"
-                placeholder="Filtrar por nombre"
-                onChange={(e) => setFilterText(e.target.value)}
-                value={filterText}
-              />
+              <div className="input-group mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Buscar por nombre..."
+                  aria-label="Buscar por nombre..."
+                  aria-describedby="basic-addon2"
+                  onChange={(e) => setFilterText(e.target.value)}
+                  value={filterText}
+                />
+                <div className="input-group-append">
+                  <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setFilterText("")}
+                  >
+                    Limpiar
+                  </button>
+                </div>
+              </div>
               <DataTable
                 columns={[
                   {
@@ -187,12 +201,26 @@ const TableComponent = () => {
         </React.Fragment>
       ) : (
         <div className="container row" class="w-100s p-3">
-          <input
-            type="text"
-            placeholder="Filtrar por nombre"
-            onChange={(e) => setFilterText(e.target.value)}
-            value={filterText}
-          />
+          <div className="input-group mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Buscar por nombre..."
+              aria-label="Buscar por nombre..."
+              aria-describedby="basic-addon2"
+              onChange={(e) => setFilterText(e.target.value)}
+              value={filterText}
+            />
+            <div className="input-group-append">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => setFilterText("")}
+              >
+                Limpiar
+              </button>
+            </div>
+          </div>
 
           <DataTable
             columns={[
