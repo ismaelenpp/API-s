@@ -10,9 +10,11 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
   const [descripcion, setDescripcion] = useState(
     equipoSeleccionado.descripcion
   );
-  const [videoLink, setVideoLink] = useState(equipoSeleccionado.videoLink); // Nuevo estado para el enlace de video
+  const [showTeamList, setShowTeamList] = useState(false);
+  const [videoLink, setVideoLink] = useState(equipoSeleccionado.videoLink);
   const [imagen, setImagen] = useState(equipoSeleccionado.imagen);
   const [imageFile, setImageFile] = useState(null);
+  const [teams, setTeams] = useState([]);
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
@@ -29,6 +31,51 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
       });
   }, []);
 
+  const fetchTeams = async (value) => {
+    if (value.length < 3) {
+      setTeams([]);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://sofascore.p.rapidapi.com/teams/search?name=${value}`,
+        {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key":
+              "1205ddc5c6msh8eb9343686ded57p16c1d5jsn30de52dc2253",
+            "X-RapidAPI-Host": "sofascore.p.rapidapi.com",
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        const footballTeams = data.teams.filter(
+          (team) => team.sport.name === "Football"
+        );
+
+        const uniqueTeams = Array.from(
+          new Set(footballTeams.map((team) => team.name))
+        );
+
+        setTeams(uniqueTeams);
+      } else {
+        console.error("Error al buscar equipos");
+      }
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+    }
+  };
+
+  const handleTeamSelect = (selectedTeam) => {
+    setEquipo(selectedTeam);
+    setTeams([]);
+    setShowTeamList(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const equipoEditado = {
@@ -37,7 +84,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
       liga: liga,
       pais: pais,
       descripcion: descripcion,
-      videoLink: videoLink, // Actualizamos el enlace de video con el valor del estado
+      videoLink: videoLink,
       imagen: imagen,
     };
     await handleEliminarImagen(equipoSeleccionado.nombre);
@@ -46,7 +93,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
     setLiga("");
     setPais("");
     setDescripcion("");
-    setVideoLink(""); // Limpiamos el enlace de video
+    setVideoLink("");
     setImageFile(null);
   };
 
@@ -86,14 +133,36 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
           <label htmlFor="equipo" className="form-label">
             Nombre del Equipo
           </label>
-          <input
-            type="text"
-            className="form-control"
-            id="equipo"
-            value={equipo}
-            onChange={(e) => setEquipo(e.target.value)}
-            required
-          />
+
+          <div className="input-group">
+            <input
+              type="text"
+              id="equipo"
+              className="form-control"
+              placeholder="Buscar equipo..."
+              value={equipo}
+              onChange={(e) => {
+                setEquipo(e.target.value);
+                fetchTeams(e.target.value);
+                setShowTeamList(true);
+              }}
+              required
+            />
+
+            {showTeamList && teams.length > 0 && (
+              <ul className="list-group dropdown-list">
+                {teams.map((team, index) => (
+                  <li
+                    key={index}
+                    className="list-group-item"
+                    onClick={() => handleTeamSelect(team)}
+                  >
+                    {team}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         <div className="mb-3">

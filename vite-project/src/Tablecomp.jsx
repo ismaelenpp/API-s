@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import BtnDelete from "./ButtonDelete";
@@ -33,11 +32,9 @@ const TableComponent = () => {
   const fetchData = () => {
     fetch("http://localhost:3000/futbol")
       .then((response) => response.json())
-
       .then((data) => {
         setTableData(data.equipos);
       })
-
       .catch((error) => {
         console.error("Error:", error);
       });
@@ -45,7 +42,6 @@ const TableComponent = () => {
 
   const handleDelete = (nombreEquipo) => {
     setDeleteConfirmation(true);
-
     setTeamToDelete(nombreEquipo);
   };
 
@@ -54,79 +50,63 @@ const TableComponent = () => {
       method: "DELETE",
     })
       .then((response) => response.json())
-
       .then((data) => {
         console.log("DELETE response:", data);
-
         fetchData();
-
         setDeleteConfirmation(false);
       })
-
       .catch((error) => {
         console.error("Error:", error);
       });
+    window.location.reload();
   };
 
   const cancelDelete = () => {
     setDeleteConfirmation(false);
-
     setTeamToDelete("");
   };
 
   const handlePut = (equipo) => {
     setEquipoSeleccionado(equipo);
-
     setShowModal(true);
   };
 
   const handleEdit = (equipoEditado) => {
     const nombreEquipoAnterior = equipoSeleccionado.nombre;
-
     fetch(`http://localhost:3000/actualizarEquipo/${nombreEquipoAnterior}`, {
       method: "PUT",
-
       headers: {
         "Content-Type": "application/json",
       },
-
       body: JSON.stringify(equipoEditado),
     })
       .then((response) => response.json())
-
       .then((data) => {
         console.log("PUT response:", data);
-
         fetchData();
       })
-
       .catch((error) => {
         console.error("Error:", error);
       });
-
     setEquipoSeleccionado(null);
-
     setShowModal(false);
   };
 
   const handleCloseModal = () => {
     setEquipoSeleccionado(null);
-
     setShowModal(false);
   };
 
   // Función para filtrar la tabla
-
   const filteredData = tableData.filter((equipo) =>
     equipo.nombre.toLowerCase().includes(filterText.toLowerCase())
   );
 
   return (
-    <div>
+    <div className="">
       {showEstadio ? (
         <React.Fragment>
-          <div className="container row">
-            {/* d-flex */}{" "}
+          <div className="container-flex row">
             <div className="col-sm-12 col-md-8 col-xl-8">
               <div className="input-group mb-3">
                 <input
@@ -138,7 +118,6 @@ const TableComponent = () => {
                   onChange={(e) => setFilterText(e.target.value)}
                   value={filterText}
                 />
-
                 <div className="input-group-append">
                   <button
                     className="btn btn-outline-secondary"
@@ -154,45 +133,31 @@ const TableComponent = () => {
                 columns={[
                   {
                     name: "Nombre",
-
                     selector: "nombre",
-
                     sortable: true,
                   },
-
                   {
                     name: "Liga",
-
                     selector: "liga",
-
                     sortable: true,
                   },
-
                   {
                     name: "País",
-
                     selector: "pais",
-
                     sortable: true,
                   },
-
                   {
                     name: "Descripción",
-
-                    selector: "descripcion",
-
+                    selector: (row) => row.descripcion,
                     sortable: true,
+                    minWidth: "200px",
                   },
-
                   {
                     name: "Imagen",
-
                     cell: (row) => <ImageComponent imageString={row.imagen} />,
                   },
-
                   {
                     name: "Acciones",
-
                     cell: (row) => (
                       <div>
                         <div className="row">
@@ -203,7 +168,6 @@ const TableComponent = () => {
                               className={"btn btn-outline-danger btn-sm"}
                             />
                           </div>
-
                           <div className="col-md-6 mb-2">
                             <BtnPut
                               text={"✏️"}
@@ -212,7 +176,6 @@ const TableComponent = () => {
                             />
                           </div>
                         </div>
-
                         <div className="row">
                           <div className="col-md-6 mb-2">
                             <BtnEstadio
@@ -221,7 +184,6 @@ const TableComponent = () => {
                               className={"btn btn-outline-success btn-sm"}
                             />
                           </div>
-
                           <div className="col-md-6 mb-2">
                             <BtnVideo
                               text={"🎥"}
@@ -273,55 +235,35 @@ const TableComponent = () => {
             columns={[
               {
                 name: "Nombre",
-
                 selector: "nombre",
-
                 sortable: true,
-
                 minWidth: "150px", // Ajusta el ancho mínimo de la columna
               },
-
               {
                 name: "Liga",
-
                 selector: "liga",
-
                 sortable: true,
-
                 minWidth: "150px", // Ajusta el ancho mínimo de la columna
               },
-
               {
                 name: "País",
-
                 selector: "pais",
-
                 sortable: true,
-
                 minWidth: "150px", // Ajusta el ancho mínimo de la columna
               },
-
               {
                 name: "Descripción",
-
-                selector: "descripcion",
-
+                selector: (row) => row.descripcion,
                 sortable: true,
-
                 minWidth: "200px", // Ajusta el ancho mínimo de la columna
               },
-
               {
                 name: "Imagen",
-
                 cell: (row) => <ImageComponent imageString={row.imagen} />,
-
                 minWidth: "100px", // Ajusta el ancho mínimo de la columna
               },
-
               {
                 name: "Acciones",
-
                 cell: (row) => (
                   <div className="d-flex justify-content-center align-items-center">
                     <BtnDelete
@@ -331,7 +273,6 @@ const TableComponent = () => {
                         "btn btn-outline-danger button-separation me-2"
                       }
                     />
-
                     <BtnPut
                       text={"✏️"}
                       onClick={() => handlePut(row)}
@@ -339,7 +280,6 @@ const TableComponent = () => {
                         "btn btn-outline-warning button-separation me-2"
                       }
                     />
-
                     <BtnEstadio
                       text={"🏟"}
                       onClick={() => setShowEstadio(true)}
@@ -347,11 +287,9 @@ const TableComponent = () => {
                         "btn btn-outline-success button-separation me-2"
                       }
                     />
-
                     <BtnVideo text={"🎥"} className={"btn btn-outline-info"} />
                   </div>
                 ),
-
                 minWidth: "300px", // Ajusta el ancho mínimo de la columna "Acciones"
               },
             ]}
