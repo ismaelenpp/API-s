@@ -190,8 +190,6 @@ const Formulario = ({ onSubmit }) => {
 
   return (
     <div className="container mt-0">
-      <h1>Añadir equipo</h1>
-
       <form onSubmit={handleSubmit}>
         {showWarning && (
           <div className="alert alert-danger" role="alert">
