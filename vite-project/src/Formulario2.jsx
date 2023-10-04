@@ -113,7 +113,7 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
 
   const handleEliminarImagen = async (public_id) => {
     try {
-      const response = await fetch(`/eliminar-imagen/${public_id}`, {
+      const response = await fetch(`http://localhost:3000/eliminar-imagen/${public_id}`, {
         method: "DELETE",
       });
       if (response.ok) {

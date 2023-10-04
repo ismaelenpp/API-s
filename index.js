@@ -3,6 +3,15 @@ const cors = require("cors");
 const app = express();
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
+const cloudinary = require("cloudinary");
+
+cloudinary.v2.config({
+  cloud_name: "dwodczt0e",
+  api_key: "246222394918621",
+  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
+  secure: true,
+});
+
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -155,6 +164,50 @@ app.post("/meterGmail", (req, res) => {
       res.status(201).json(newUser);
     });
   });
+});
+
+// Eliminar imagen de Cloudinary
+app.delete("/eliminar-imagen/:public_id", async (req, res) => {
+  console.log("Imagen a eliminar:", req.params.public_id);
+  const { public_id } = req.params;
+  console.log("public_id:", public_id);
+
+  try {
+    await cloudinary.v2.uploader.destroy(public_id, (error, result) => {
+      if (error) {
+        console.error("Error al eliminar la imagen:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+        return;
+      }
+      console.log("Resultado de la eliminación:", result);
+    });
+    res.json({ message: "Imagen eliminada con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar la imagen:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+// Eliminar imagen de Cloudinary
+app.delete("/eliminar-imagen/:public_id", async (req, res) => {
+  console.log("Imagen a eliminar:", req.params.public_id);
+  const { public_id } = req.params;
+  console.log("public_id:", public_id);
+
+  try {
+    await cloudinary.v2.uploader.destroy(public_id, (error, result) => {
+      if (error) {
+        console.error("Error al eliminar la imagen:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+        return;
+      }
+      console.log("Resultado de la eliminación:", result);
+    });
+    res.json({ message: "Imagen eliminada con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar la imagen:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
 });
 
 // Cerrar la conexión MySQL cuando la aplicación se termine
