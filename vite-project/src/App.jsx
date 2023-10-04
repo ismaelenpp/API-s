@@ -1,20 +1,30 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
+
 import { Button, Modal } from "react-bootstrap";
+
 import Formulario from "./Formulario";
+
 import TableComponent from "./Tablecomp";
+
 import gif1 from "./images/futbol_gif.gif";
+
 import gif2 from "./images/futbol_gif.gif";
+
 function App() {
   const [tableHtml, setTableHtml] = useState("");
+
   const [showModal, setShowModal] = useState(false);
+
   //insert into usuarios ("id", "usuarios", "password", "rol") VALUES (1, "ismaelgarciabougrine2@gmail.com", "5544", "administrador");
+
   const handleGet = () => {
     fetch("http://localhost:3000/futbol")
       .then((response) => response.text())
+
       .then((data) => {
         setTableHtml(data);
       })
+
       .catch((error) => {
         console.error("Error:", error);
       });
@@ -28,24 +38,33 @@ function App() {
     if (equipo && liga && pais && descripcion && imagen) {
       const newTeam = {
         nombre: equipo,
+
         liga: liga,
+
         pais: pais,
+
         descripcion: descripcion,
+
         imagen: imagen,
       };
 
       fetch("http://localhost:3000/meterEquipo", {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify(newTeam),
       })
         .then((response) => response.json())
+
         .then((data) => {
           console.log("POST response:", data);
+
           handleGet();
         })
+
         .catch((error) => {
           console.error("Error:", error);
         });
@@ -67,10 +86,15 @@ function App() {
       <div
         style={{
           background: "linear-gradient(#c4c4c4, #fff)",
+
           padding: "20px",
+
           display: "flex",
+
           flexDirection: "column",
+
           alignItems: "center",
+
           textAlign: "center",
         }}
       >
@@ -80,13 +104,19 @@ function App() {
             alt="GIF 1"
             style={{ width: "50px", marginRight: "10px" }}
           />
+
           <h1
             style={{
               fontFamily: "Arial, sans-serif",
+
               fontSize: "48px",
+
               fontWeight: "bold",
+
               color: hovered ? "#03a99a" : "#03a99a",
+
               textShadow: "2px 2px #000",
+
               cursor: "pointer",
             }}
             onMouseEnter={() => setHovered(true)}
@@ -94,6 +124,7 @@ function App() {
           >
             {hovered ? "¡INETFUT!" : "EQUIPOS DE FÚTBOL"}
           </h1>
+
           <img
             src={gif2}
             alt="GIF 2"
@@ -101,6 +132,7 @@ function App() {
           />
         </div>
       </div>
+
       <div className="App" style={{ padding: "30px" }}>
         <Button
           variant="outline-primary"
@@ -109,19 +141,23 @@ function App() {
         >
           Añadir Equipo
         </Button>
+
         <Modal show={showModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
             <Modal.Title>Añadir Equipo</Modal.Title>
           </Modal.Header>
+
           <Modal.Body>
             <Formulario onSubmit={handlePost} />
           </Modal.Body>
+
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseModal}>
               Cancelar
             </Button>
           </Modal.Footer>
         </Modal>
+
         <TableComponent />
       </div>
     </center>
