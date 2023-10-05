@@ -4,15 +4,18 @@ const app = express();
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cloudinary = require("cloudinary");
-const nodemailer = require("nodemailer");
+const { enviartoken } = require("./Funciones/funcionesUtiles");
+// const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
-  service: "Gmail",
-  auth: {
-    user: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
-    pass: "kollacebab4$", // Cambia esto a tu contraseña de correo electrónico
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   host: "smtp.gmail.com",
+//   port: 587,
+//   service: "Gmail",
+//   auth: {
+//     user: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
+//     pass: "ikac zxxq yuoc jins", // Cambia esto a tu contraseña de correo electrónico
+//   },
+// });
 
 cloudinary.v2.config({
   cloud_name: "dwodczt0e",
@@ -27,8 +30,8 @@ app.use(express.json());
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  // password: "ismaelenp1234",
+  user: "ismael",
+  password: "ismaelenp1234",
   database: "futbol",
   port: "3306",
 });
@@ -139,9 +142,33 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
   });
 });
 
+// Eliminar imagen de Cloudinary
+app.delete("/eliminar-imagen/:public_id", async (req, res) => {
+  console.log("Imagen a eliminar:", req.params.public_id);
+  const { public_id } = req.params;
+  console.log("public_id:", public_id);
+
+  try {
+    await cloudinary.v2.uploader.destroy(public_id, (error, result) => {
+      if (error) {
+        console.error("Error al eliminar la imagen:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
+        return;
+      }
+      console.log("Resultado de la eliminación:", result);
+    });
+    res.json({ message: "Imagen eliminada con éxito" });
+  } catch (error) {
+    console.error("Error al eliminar la imagen:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
 // POST para agregar un usuario a la tabla "usuarios"
 app.post("/meterGmail", (req, res) => {
   const { correo } = req.body;
+  let numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
+  console.log(correo);
   // Obtener la última ID
   const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
   connection.query(getLastIdQuery, (error, result) => {
@@ -150,7 +177,6 @@ app.post("/meterGmail", (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
-    let numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
 
     let lastId = result[0].lastId || 0;
     const newId = lastId + 1;
@@ -173,83 +199,8 @@ app.post("/meterGmail", (req, res) => {
       res.status(201).json(newUser);
     });
   });
-});
 
-// Eliminar imagen de Cloudinary
-app.delete("/eliminar-imagen/:public_id", async (req, res) => {
-  console.log("Imagen a eliminar:", req.params.public_id);
-  const { public_id } = req.params;
-  console.log("public_id:", public_id);
-
-  try {
-    await cloudinary.v2.uploader.destroy(public_id, (error, result) => {
-      if (error) {
-        console.error("Error al eliminar la imagen:", error);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
-      }
-      console.log("Resultado de la eliminación:", result);
-    });
-    res.json({ message: "Imagen eliminada con éxito" });
-  } catch (error) {
-    console.error("Error al eliminar la imagen:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-});
-
-// Eliminar imagen de Cloudinary
-app.delete("/eliminar-imagen/:public_id", async (req, res) => {
-  console.log("Imagen a eliminar:", req.params.public_id);
-  const { public_id } = req.params;
-  console.log("public_id:", public_id);
-
-  try {
-    await cloudinary.v2.uploader.destroy(public_id, (error, result) => {
-      if (error) {
-        console.error("Error al eliminar la imagen:", error);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
-      }
-      console.log("Resultado de la eliminación:", result);
-    });
-    res.json({ message: "Imagen eliminada con éxito" });
-  } catch (error) {
-    console.error("Error al eliminar la imagen:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-});
-
-app.post("/enviarCorreo", async (req, res) => {
-  try {
-    console.log("resq --->", req);
-    console.log("res -->", res);
-
-    const { correoOrigen, correoDestino, mensaje } = req.body;
-    console.log("correo origen", correoOrigen);
-    console.log("correo destino", correoDestino);
-    console.log("msj", mensaje);
-    // Configuración del correo electrónico
-    const mailOptions = {
-      from: correoOrigen,
-      to: correoDestino,
-      subject: "Asunto del correo",
-      text: mensaje,
-    };
-
-    // Envío del correo electrónico
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error al enviar el correo:", error);
-        res.status(500).send("Error al enviar el correo");
-      } else {
-        console.log("Correo enviado:", info.response);
-        res.status(200).send("Correo enviado con éxito");
-      }
-    });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Error interno del servidor");
-  }
+  enviartoken(correo, numeroAleatorio);
 });
 
 // Cerrar la conexión MySQL cuando la aplicación se termine
