@@ -4,6 +4,15 @@ const app = express();
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cloudinary = require("cloudinary");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
+    pass: "kollacebab4$", // Cambia esto a tu contraseña de correo electrónico
+  },
+});
 
 cloudinary.v2.config({
   cloud_name: "dwodczt0e",
@@ -207,6 +216,39 @@ app.delete("/eliminar-imagen/:public_id", async (req, res) => {
   } catch (error) {
     console.error("Error al eliminar la imagen:", error);
     res.status(500).json({ error: "Error interno del servidor" });
+  }
+});
+
+app.post("/enviarCorreo", async (req, res) => {
+  try {
+    console.log("resq --->", req);
+    console.log("res -->", res);
+
+    const { correoOrigen, correoDestino, mensaje } = req.body;
+    console.log("correo origen", correoOrigen);
+    console.log("correo destino", correoDestino);
+    console.log("msj", mensaje);
+    // Configuración del correo electrónico
+    const mailOptions = {
+      from: correoOrigen,
+      to: correoDestino,
+      subject: "Asunto del correo",
+      text: mensaje,
+    };
+
+    // Envío del correo electrónico
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error al enviar el correo:", error);
+        res.status(500).send("Error al enviar el correo");
+      } else {
+        console.log("Correo enviado:", info.response);
+        res.status(200).send("Correo enviado con éxito");
+      }
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Error interno del servidor");
   }
 });
 

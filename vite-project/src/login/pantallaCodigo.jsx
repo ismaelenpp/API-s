@@ -9,6 +9,31 @@ function PantallaCodigo() {
   const location = useLocation();
   const { email } = location.state || {};
 
+  // Función para enviar el correo electrónico
+  const enviarCorreo = async (correoDestino) => {
+    try {
+      const response = await fetch("http://localhost:3000/enviarCorreo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          correoOrigen: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
+          correoDestino, // Agrega el correo destino aquí
+          mensaje: "Hola", // Agrega el mensaje aquí
+        }),
+      });
+
+      if (response.status === 200) {
+        console.log(`Correo enviado a ${correoDestino}`);
+      } else {
+        console.error("Error al enviar el correo");
+      }
+    } catch (error) {
+      console.error("Error de red:", error);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Aquí puedes agregar la lógica de autenticación
@@ -16,6 +41,8 @@ function PantallaCodigo() {
     // por ejemplo, verificar si el código es válido
     if (codigo === "tu_codigo_secreto") {
       setLoggedIn(true);
+      // Llama a enviarCorreo para enviar el correo electrónico
+      enviarCorreo(email);
     } else {
       alert("Código incorrecto");
     }
