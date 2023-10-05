@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import "./pantallaPrincipal.css";
-import pantallaCodigo from "./pantallaCodigo";
 import { useNavigate } from "react-router-dom";
 
-function pantallaPrincipal(props) {
+function pantallaPrincipal() {
   const [email, setEmail] = useState(""); // Estado para almacenar el correo electrónico
   const [emailValido, setEmailValido] = useState(true); // Estado para verificar la validez del correo
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
-
     // Verificar si el correo electrónico es válido
     if (!validarCorreoElectronico(email)) {
       setEmailValido(false);
@@ -29,11 +27,10 @@ function pantallaPrincipal(props) {
         },
         body: JSON.stringify({ correo: email }),
       });
-
       if (response.status === 201) {
-        // El servidor respondió correctamente, puedes redirigir al usuario o realizar otras acciones
+        // El servidor respondió correctamente, pue des redirigir al usuario o realizar otras acciones
         console.log("Usuario creado con éxito");
-        navigate("/codigo");
+        navigate("/codigo", { state: { email } });
       } else {
         // Manejar errores aquí
         console.error("Error al crear el usuario");
@@ -88,6 +85,7 @@ function pantallaPrincipal(props) {
                           </div>
                         )}
                       </div>
+
                       <button
                         className="btn btn-outline-light btn-lg px-5"
                         type="submit"

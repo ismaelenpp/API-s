@@ -1,21 +1,19 @@
 import React, { useState } from "react";
-
+import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import "./pantallaCodigo.css";
 
-function pantallaCodigo() {
+function PantallaCodigo() {
   const [codigo, setCodigo] = useState("");
-
   const [loggedIn, setLoggedIn] = useState(false);
+  const location = useLocation();
+  const { email } = location.state || {};
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     // Aquí puedes agregar la lógica de autenticación
 
     // por ejemplo, verificar si el código es válido
-
     if (codigo === "tu_codigo_secreto") {
       setLoggedIn(true);
     } else {
@@ -25,7 +23,6 @@ function pantallaCodigo() {
 
   const handleLogout = () => {
     setLoggedIn(false);
-
     setCodigo("");
   };
 
@@ -37,35 +34,24 @@ function pantallaCodigo() {
             <div className="card-header">Iniciar sesión</div>
 
             <div className="card-body">
-              {loggedIn ? (
-                <div>
-                  <h2>Bienvenido</h2>
-
-                  <button className="btn btn-danger" onClick={handleLogout}>
-                    Cerrar sesión
-                  </button>
+              <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                  <label htmlFor="codigo">Código:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="codigo"
+                    name="codigo"
+                    value={codigo}
+                    onChange={(e) => setCodigo(e.target.value)}
+                    required
+                  />
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit}>
-                  <div className="form-group">
-                    <label htmlFor="codigo">Código:</label>
-
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="codigo"
-                      name="codigo"
-                      value={codigo}
-                      onChange={(e) => setCodigo(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <button type="submit" className="btn btn-primary btn-block">
-                    Iniciar sesión
-                  </button>
-                </form>
-              )}
+                <p>Email: {email}</p>
+                <button type="submit" className="btn btn-primary btn-block">
+                  Iniciar sesión
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -74,4 +60,4 @@ function pantallaCodigo() {
   );
 }
 
-export default pantallaCodigo;
+export default PantallaCodigo;
