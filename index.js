@@ -27,8 +27,8 @@ app.use(express.json());
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "ismael",
-  password: "ismaelenp1234",
+  user: "root",
+  password: "",
   database: "futbol",
   port: "3306",
 });
@@ -143,6 +143,7 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
 app.post("/meterGmail", (req, res) => {
   const { correo } = req.body;
   // Obtener la última ID
+  console.log("correo", correo);
   const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
   connection.query(getLastIdQuery, (error, result) => {
     if (error) {
@@ -171,6 +172,7 @@ app.post("/meterGmail", (req, res) => {
         rol: "usuario",
       };
       res.status(201).json(newUser);
+      console.log(result);
     });
   });
 });
@@ -197,28 +199,7 @@ app.delete("/eliminar-imagen/:public_id", async (req, res) => {
   }
 });
 
-// Eliminar imagen de Cloudinary
-app.delete("/eliminar-imagen/:public_id", async (req, res) => {
-  console.log("Imagen a eliminar:", req.params.public_id);
-  const { public_id } = req.params;
-  console.log("public_id:", public_id);
-
-  try {
-    await cloudinary.v2.uploader.destroy(public_id, (error, result) => {
-      if (error) {
-        console.error("Error al eliminar la imagen:", error);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
-      }
-      console.log("Resultado de la eliminación:", result);
-    });
-    res.json({ message: "Imagen eliminada con éxito" });
-  } catch (error) {
-    console.error("Error al eliminar la imagen:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-});
-
+// Enviar correo electrónico
 app.post("/enviarCorreo", async (req, res) => {
   try {
     console.log("resq --->", req);
@@ -233,6 +214,7 @@ app.post("/enviarCorreo", async (req, res) => {
       from: correoOrigen,
       to: correoDestino,
       subject: "Asunto del correo",
+
       text: mensaje,
     };
 
