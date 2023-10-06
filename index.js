@@ -4,15 +4,18 @@ const app = express();
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cloudinary = require("cloudinary");
-const nodemailer = require("nodemailer");
+const { enviartoken } = require("./Funciones/funcionesUtiles");
+// const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
-  service: "Gmail",
-  auth: {
-    user: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
-    pass: "kollacebab4$", // Cambia esto a tu contraseña de correo electrónico
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   host: "smtp.gmail.com",
+//   port: 587,
+//   service: "Gmail",
+//   auth: {
+//     user: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
+//     pass: "ikac zxxq yuoc jins", // Cambia esto a tu contraseña de correo electrónico
+//   },
+// });
 
 cloudinary.v2.config({
   cloud_name: "dwodczt0e",
@@ -139,44 +142,6 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
   });
 });
 
-// POST para agregar un usuario a la tabla "usuarios"
-app.post("/meterGmail", (req, res) => {
-  const { correo } = req.body;
-  // Obtener la última ID
-  console.log("correo", correo);
-  const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
-  connection.query(getLastIdQuery, (error, result) => {
-    if (error) {
-      console.error("Error executing MySQL query:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-      return;
-    }
-    let numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
-
-    let lastId = result[0].lastId || 0;
-    const newId = lastId + 1;
-    const query =
-      "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
-
-    const values = [newId, correo, numeroAleatorio, "usuario"];
-    connection.query(query, values, (error, result) => {
-      if (error) {
-        console.error("Error executing MySQL query:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-      }
-      const newUser = {
-        id: newId,
-        correo,
-        codigo: numeroAleatorio,
-        rol: "usuario",
-      };
-      res.status(201).json(newUser);
-      console.log(result);
-    });
-  });
-});
-
 // Eliminar imagen de Cloudinary
 app.delete("/eliminar-imagen/:public_id", async (req, res) => {
   console.log("Imagen a eliminar:", req.params.public_id);
@@ -199,39 +164,44 @@ app.delete("/eliminar-imagen/:public_id", async (req, res) => {
   }
 });
 
-// Enviar correo electrónico
-app.post("/enviarCorreo", async (req, res) => {
-  try {
-    console.log("resq --->", req);
-    console.log("res -->", res);
+// POST para agregar un usuario a la tabla "usuarios"
+app.post("/meterGmail", (req, res) => {
+  const { correo } = req.body;
+  let numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
+  console.log(correo);
+  // Obtener la última ID
+  console.log("correo", correo);
+  const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
+  connection.query(getLastIdQuery, (error, result) => {
+    if (error) {
+      console.error("Error executing MySQL query:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
 
-    const { correoOrigen, correoDestino, mensaje } = req.body;
-    console.log("correo origen", correoOrigen);
-    console.log("correo destino", correoDestino);
-    console.log("msj", mensaje);
-    // Configuración del correo electrónico
-    const mailOptions = {
-      from: correoOrigen,
-      to: correoDestino,
-      subject: "Asunto del correo",
+    let lastId = result[0].lastId || 0;
+    const newId = lastId + 1;
+    const query =
+      "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
 
-      text: mensaje,
-    };
-
-    // Envío del correo electrónico
-    transporter.sendMail(mailOptions, (error, info) => {
+    const values = [newId, correo, numeroAleatorio, "usuario"];
+    connection.query(query, values, (error, result) => {
       if (error) {
-        console.error("Error al enviar el correo:", error);
-        res.status(500).send("Error al enviar el correo");
-      } else {
-        console.log("Correo enviado:", info.response);
-        res.status(200).send("Correo enviado con éxito");
+        console.error("Error executing MySQL query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
       }
+      const newUser = {
+        id: newId,
+        correo,
+        codigo: numeroAleatorio,
+        rol: "usuario",
+      };
+      res.status(201).json(newUser);
     });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Error interno del servidor");
-  }
+  });
+
+  enviartoken(correo, numeroAleatorio);
 });
 
 // Cerrar la conexión MySQL cuando la aplicación se termine
