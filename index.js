@@ -170,6 +170,7 @@ app.post("/meterGmail", (req, res) => {
   let numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
   console.log(correo);
   // Obtener la última ID
+  console.log("correo", correo);
   const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
   connection.query(getLastIdQuery, (error, result) => {
     if (error) {
