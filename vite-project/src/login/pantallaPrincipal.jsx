@@ -5,12 +5,16 @@ import "./pantallaPrincipal.css";
 import { useNavigate } from "react-router-dom";
 
 function pantallaPrincipal() {
-  const [email, setEmail] = useState(""); // Estado para almacenar el correo electrónico
-  const [emailValido, setEmailValido] = useState(true); // Estado para verificar la validez del correo
+  // Estado para almacenar el correo electrónico
+  const [email, setEmail] = useState("");
+  // Estado para verificar la validez del correo
+  const [emailValido, setEmailValido] = useState(true);
   const navigate = useNavigate();
 
+  // Función que se ejecuta al enviar el formulario
   const handleSubmit = async (event) => {
     event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
+
     // Verificar si el correo electrónico es válido
     if (!validarCorreoElectronico(email)) {
       setEmailValido(false);
