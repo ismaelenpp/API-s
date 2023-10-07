@@ -1755,7 +1755,7 @@ mysql@^2.18.1:
     safe-buffer "5.1.2"
     sqlstring "2.3.1"
 
-mysql2@^3.6.0:
+mysql2@^3.6.1:
   version "3.6.1"
   resolved "https://registry.npmjs.org/mysql2/-/mysql2-3.6.1.tgz"
   integrity sha512-O7FXjLtNkjcMBpLURwkXIhyVbX9i4lq4nNRCykPNOXfceq94kJ0miagmTEGCZieuO8JtwtXaZ41U6KT4eF9y3g==

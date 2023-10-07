@@ -5,17 +5,6 @@ const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cloudinary = require("cloudinary");
 const { enviartoken } = require("./Funciones/funcionesUtiles");
-// const nodemailer = require("nodemailer");
-
-// const transporter = nodemailer.createTransport({
-//   host: "smtp.gmail.com",
-//   port: 587,
-//   service: "Gmail",
-//   auth: {
-//     user: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
-//     pass: "ikac zxxq yuoc jins", // Cambia esto a tu contraseña de correo electrónico
-//   },
-// });
 
 cloudinary.v2.config({
   cloud_name: "dwodczt0e",
@@ -30,10 +19,10 @@ app.use(express.json());
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "ismael",
-  password: "ismaelenp1234",
+  user: "root",
+  password: "1234",
   database: "futbol",
-  port: "3306",
+  port: "3307",
 });
 
 // Connect to MySQL
