@@ -60,7 +60,6 @@ function PantallaCodigo() {
         <div className="col-md-12">
           <div className="card">
             <div className="card-header">Iniciar sesión</div>
-
             <div className="card-body">
               <form onSubmit={handleSubmit}>
                 <div className="form-group">

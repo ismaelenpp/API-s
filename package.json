@@ -17,6 +17,8 @@
     "node-vite": "^0.0.0-alpha.0",
     "nodemailer": "^6.9.5",
     "react-bootstrap": "^2.8.0",
+    "react-data-table-component": "^7.5.4",
+    "react-router-dom": "^6.16.0",
     "reactstrap": "^9.2.0",
     "vite-node": "^0.34.3"
   },

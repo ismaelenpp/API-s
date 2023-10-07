@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App.jsx";
 import PantallaPrincipal from "./login/pantallaPrincipal.jsx"; // Verifica la ruta
 import PantallaCodigo from "./login/pantallaCodigo.jsx";
+import App from "./App.jsx";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -15,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: "/codigo",
     element: <PantallaCodigo />,
+  },
+  {
+    path: "/app",
+    element: <App />,
   },
 ]);
 
