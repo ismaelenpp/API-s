@@ -5,17 +5,6 @@ const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cloudinary = require("cloudinary");
 const { enviartoken } = require("./Funciones/funcionesUtiles");
-// const nodemailer = require("nodemailer");
-
-// const transporter = nodemailer.createTransport({
-//   host: "smtp.gmail.com",
-//   port: 587,
-//   service: "Gmail",
-//   auth: {
-//     user: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
-//     pass: "ikac zxxq yuoc jins", // Cambia esto a tu contraseña de correo electrónico
-//   },
-// });
 
 cloudinary.v2.config({
   cloud_name: "dwodczt0e",
@@ -30,10 +19,10 @@ app.use(express.json());
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "ismael",
-  password: "ismaelenp1234",
+  user: "root",
+  password: "1234",
   database: "futbol",
-  port: "3306",
+  port: "3307",
 });
 
 // Connect to MySQL
@@ -200,9 +189,39 @@ app.post("/meterGmail", (req, res) => {
       res.status(201).json(newUser);
     });
   });
-
   enviartoken(correo, numeroAleatorio);
 });
+
+app.post("/verificarCodigo", (req, res) => {
+    const { codigo } = req.body;
+    const { email } = req.body;
+    console.log("codigo en el index.js --->", codigo);
+    console.log("email en el index.js --->", email);
+
+    const query = "SELECT * FROM usuarios WHERE codigo = ?";
+    const values = [codigo];
+    const values2 = [email];
+    console.log("values en el index.js --->", values);
+    console.log("values2 en el index.js --->", values2);
+    connection.query(query, values, (error, result) => {
+        if (error) {
+        console.error("Error executing MySQL query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+        }
+        if (result.affectedRows === 0) {
+        res.status(404).json({ error: "User not found" });
+        return;
+        }
+        console.log(result);
+        // Verificar los elementos de la base de datos con los que se han introducido
+        if (result[0].codigo == codigo && result[0].correo == email) {
+        console.log("El logueo es correcto");
+        res.status(200).json({ message: "User updated successfully" });
+        }
+    });
+});
+
 
 // Cerrar la conexión MySQL cuando la aplicación se termine
 process.on("SIGINT", () => {

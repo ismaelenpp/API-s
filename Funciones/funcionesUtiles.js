@@ -17,12 +17,6 @@ function enviartoken(correo, numeroAleatorio) {
     var correoOrigen = "collakebab@gmail.com";
     var mensaje = numeroAleatorio.toString();
 
-    console.log(typeof mensaje);
-
-    console.log("correo destino--->", correoDestino);
-    console.log("correo origen --->", correoOrigen);
-    console.log("token desbloqueo --->", mensaje);
-
     // Configuración del correo electrónico
     const mailOptions = {
       from: correoOrigen,
