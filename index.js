@@ -20,9 +20,9 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "1234",
+  password: "ismaelenp1234",
   database: "futbol",
-  port: "3307",
+  port: "3306",
 });
 
 // Connect to MySQL
@@ -193,35 +193,48 @@ app.post("/meterGmail", (req, res) => {
 });
 
 app.post("/verificarCodigo", (req, res) => {
-    const { codigo } = req.body;
-    const { email } = req.body;
-    console.log("codigo en el index.js --->", codigo);
-    console.log("email en el index.js --->", email);
+  const { codigo } = req.body;
+  const { email } = req.body;
+  console.log("codigo en el index.js --->", codigo);
+  console.log("email en el index.js --->", email);
+  const query = "SELECT * FROM usuarios WHERE codigo = ?";
+  const values = [codigo];
+  const values2 = [email];
+  console.log("values en el index.js --->", values);
+  console.log("values2 en el index.js --->", values2);
 
-    const query = "SELECT * FROM usuarios WHERE codigo = ?";
-    const values = [codigo];
-    const values2 = [email];
-    console.log("values en el index.js --->", values);
-    console.log("values2 en el index.js --->", values2);
+  try {
     connection.query(query, values, (error, result) => {
-        if (error) {
+      if (error) {
         console.error("Error executing MySQL query:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-        }
-        if (result.affectedRows === 0) {
-        res.status(404).json({ error: "User not found" });
-        return;
-        }
-        console.log(result);
-        // Verificar los elementos de la base de datos con los que se han introducido
-        if (result[0].codigo == codigo && result[0].correo == email) {
-        console.log("El logueo es correcto");
-        res.status(200).json({ message: "User updated successfully" });
-        }
-    });
-});
 
+        res.status(500).json({ error: "Internal Server Error" });
+
+        return;
+      }
+
+      if (!result || result.length === 0) {
+        res.status(404).json({ error: "User not found" });
+
+        return;
+      }
+
+      if (result[0].codigo == codigo && result[0].correo == email) {
+        console.log("El logueo es correcto");
+
+        res.status(200).json({ message: "Token Correcto" });
+      } else {
+        console.log("El logueo es INCORRECTO");
+
+        res.status(401).json({ error: "Token Incorrecto" });
+      }
+    });
+  } catch (error) {
+    console.error("Unexpected error:", error);
+
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 // Cerrar la conexión MySQL cuando la aplicación se termine
 process.on("SIGINT", () => {

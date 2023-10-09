@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function pantallaPrincipal() {
   // Estado para almacenar el correo electrónico
+
   const [email, setEmail] = useState("");
   // Estado para verificar la validez del correo
   const [emailValido, setEmailValido] = useState(true);

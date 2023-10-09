@@ -3,73 +3,44 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./pantallaCodigo.css";
-
+import { useNavigate } from "react-router-dom";
 function PantallaCodigo() {
   const [codigo, setCodigo] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { email } = location.state || {};
+  const [email2, setEmail] = useState("");
 
-  // Función para enviar el correo electrónico
-  // const enviarCorreo = async (correoDestino) => {
-  //   try {
-  //     const response = await fetch("http://localhost:3000/verificarCodigo", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         correoOrigen: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
-  //         correoDestino, // Agrega el correo destino aquí
-  //         mensaje: "Hola", // Agrega el mensaje aquí
-  //       }),
-  //     });
-  //
-  //     if (response.status === 200) {
-  //       console.log(`Correo enviado a ${correoDestino}`);
-  //     } else {
-  //       console.error("Error al enviar el correo");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error de red:", error);
-  //   }
-  // };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     var codigoIngresado = codigo;
     var emailIngresado = email;
-    console.log("codigo ---->",codigoIngresado);
-    console.log("email ---->",emailIngresado);
+    setEmail(emailIngresado);
+    console.log("codigo ---->", codigoIngresado);
+    console.log("email ---->", emailIngresado);
 
     // Promesa al servidor para verificar el código
     try {
-        const response = fetch("http://localhost:3000/verificarCodigo", {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-            codigo: codigoIngresado,
-            email: emailIngresado,
-            }),
-        });
-        console.log("response ---->",response);
-        if (response.status === 200) {
-            console.log("Usuario verificado");
-        } else {
-            console.error("Error al verificar usuario");
-        }
+      const response = await fetch("http://localhost:3000/verificarCodigo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          codigo: codigoIngresado,
+          email: emailIngresado,
+        }),
+      });
+      console.log("response ---->", response);
+      if (response.status === 200) {
+        navigate("/app", { state: { email2 } });
+      } else {
+        console.error("Error al verificar usuario");
+      }
     } catch (error) {
-        console.error("Error de red:", error);
+      console.error("Error de red:", error);
     }
   };
-
-  const handleLogout = () => {
-    setLoggedIn(false);
-    setCodigo("");
-  };
-
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">

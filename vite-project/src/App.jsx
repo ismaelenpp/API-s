@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 import { Button, Modal } from "react-bootstrap";
-
+import { useLocation } from "react-router-dom";
 import Formulario from "./Formulario";
 
 import TableComponent from "./Tablecomp";
@@ -15,6 +15,8 @@ function App() {
   const [tableHtml, setTableHtml] = useState("");
 
   const [showModal, setShowModal] = useState(false);
+  const location = useLocation();
+  const { email2 } = location.state || {};
 
   //insert into usuarios ("id", "usuarios", "password", "rol") VALUES (1, "ismaelgarciabougrine2@gmail.com", "5544", "administrador");
 
@@ -23,6 +25,13 @@ function App() {
       .then((response) => response.text())
 
       .then((data) => {
+        console.log(email2);
+        console.log(email2);
+        console.log(email2);
+        console.log(email2);
+        console.log(email2);
+        console.log(email2);
+        console.log(email2);
         setTableHtml(data);
       })
 
@@ -36,6 +45,7 @@ function App() {
   }, []);
 
   const handlePost = (equipo, liga, pais, descripcion, imagen) => {
+    console.log(email2);
     if (equipo && liga && pais && descripcion && imagen) {
       const newTeam = {
         nombre: equipo,
