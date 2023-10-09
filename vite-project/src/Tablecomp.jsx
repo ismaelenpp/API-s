@@ -13,17 +13,11 @@ import { Background } from "@cloudinary/url-gen/qualifiers";
 
 const TableComponent = () => {
   const [tableData, setTableData] = useState([]);
-
   const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
-
   const [showModal, setShowModal] = useState(false);
-
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-
   const [teamToDelete, setTeamToDelete] = useState("");
-
   const [showEstadio, setShowEstadio] = useState(false);
-
   const [filterText, setFilterText] = useState(""); // Estado para el texto de filtrado
 
   useEffect(() => {
@@ -97,7 +91,7 @@ const TableComponent = () => {
     setEquipoSeleccionado(null);
     setShowModal(false);
   };
-  //sadds
+
   // Función para filtrar la tabla
   const filteredData = tableData.filter((equipo) =>
     equipo.nombre.toLowerCase().includes(filterText.toLowerCase())
