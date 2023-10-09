@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import BtnDelete from "./ButtonDelete";
@@ -330,8 +331,6 @@ const TableComponent = () => {
 
           <Modal.Body>
             ¿Quieres eliminar el equipo <strong>{teamToDelete}</strong>?
-            <br />
-            Clique dos veces en <strong>BORRAR</strong> para eliminarlo
           </Modal.Body>
 
           <Modal.Footer>
