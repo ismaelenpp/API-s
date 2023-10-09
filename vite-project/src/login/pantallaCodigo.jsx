@@ -33,7 +33,7 @@ function PantallaCodigo() {
       });
       console.log("response ---->", response);
       if (response.status === 200) {
-        navigate("/app", { state: { email2 } });
+        navigate("/app", { state: { email2: email } });
       } else {
         console.error("Error al verificar usuario");
       }
