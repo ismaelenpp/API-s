@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import BtnDelete from "./ButtonDelete";
@@ -12,17 +13,11 @@ import { Background } from "@cloudinary/url-gen/qualifiers";
 
 const TableComponent = () => {
   const [tableData, setTableData] = useState([]);
-
   const [equipoSeleccionado, setEquipoSeleccionado] = useState(null);
-
   const [showModal, setShowModal] = useState(false);
-
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-
   const [teamToDelete, setTeamToDelete] = useState("");
-
   const [showEstadio, setShowEstadio] = useState(false);
-
   const [filterText, setFilterText] = useState(""); // Estado para el texto de filtrado
 
   useEffect(() => {
@@ -96,7 +91,7 @@ const TableComponent = () => {
     setEquipoSeleccionado(null);
     setShowModal(false);
   };
-  //sadds
+
   // Función para filtrar la tabla
   const filteredData = tableData.filter((equipo) =>
     equipo.nombre.toLowerCase().includes(filterText.toLowerCase())
@@ -330,8 +325,6 @@ const TableComponent = () => {
 
           <Modal.Body>
             ¿Quieres eliminar el equipo <strong>{teamToDelete}</strong>?
-            <br />
-            Clique dos veces en <strong>BORRAR</strong> para eliminarlo
           </Modal.Body>
 
           <Modal.Footer>

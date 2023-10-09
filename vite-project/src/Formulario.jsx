@@ -1,17 +1,14 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-
 import DragAndDrop from "./drag_and_drop";
-
 import cloudinary from "cloudinary-core";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const cl = new cloudinary.Cloudinary({
-  cloud_name: 'dwodczt0e', 
-  api_key: '246222394918621', 
-  api_secret: '7R2jwsxRXL9VZrU5CH1YlgGGVxc' 
+  cloud_name: "dwodczt0e",
+  api_key: "246222394918621",
+  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
 });
 
 const Formulario = ({ onSubmit }) => {

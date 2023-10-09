@@ -16,6 +16,7 @@ cloudinary.v2.config({
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
@@ -207,31 +208,25 @@ app.post("/verificarCodigo", (req, res) => {
     connection.query(query, values, (error, result) => {
       if (error) {
         console.error("Error executing MySQL query:", error);
-
         res.status(500).json({ error: "Internal Server Error" });
-
         return;
       }
 
       if (!result || result.length === 0) {
         res.status(404).json({ error: "User not found" });
-
         return;
       }
 
       if (result[0].codigo == codigo && result[0].correo == email) {
         console.log("El logueo es correcto");
-
         res.status(200).json({ message: "Token Correcto" });
       } else {
         console.log("El logueo es INCORRECTO");
-
         res.status(401).json({ error: "Token Incorrecto" });
       }
     });
   } catch (error) {
     console.error("Unexpected error:", error);
-
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
