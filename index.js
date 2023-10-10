@@ -21,7 +21,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "ismaelenp1234",
+  password: "admin6023!",
   database: "futbol",
   port: "3306",
 });
@@ -155,54 +155,76 @@ app.delete("/eliminar-imagen/:public_id", async (req, res) => {
 });
 
 // POST para agregar un usuario a la tabla "usuarios"
-app.post("/meterGmail", (req, res) => {
+app.post("/meterGmail", async (req, res) => {
   const { correo } = req.body;
-  let numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
-  console.log(correo);
-  // Obtener la última ID
-  console.log("correo", correo);
-  const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
-  connection.query(getLastIdQuery, (error, result) => {
+
+  // Verificar si el correo ya existe en la base de datos
+  const checkEmailQuery = "SELECT * FROM usuarios WHERE correo = ?";
+  connection.query(checkEmailQuery, [correo], async (error, result) => {
     if (error) {
       console.error("Error executing MySQL query:", error);
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
 
-    let lastId = result[0].lastId || 0;
-    const newId = lastId + 1;
-    const query =
-      "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
+    if (result && result.length > 0) {
+      // El correo ya existe en la base de datos
+      // Generar un nuevo token
+      const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
 
-    const values = [newId, correo, numeroAleatorio, "usuario"];
-    connection.query(query, values, (error, result) => {
-      if (error) {
-        console.error("Error executing MySQL query:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-        return;
-      }
-      const newUser = {
-        id: newId,
-        correo,
-        codigo: numeroAleatorio,
-        rol: "usuario",
-      };
-      res.status(201).json(newUser);
-    });
+      // Actualizar el token en la base de datos
+      const updateTokenQuery =
+        "UPDATE usuarios SET codigo = ? WHERE correo = ?";
+      connection.query(
+        updateTokenQuery,
+        [numeroAleatorio, correo],
+        (error, updateResult) => {
+          if (error) {
+            console.error("Error updating token:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+            return;
+          }
+
+          // Envía el nuevo token por correo electrónico
+          enviartoken(correo, numeroAleatorio);
+
+          res
+            .status(200)
+            .json({ message: "Token actualizado y enviado por correo" });
+        }
+      );
+    } else {
+      // El correo no existe en la base de datos, procede a agregarlo
+      // Generar un valor único para id (número aleatorio más pequeño)
+      const idUnico = Math.floor(Math.random() * 100000); // Valor más pequeño
+      const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
+      const query =
+        "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
+      const values = [idUnico, correo, numeroAleatorio, "usuario"];
+      connection.query(query, values, async (error, insertResult) => {
+        if (error) {
+          console.error("Error executing MySQL query:", error);
+          res.status(500).json({ error: "Internal Server Error" });
+          return;
+        }
+
+        // Envía el token por correo electrónico
+        enviartoken(correo, numeroAleatorio);
+
+        res
+          .status(201)
+          .json({ message: "Usuario creado y token enviado por correo" });
+      });
+    }
   });
-  enviartoken(correo, numeroAleatorio);
 });
 
 app.post("/verificarCodigo", (req, res) => {
   const { codigo } = req.body;
   const { email } = req.body;
-  console.log("codigo en el index.js --->", codigo);
-  console.log("email en el index.js --->", email);
   const query = "SELECT * FROM usuarios WHERE codigo = ?";
   const values = [codigo];
   const values2 = [email];
-  console.log("values en el index.js --->", values);
-  console.log("values2 en el index.js --->", values2);
 
   try {
     connection.query(query, values, (error, result) => {
@@ -218,10 +240,8 @@ app.post("/verificarCodigo", (req, res) => {
       }
 
       if (result[0].codigo == codigo && result[0].correo == email) {
-        console.log("El logueo es correcto");
         res.status(200).json({ message: "Token Correcto" });
       } else {
-        console.log("El logueo es INCORRECTO");
         res.status(401).json({ error: "Token Incorrecto" });
       }
     });
