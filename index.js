@@ -24,7 +24,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "ismaelenp1234",
+  password: "admin6023!",
   database: "futbol",
   port: "3306",
 });
@@ -158,7 +158,7 @@ app.delete("/eliminar-imagen/:public_id", async (req, res) => {
 });
 
 // POST para agregar un usuario a la tabla "usuarios"
-app.post("/meterGmail", (req, res) => {
+app.post("/meterGmail", async (req, res) => {
   const { correo } = req.body;
   let numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
 
