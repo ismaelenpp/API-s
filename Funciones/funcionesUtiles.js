@@ -1,4 +1,7 @@
 const nodemailer = require("nodemailer");
+const ncrypt = require("ncrypt-js");
+var _secretKey = "some-super-secret-key";
+var ncryptObject = new ncrypt(_secretKey);
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -15,8 +18,7 @@ function enviartoken(correo, numeroAleatorio) {
     //var emaildata = { correoOrigen, correoDestino, mensaje };
     var correoDestino = correo;
     var correoOrigen = "collakebab@gmail.com";
-    var mensaje = numeroAleatorio.toString();
-
+    var mensaje = ncryptObject.decrypt(numeroAleatorio);
     // Configuración del correo electrónico
     const mailOptions = {
       from: correoOrigen,
