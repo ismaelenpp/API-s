@@ -2,6 +2,9 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import DragAndDrop from "./drag_and_drop";
+import * as filestack from 'filestack-js';
+
+const client = filestack.init('AZOIMYcHQJq6ZI7YPI0BEz');
 
 const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
   const [equipo, setEquipo] = useState(equipoSeleccionado.nombre);
@@ -87,7 +90,14 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
       videoLink: videoLink,
       imagen: imagen,
     };
-    await handleEliminarImagen(equipoSeleccionado.nombre);
+
+    console.log("datos de imagen", imagen);
+
+    console.log("Intento1", imagen.split("/")[3]);
+
+    var imagenborrar = imagen.split("/")[3];
+
+    await handleEliminarImagen(imagenborrar);
     onEdit(equipoEditado);
     setEquipo("");
     setLiga("");
@@ -111,20 +121,13 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
     setImagen(null);
   };
 
-  const handleEliminarImagen = async (public_id) => {
-    try {
-      const response = await fetch(`http://localhost:3000/eliminar-imagen/${public_id}`, {
-        method: "DELETE",
-      });
-      if (response.ok) {
-        console.log("Imagen eliminada con éxito");
-      } else {
-        console.error("Error al eliminar la imagen");
-      }
-    } catch (error) {
-      console.error("Error al eliminar la imagen:", error);
-    }
+  const handleEliminarImagen = async (eliminar) => {
+
+    console.log("Intento2", eliminar);
+    await client.remove(eliminar);
   };
+
+
 
   return (
     <div className="container">
