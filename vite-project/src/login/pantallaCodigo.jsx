@@ -42,30 +42,33 @@ function PantallaCodigo() {
     }
   };
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-12">
-          <div className="card">
-            <div className="card-header">Iniciar sesión</div>
-            <div className="card-body">
-              <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label htmlFor="codigo">Código:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="codigo"
-                    name="codigo"
-                    value={codigo}
-                    onChange={(e) => setCodigo(e.target.value)}
-                    required
-                  />
-                </div>
-                <p>Email: {email}</p>
-                <button type="submit" className="btn btn-primary btn-block">
-                  Iniciar sesión
-                </button>
-              </form>
+    <div className="background">
+      <div className="container mt-5">
+        <div className="row justify-content-center">
+          <div className="col-md-12">
+            <div className="card">
+              <div className="card-body">
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="codigo">Introduce el Token:</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="codigo"
+                      name="codigo"
+                      value={codigo}
+                      onChange={(e) => setCodigo(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <p>
+                    <b>Email:</b> {email}
+                  </p>
+                  <button type="submit" className="btn btn-primary btn-block">
+                    Iniciar sesión
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>

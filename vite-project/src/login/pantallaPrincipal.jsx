@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import "./pantallaPrincipal.css";
 import { useNavigate } from "react-router-dom";
+import "/Users/daniel.lopez-rodrigu/Desktop/API_4/API-s/vite-project/src/login/pantallaPrincipal.css";
 
 function pantallaPrincipal() {
   // Estado para almacenar el correo electrónico
-
   const [email, setEmail] = useState("");
   // Estado para verificar la validez del correo
   const [emailValido, setEmailValido] = useState(true);
@@ -54,30 +53,32 @@ function pantallaPrincipal() {
   }
 
   return (
-    <div>
+    <div className="background" id="background" >
       <section className="vh-100 gradient-custom">
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-12">
               <div
-                className="card bg-dark text-white"
+                className="card bg-light text-white"
                 style={{ borderRadius: "1rem" }}
               >
-                <div className="card-body p-5 text-center">
-                  <div className="mb-md-5 mt-md-4 pb-5">
-                    <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
-                    <p className="text-white-50 mb-5">
-                      Por favor, pon tu correo electrónico.
+                <div className="card-body p-5 text-center bg-white">
+                <h1 className="fw-bold mb-2 text-uppercase text-black">InetFUT</h1>
+                  <div className="mb-md-5 mt-md-4 pb-5">  
+                    <h6 className="fw-bold mb-2 text-uppercase text-black">Login</h6>
+                    <p className="text-black-50 mb-5">
+                      Introduce el correo electrónico
                     </p>
                     <form onSubmit={handleSubmit}>
-                      <div className="form-outline form-white mb-4">
+                      <div className="form-outline form-white text-black mb-4">
                         <label className="form-label" htmlFor="typeEmailX">
-                          Correo electrónico
+
                         </label>
                         <input
                           type="email"
                           id="typeEmailX"
-                          className={`form-control form-control-lg ${
+                          placeholder="Correo Electrónico"
+                          className={`form-control form-control-lg${
                             emailValido ? "" : "is-invalid"
                           }`}
                           value={email}
@@ -94,7 +95,7 @@ function pantallaPrincipal() {
                       </div>
 
                       <button
-                        className="btn btn-outline-light btn-lg px-5"
+                        className="btn btn-outline-light  bg-primary btn-lg px-5 text-white"
                         type="submit"
                       >
                         Login
