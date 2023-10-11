@@ -5,13 +5,9 @@ const mysql = require("mysql2");
 const bodyParser = require("body-parser");
 const cloudinary = require("cloudinary");
 const { enviartoken } = require("./Funciones/funcionesUtiles");
+const filestack = require("filestack-js");
+const client = filestack.init("AZOIMYcHQJq6ZI7YPI0BEz");
 
-cloudinary.v2.config({
-  cloud_name: "dwodczt0e",
-  api_key: "246222394918621",
-  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
-  secure: true,
-});
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -21,7 +17,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "admin6023!",
+  password: "1234",
   database: "futbol",
   port: "3306",
 });
@@ -133,25 +129,10 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
 });
 
 // Eliminar imagen de Cloudinary
-app.delete("/eliminar-imagen/:public_id", async (req, res) => {
-  console.log("Imagen a eliminar:", req.params.public_id);
-  const { public_id } = req.params;
-  console.log("public_id:", public_id);
+app.post("eliminarImagen", async (req, res) => {
+  console.log("Lo que llega: ", req.body);
 
-  try {
-    await cloudinary.v2.uploader.destroy(public_id, (error, result) => {
-      if (error) {
-        console.error("Error al eliminar la imagen:", error);
-        res.status(500).json({ error: "Error interno del servidor" });
-        return;
-      }
-      console.log("Resultado de la eliminación:", result);
-    });
-    res.json({ message: "Imagen eliminada con éxito" });
-  } catch (error) {
-    console.error("Error al eliminar la imagen:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
+
 });
 
 // POST para agregar un usuario a la tabla "usuarios"
