@@ -138,16 +138,18 @@ app.delete("/eliminarimagen/:eliminate", async (req, res) => {
     const secretKey = "T5EHAT5TXZH6HJHUVBJRH5N6TE";
     const policyObject = {
       "call": ["remove"],
-      "expiry": 1634503200,
+      "expiry": 1698795000,
       "handle": eliminate,
     };
 
-    const base64Policy = btoa(JSON.stringify(policyObject));
-    //console.log("base64Policy", base64Policy);
+  const base64Policy = btoa(JSON.stringify(policyObject))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_");
+  console.log("base64Policy", base64Policy);
     const policyAndKey = base64Policy + secretKey;
     //console.log("policyAndKey", policyAndKey);
     const signature = sha256(policyAndKey);
-    //console.log("signature", signature);
+    console.log("signature", signature);
 
     try {
       const response = await fetch(
