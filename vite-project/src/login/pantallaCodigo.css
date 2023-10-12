@@ -1,4 +1,7 @@
 /* App.css */
+.background{
+  background-color: midnightblue;
+}
 
 .container {
     display: flex;
