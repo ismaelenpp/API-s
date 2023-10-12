@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const ncrypt = require("ncrypt-js");
 var _secretKey = "some-super-secret-key";
+const CryptoJS = require("crypto-js");
 var ncryptObject = new ncrypt(_secretKey);
 
 const transporter = nodemailer.createTransport({
@@ -43,4 +44,8 @@ function enviartoken(correo, numeroAleatorio) {
   }
 }
 
-module.exports = { enviartoken };
+const sha256 = (message) => {
+  const hash = CryptoJS.SHA256(message);
+  return hash.toString(CryptoJS.enc.Hex);
+};
+module.exports = { enviartoken, sha256 };

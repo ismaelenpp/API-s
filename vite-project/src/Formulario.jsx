@@ -2,14 +2,10 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import DragAndDrop from "./drag_and_drop";
-import cloudinary from "cloudinary-core";
 import "bootstrap/dist/css/bootstrap.min.css";
+import * as filestack from 'filestack-js';
 
-const cl = new cloudinary.Cloudinary({
-  cloud_name: "dwodczt0e",
-  api_key: "246222394918621",
-  api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
-});
+const client = filestack.init('AZOIMYcHQJq6ZI7YPI0BEz');
 
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
@@ -105,7 +101,7 @@ const Formulario = ({ onSubmit }) => {
       return;
     }
 
-    const imageUrl = await uploadImageToCloudinary(imageFile, equipo);
+    const imageUrl = await uploadImageToFilestack(imageFile);
 
     onSubmit(equipo, liga, pais, descripcion, imageUrl);
 
@@ -121,7 +117,7 @@ const Formulario = ({ onSubmit }) => {
 
     setShowWarning(false);
 
-    window.location.reload();
+   // window.location.reload();
   };
 
   const handleImageDrop = (file) => {
@@ -138,50 +134,23 @@ const Formulario = ({ onSubmit }) => {
     setImageFile(null);
   };
 
-  const uploadImageToCloudinary = async (imageFile, name) => {
-    console.log("Subiendo imagen a Cloudinary...");
+  const uploadImageToFilestack = async (imageFile) => {
+    console.log("Subiendo imagen a Filestack...");
+    console.log("Nombre del equipo:", name);
 
     try {
-      const formData = new FormData();
+      const response = await client.upload(imageFile);
 
-      formData.append("file", imageFile);
+      console.log("Imagen subida a Filestack:", response);
 
-      formData.append("upload_preset", "images");
-
-      formData.append("public_id", name);
-      const response = await fetch(
-        cl.url("https://api.cloudinary.com/v1_1/dwodczt0e/image/upload", {
-          secure: true,
-          upload_preset: "images",
-          cloud_name: "dwodczt0e",
-          api_key: "246222394918621",
-          api_secret: "7R2jwsxRXL9VZrU5CH1YlgGGVxc",
-        }),
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-
-        console.log("Imagen cargada exitosamente:", data.secure_url);
-
-        return data.secure_url;
-      } else {
-        const errorData = await response.json();
-
-        console.error("Error al subir la imagen:", errorData.message);
-
-        return errorData.message;
-      }
+      return response.url;
     } catch (error) {
-      console.error("Error al subir la imagen:", error);
+      console.error("Error al subir la imagen a Filestack:", error);
 
       return error;
     }
   };
+
 
   return (
     <div className="container mt-0">
