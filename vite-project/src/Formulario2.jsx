@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import DragAndDrop from "./drag_and_drop";
 import * as filestack from 'filestack-js';
+//import CryptoJS from "crypto-js";
 
 const client = filestack.init('AZOIMYcHQJq6ZI7YPI0BEz');
 
@@ -121,13 +122,53 @@ const Formulario2 = ({ equipoSeleccionado, onEdit }) => {
     setImagen(null);
   };
 
-  const handleEliminarImagen = async (eliminar) => {
-
-    console.log("Intento2", eliminar);
-    await client.remove(eliminar);
-  };
-
-
+  const handleEliminarImagen = async (eliminate) => {
+    // Promesa a localhost:3000 para eliminar la imagen
+    const response = await fetch(`http://localhost:3000/eliminarimagen/${eliminate}`, {
+        method: "DELETE",
+    });
+    if (response.ok) {
+        console.log("Imagen eliminada con éxito");
+    } else {
+        console.error("Error al eliminar la imagen:", response.status, response.statusText);
+    }
+  }
+  // const handleEliminarImagen = async (eliminate) => {
+  //   const API_KEY = "AZOIMYcHQJq6ZI7YPI0BEz";
+  //   const secretKey = "T5EHAT5TXZH6HJHUVBJRH5N6TE";
+  //   const policyObject = {
+  //     "call": ["remove"],
+  //     "expiry": 1634503200,
+  //     "handle": eliminate,
+  //   };
+  //
+  //   const base64Policy = btoa(JSON.stringify(policyObject));
+  //   const policyAndKey = base64Policy + secretKey;
+  //   const signature = sha256(policyAndKey);
+  //
+  //   try {
+  //     const response = await fetch(
+  //         `https://www.filestackapi.com/api/file/${eliminate}?key=${API_KEY}&policy=${base64Policy}&signature=${signature}`,
+  //         {
+  //           method: "DELETE",
+  //         }
+  //     );
+  //
+  //     if (response.ok) {
+  //       console.log("Imagen eliminada con éxito");
+  //     } else {
+  //       console.error("Error al eliminar la imagen:", response.status, response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error al eliminar la imagen:", error);
+  //   }
+  // };
+  //
+  // const sha256 = (message) => {
+  //   const hash = CryptoJS.SHA256(message);
+  //   return hash.toString(CryptoJS.enc.Hex);
+  // };
+  //
 
   return (
     <div className="container">

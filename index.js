@@ -3,8 +3,7 @@ const cors = require("cors");
 const app = express();
 const mysql = require("mysql2");
 const bodyParser = require("body-parser");
-const cloudinary = require("cloudinary");
-const { enviartoken } = require("./Funciones/funcionesUtiles");
+const { enviartoken, sha256 } = require("./Funciones/funcionesUtiles");
 const filestack = require("filestack-js");
 const client = filestack.init("AZOIMYcHQJq6ZI7YPI0BEz");
 const ncrypt = require("ncrypt-js");
@@ -132,9 +131,40 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
 });
 
 // Eliminar imagen de Cloudinary
-app.post("eliminarImagen", async (req, res) => {
-  console.log("Lo que llega: ", req.body);
+app.delete("/eliminarimagen/:eliminate", async (req, res) => {
+    const { eliminate } = req.params;
+    console.log(eliminate)
+    const API_KEY = "AZOIMYcHQJq6ZI7YPI0BEz";
+    const secretKey = "T5EHAT5TXZH6HJHUVBJRH5N6TE";
+    const policyObject = {
+      "call": ["remove"],
+      "expiry": 1634503200,
+      "handle": eliminate,
+    };
 
+    const base64Policy = btoa(JSON.stringify(policyObject));
+    //console.log("base64Policy", base64Policy);
+    const policyAndKey = base64Policy + secretKey;
+    //console.log("policyAndKey", policyAndKey);
+    const signature = sha256(policyAndKey);
+    //console.log("signature", signature);
+
+    try {
+      const response = await fetch(
+          `https://www.filestackapi.com/api/file/${eliminate}?key=${API_KEY}&policy=${base64Policy}&signature=${signature}`,
+          {
+            method: "DELETE",
+          }
+      );
+
+      if (response.ok) {
+        console.log("Imagen eliminada con éxito");
+      } else {
+        console.error("Error al eliminar la imagen:", response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error("Error al eliminar la imagen:", error);
+    }
 
 });
 
