@@ -19,9 +19,9 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "ismaelenp1234",
+  password: "1234",
   database: "futbol",
-  port: "3307",
+  port: "3306",
 });
 
 // Connect to MySQL
@@ -202,7 +202,7 @@ app.post("/meterGmail", async (req, res) => {
           }
 
           // Envía el nuevo token por correo electrónico
-          enviartoken(correo, numeroAleatorio);
+          enviartoken(correo, numeroAleatorio, res);
 
           res
             .status(200)
@@ -225,7 +225,7 @@ app.post("/meterGmail", async (req, res) => {
         }
 
         // Envía el token por correo electrónico
-        enviartoken(correo, numeroAleatorio);
+        enviartoken(correo, numeroAleatorio, res);
 
         res
           .status(201)

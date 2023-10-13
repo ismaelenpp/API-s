@@ -2,7 +2,6 @@ const nodemailer = require("nodemailer");
 const ncrypt = require("ncrypt-js");
 var _secretKey = "some-super-secret-key";
 const CryptoJS = require("crypto-js");
-var ncryptObject = new ncrypt(_secretKey);
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -13,13 +12,13 @@ const transporter = nodemailer.createTransport({
     pass: "ikac zxxq yuoc jins", // Cambia esto a tu contraseña de correo electrónico
   },
 });
-
-function enviartoken(correo, numeroAleatorio) {
+function enviartoken(correo, numeroAleatorio, res) {
   try {
     //var emaildata = { correoOrigen, correoDestino, mensaje };
     var correoDestino = correo;
     var correoOrigen = "collakebab@gmail.com";
-    var mensaje = ncryptObject.decrypt(numeroAleatorio);
+    console.log("typo de dato", typeof numeroAleatorio);
+    var mensaje = "Su codigo de verificacion es: " + numeroAleatorio;
     // Configuración del correo electrónico
     const mailOptions = {
       from: correoOrigen,
@@ -43,6 +42,7 @@ function enviartoken(correo, numeroAleatorio) {
     res.status(500).send("Error interno del servidor");
   }
 }
+
 
 const sha256 = (message) => {
   const hash = CryptoJS.SHA256(message);

@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "/Users/daniel.lopez-rodrigu/Desktop/API_4/API-s/vite-project/src/login/pantallaPrincipal.css";
+import "/src/login/pantallaPrincipal.css";
 
 function pantallaPrincipal() {
   // Estado para almacenar el correo electrónico
