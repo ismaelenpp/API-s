@@ -189,7 +189,6 @@ app.post("/meterGmail", async (req, res) => {
       // El correo ya existe en la base de datos
       // Generar un nuevo token
       const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
-
       // Actualizar el token en la base de datos
       const updateTokenQuery =
         "UPDATE usuarios SET codigo = ? WHERE correo = ?";
@@ -214,17 +213,29 @@ app.post("/meterGmail", async (req, res) => {
     } else {
       // El correo no existe en la base de datos, procede a agregarlo
       // Generar un valor único para id (número aleatorio más pequeño)
-      const idUnico = Math.floor(Math.random() * 100000); // Valor más pequeño
-      const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
-      const query =
-        "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
-      const values = [idUnico, correo, numeroAleatorio, "usuario"];
-      connection.query(query, values, async (error, insertResult) => {
+      const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
+      connection.query(getLastIdQuery, (error, result) => {
         if (error) {
           console.error("Error executing MySQL query:", error);
           res.status(500).json({ error: "Internal Server Error" });
           return;
         }
+        let lastId = result[result.length - 1].lastId || 0;
+        var idUnico = lastId + 1;
+
+        console.log(idUnico);
+
+        const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
+        const query =
+          "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
+        const values = [idUnico, correo, numeroAleatorio, "usuario"];
+        connection.query(query, values, async (error, insertResult) => {
+          if (error) {
+            console.error("Error executing MySQL query:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+            return;
+          }
+        });
 
         // Envía el token por correo electrónico
         enviartoken(correo, numeroAleatorio, res);
