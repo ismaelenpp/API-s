@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "/src/login/pantallaPrincipal.css";
+import {background} from "@cloudinary/url-gen/qualifiers/focusOn";
+import {image} from "@cloudinary/url-gen/qualifiers/source";
 
 function pantallaPrincipal() {
   // Estado para almacenar el correo electrónico
@@ -52,6 +54,8 @@ function pantallaPrincipal() {
     return patronCorreo.test(correo);
   }
 
+
+
   return (
     <div className="background" id="background" >
       <section className="vh-100 gradient-custom">
@@ -60,9 +64,8 @@ function pantallaPrincipal() {
             <div className="col-12">
               <div
                 className="card bg-light text-white"
-                style={{ borderRadius: "1 rem" }}
-              >
-                <div className="card-body p-5 text-center bg-white">
+                style={{ borderRadius: "1 rem", background: "url(https://cdn.filestackcontent.com/6MG9zFKMTfSapBgsCvvS)", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
+                <div className="card-body p-5 text-center">
                 <img style={{with:"5%", height:"50px"}} src={"https://cdn.filestackcontent.com/tr0F3biuQEexN34fwBuy"}/>
                   <div className="mb-md-5 mt-md-4 pb-5">
                     <h6 className="fw-bold mb-2 text-uppercase text-black">Login</h6>
