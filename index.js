@@ -133,22 +133,19 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
 // Eliminar imagen de Cloudinary
 app.delete("/eliminarimagen/:eliminate", async (req, res) => {
     const { eliminate } = req.params;
-    console.log(eliminate)
+    console.log(eliminate);
     const API_KEY = "AZOIMYcHQJq6ZI7YPI0BEz";
     const secretKey = "T5EHAT5TXZH6HJHUVBJRH5N6TE";
-    const policyObject = {
-      "call": ["remove"],
-      "expiry": 1698795000,
-      "handle": eliminate,
-    };
+    const policyObject = {"call":["remove"],"expiry":1697452200,"handle":"ReLG2cETTSxZ7WMBVPY7"}
 
-  const base64Policy = btoa(JSON.stringify(policyObject))
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_");
+  const base64Policy = "eyJjYWxsIjpbInJlbW92ZSJdLCJleHBpcnkiOjE2OTc0NTIyMDAsImhhbmRsZSI6IlJlTEcyY0VUVFN4WjdXTUJWUFk3In0=";
+      // btoa(JSON.stringify(policyObject))
+      // .replace(/\+/g, "-")
+      // .replace(/\//g, "_");
   console.log("base64Policy", base64Policy);
     const policyAndKey = base64Policy + secretKey;
     //console.log("policyAndKey", policyAndKey);
-    const signature = sha256(policyAndKey);
+    const signature = "5c134c2650a182e04d8b3254781fc762b992824c88904dcccea9e94fec78badd";
     console.log("signature", signature);
 
     try {
@@ -161,6 +158,7 @@ app.delete("/eliminarimagen/:eliminate", async (req, res) => {
 
       if (response.ok) {
         console.log("Imagen eliminada con éxito");
+        console.log("response", response);
       } else {
         console.error("Error al eliminar la imagen:", response.status, response.statusText);
       }
