@@ -60,11 +60,11 @@ function pantallaPrincipal() {
             <div className="col-12">
               <div
                 className="card bg-light text-white"
-                style={{ borderRadius: "1rem" }}
+                style={{ borderRadius: "1 rem" }}
               >
                 <div className="card-body p-5 text-center bg-white">
-                <h1 className="fw-bold mb-2 text-uppercase text-black">InetFUT</h1>
-                  <div className="mb-md-5 mt-md-4 pb-5">  
+                <img style={{with:"5%", height:"50px"}} src={"https://cdn.filestackcontent.com/tr0F3biuQEexN34fwBuy"}/>
+                  <div className="mb-md-5 mt-md-4 pb-5">
                     <h6 className="fw-bold mb-2 text-uppercase text-black">Login</h6>
                     <p className="text-black-50 mb-5">
                       Introduce el correo electrónico
