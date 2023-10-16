@@ -57,8 +57,8 @@ function pantallaPrincipal() {
 
 
   return (
-    <div className="background" id="background" >
-      <section className="vh-100 gradient-custom">
+    <div className="background" id="background">
+      <section style={{ backgroundColor: "#004D7B" }}>
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-12">
