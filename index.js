@@ -10,7 +10,6 @@ const ncrypt = require("ncrypt-js");
 const _secretKey = "some-super-secret-key";
 const ncryptObject = new ncrypt(_secretKey);
 
-
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -19,7 +18,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "1234",
+  password: "admin6023!",
   database: "futbol",
   port: "3306",
 });
@@ -132,42 +131,45 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
 
 // Eliminar imagen de Cloudinary
 app.delete("/eliminarimagen/:eliminate", async (req, res) => {
-    const { eliminate } = req.params;
-    console.log(eliminate)
-    const API_KEY = "AZOIMYcHQJq6ZI7YPI0BEz";
-    const secretKey = "T5EHAT5TXZH6HJHUVBJRH5N6TE";
-    const policyObject = {
-      "call": ["remove"],
-      "expiry": 1698795000,
-      "handle": eliminate,
-    };
+  const { eliminate } = req.params;
+  console.log(eliminate);
+  const API_KEY = "AZOIMYcHQJq6ZI7YPI0BEz";
+  const secretKey = "T5EHAT5TXZH6HJHUVBJRH5N6TE";
+  const policyObject = {
+    call: ["remove"],
+    expiry: 1698795000,
+    handle: eliminate,
+  };
 
   const base64Policy = btoa(JSON.stringify(policyObject))
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_");
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_");
   console.log("base64Policy", base64Policy);
-    const policyAndKey = base64Policy + secretKey;
-    //console.log("policyAndKey", policyAndKey);
-    const signature = sha256(policyAndKey);
-    console.log("signature", signature);
+  const policyAndKey = base64Policy + secretKey;
+  //console.log("policyAndKey", policyAndKey);
+  const signature = sha256(policyAndKey);
+  console.log("signature", signature);
 
-    try {
-      const response = await fetch(
-          `https://www.filestackapi.com/api/file/${eliminate}?key=${API_KEY}&policy=${base64Policy}&signature=${signature}`,
-          {
-            method: "DELETE",
-          }
-      );
-
-      if (response.ok) {
-        console.log("Imagen eliminada con éxito");
-      } else {
-        console.error("Error al eliminar la imagen:", response.status, response.statusText);
+  try {
+    const response = await fetch(
+      `https://www.filestackapi.com/api/file/${eliminate}?key=${API_KEY}&policy=${base64Policy}&signature=${signature}`,
+      {
+        method: "DELETE",
       }
-    } catch (error) {
-      console.error("Error al eliminar la imagen:", error);
-    }
+    );
 
+    if (response.ok) {
+      console.log("Imagen eliminada con éxito");
+    } else {
+      console.error(
+        "Error al eliminar la imagen:",
+        response.status,
+        response.statusText
+      );
+    }
+  } catch (error) {
+    console.error("Error al eliminar la imagen:", error);
+  }
 });
 
 // POST para agregar un usuario a la tabla "usuarios"
