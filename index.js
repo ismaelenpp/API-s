@@ -17,12 +17,11 @@ app.use(express.json());
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "sergi",
-  password: "1234",
+  user: "root",
+  password: "ismaelenp1234",
   database: "futbol",
   port: "3306",
 });
-
 // Connect to MySQL
 connection.connect((err) => {
   if (err) {
@@ -175,106 +174,87 @@ app.delete("/eliminarimagen/:eliminate", async (req, res) => {
 // POST para agregar un usuario a la tabla "usuarios"
 app.post("/meterGmail", async (req, res) => {
   const { correo } = req.body;
+  let numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
 
-  // Verificar si el correo ya existe en la base de datos
-  const checkEmailQuery = "SELECT * FROM usuarios WHERE correo = ?";
-  connection.query(checkEmailQuery, [correo], async (error, result) => {
+  const numeroAleatorioCorto = numeroAleatorio.toString().substring(0, 6);
+  let codigoEncriptado = ncryptObject.encrypt(numeroAleatorioCorto);
+
+  console.log(correo);
+  // Obtener la última ID
+  console.log("correo", correo);
+  const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
+  connection.query(getLastIdQuery, (error, result) => {
     if (error) {
       console.error("Error executing MySQL query:", error);
       res.status(500).json({ error: "Internal Server Error" });
       return;
     }
+    console.log("codigoEncriptado: " + codigoEncriptado);
+    let lastId = result[0].lastId || 0;
+    const newId = lastId + 1;
+    const query =
+      "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
 
-    if (result && result.length > 0) {
-      // El correo ya existe en la base de datos
-      // Generar un nuevo token
-      const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
-      // Actualizar el token en la base de datos
-      const updateTokenQuery =
-        "UPDATE usuarios SET codigo = ? WHERE correo = ?";
-      connection.query(
-        updateTokenQuery,
-        [numeroAleatorio, correo],
-        (error, updateResult) => {
-          if (error) {
-            console.error("Error updating token:", error);
-            res.status(500).json({ error: "Internal Server Error" });
-            return;
-          }
-
-          // Envía el nuevo token por correo electrónico
-          enviartoken(correo, numeroAleatorio, res);
-
-          res
-            .status(200)
-            .json({ message: "Token actualizado y enviado por correo" });
-        }
-      );
-    } else {
-      // El correo no existe en la base de datos, procede a agregarlo
-      // Generar un valor único para id (número aleatorio más pequeño)
-      const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
-      connection.query(getLastIdQuery, (error, result) => {
-        if (error) {
-          console.error("Error executing MySQL query:", error);
-          res.status(500).json({ error: "Internal Server Error" });
-          return;
-        }
-        let lastId = result[result.length - 1].lastId || 0;
-        var idUnico = lastId + 1;
-
-        console.log(idUnico);
-
-        const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
-        const query =
-          "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
-        const values = [idUnico, correo, numeroAleatorio, "usuario"];
-        connection.query(query, values, async (error, insertResult) => {
-          if (error) {
-            console.error("Error executing MySQL query:", error);
-            res.status(500).json({ error: "Internal Server Error" });
-            return;
-          }
-        });
-
-        // Envía el token por correo electrónico
-        enviartoken(correo, numeroAleatorio, res);
-
-        res
-          .status(201)
-          .json({ message: "Usuario creado y token enviado por correo" });
-      });
-    }
-  });
-});
-
-app.post("/verificarCodigo", (req, res) => {
-  const { codigo } = req.body;
-  const { email } = req.body;
-  const query = "SELECT * FROM usuarios WHERE codigo = ?";
-  const values = [codigo];
-  const values2 = [email];
-
-  try {
+    const values = [newId, correo, codigoEncriptado, "usuario"];
     connection.query(query, values, (error, result) => {
       if (error) {
         console.error("Error executing MySQL query:", error);
         res.status(500).json({ error: "Internal Server Error" });
         return;
       }
+      const newUser = {
+        id: newId,
+        correo,
+        codigo: codigoEncriptado,
+        rol: "usuario",
+      };
+      res.status(201).json(newUser);
+    });
+  });
+  enviartoken(correo, codigoEncriptado);
+});
+
+app.post("/verificarCodigo", (req, res) => {
+  const { codigo } = req.body;
+  console.log(codigo);
+  const codigo2 = ncryptObject.encrypt(codigo);
+  const { email } = req.body;
+  const query = "SELECT * FROM usuarios WHERE correo = '" + email + "';";
+  const values = [codigo];
+  const values2 = [email];
+  const codigoEncriptado = ncryptObject.encrypt(codigo);
+
+  // console.log("codigo que pone el usuario:   " + codigoEncriptado);
+  try {
+    connection.query(query, values, (error, result) => {
+      console.log(
+        result[0].codigo + "        vavava        " + codigoEncriptado
+      );
+      if (error) {
+        console.log("1");
+        console.error("Error executing MySQL query:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+        return;
+      }
 
       if (!result || result.length === 0) {
+        console.log("2");
         res.status(404).json({ error: "User not found" });
         return;
       }
 
-      if (result[0].codigo == codigo && result[0].correo == email) {
+      if (result[0].codigo == codigoEncriptado && result[0].correo == email) {
+        console.log("3");
+        console.log("El logueo es correcto");
         res.status(200).json({ message: "Token Correcto" });
       } else {
+        console.log("El logueo es INCORRECTO");
+        console.log("4");
         res.status(401).json({ error: "Token Incorrecto" });
       }
     });
   } catch (error) {
+    console.log("5");
     console.error("Unexpected error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }

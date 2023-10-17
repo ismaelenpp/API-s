@@ -1,25 +1,24 @@
 const nodemailer = require("nodemailer");
 const ncrypt = require("ncrypt-js");
 var _secretKey = "some-super-secret-key";
-const CryptoJS = require("crypto-js");
+var ncryptObject = new ncrypt(_secretKey);
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   service: "Gmail",
   auth: {
-    user: "collakebab@gmail.com", // Cambia esto a tu dirección de correo electrónico
-    pass: "ikac zxxq yuoc jins", // Cambia esto a tu contraseña de correo electrónico
+    user: "collakebab@gmail.com",
+    pass: "ikac zxxq yuoc jins",
   },
 });
+
 function enviartoken(correo, numeroAleatorio, res) {
   try {
-    //var emaildata = { correoOrigen, correoDestino, mensaje };
     var correoDestino = correo;
     var correoOrigen = "collakebab@gmail.com";
-    console.log("typo de dato", typeof numeroAleatorio);
-    var mensaje = "Su codigo de verificacion es: " + numeroAleatorio;
-    // Configuración del correo electrónico
+    var mensaje = ncryptObject.decrypt(numeroAleatorio);
+
     const mailOptions = {
       from: correoOrigen,
       to: correoDestino,
@@ -27,7 +26,6 @@ function enviartoken(correo, numeroAleatorio, res) {
       text: mensaje,
     };
 
-    // Envío del correo electrónico
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error("Error al enviar el correo:", error);
@@ -43,9 +41,4 @@ function enviartoken(correo, numeroAleatorio, res) {
   }
 }
 
-
-const sha256 = (message) => {
-  const hash = CryptoJS.SHA256(message);
-  return hash.toString(CryptoJS.enc.Hex);
-};
-module.exports = { enviartoken, sha256 };
+module.exports = { enviartoken };
