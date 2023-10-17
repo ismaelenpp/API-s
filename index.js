@@ -10,7 +10,6 @@ const ncrypt = require("ncrypt-js");
 const _secretKey = "some-super-secret-key";
 const ncryptObject = new ncrypt(_secretKey);
 
-
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -18,7 +17,7 @@ app.use(express.json());
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "root",
+  user: "sergi",
   password: "1234",
   database: "futbol",
   port: "3306",
@@ -148,13 +147,13 @@ app.delete("/eliminarimagen/:eliminate", async (req, res) => {
     const signature = "5c134c2650a182e04d8b3254781fc762b992824c88904dcccea9e94fec78badd";
     console.log("signature", signature);
 
-    try {
-      const response = await fetch(
-          `https://www.filestackapi.com/api/file/${eliminate}?key=${API_KEY}&policy=${base64Policy}&signature=${signature}`,
-          {
-            method: "DELETE",
-          }
-      );
+  try {
+    const response = await fetch(
+      `https://www.filestackapi.com/api/file/${eliminate}?key=${API_KEY}&policy=${base64Policy}&signature=${signature}`,
+      {
+        method: "DELETE",
+      }
+    );
 
       if (response.ok) {
         console.log("Imagen eliminada con éxito");
@@ -185,7 +184,6 @@ app.post("/meterGmail", async (req, res) => {
       // El correo ya existe en la base de datos
       // Generar un nuevo token
       const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
-
       // Actualizar el token en la base de datos
       const updateTokenQuery =
         "UPDATE usuarios SET codigo = ? WHERE correo = ?";
@@ -210,17 +208,29 @@ app.post("/meterGmail", async (req, res) => {
     } else {
       // El correo no existe en la base de datos, procede a agregarlo
       // Generar un valor único para id (número aleatorio más pequeño)
-      const idUnico = Math.floor(Math.random() * 100000); // Valor más pequeño
-      const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
-      const query =
-        "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
-      const values = [idUnico, correo, numeroAleatorio, "usuario"];
-      connection.query(query, values, async (error, insertResult) => {
+      const getLastIdQuery = "SELECT MAX(id) AS lastId FROM usuarios";
+      connection.query(getLastIdQuery, (error, result) => {
         if (error) {
           console.error("Error executing MySQL query:", error);
           res.status(500).json({ error: "Internal Server Error" });
           return;
         }
+        let lastId = result[result.length - 1].lastId || 0;
+        var idUnico = lastId + 1;
+
+        console.log(idUnico);
+
+        const numeroAleatorio = Math.floor(Math.random() * 900000) + 100000;
+        const query =
+          "INSERT INTO `usuarios`(`id`, `correo`, `codigo`, `rol`) VALUES (?,?,?,?)";
+        const values = [idUnico, correo, numeroAleatorio, "usuario"];
+        connection.query(query, values, async (error, insertResult) => {
+          if (error) {
+            console.error("Error executing MySQL query:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+            return;
+          }
+        });
 
         // Envía el token por correo electrónico
         enviartoken(correo, numeroAleatorio, res);
