@@ -63,10 +63,13 @@ function pantallaPrincipal() {
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-12">
               <div
-                className="card bg-light text-white"
-                style={{ borderRadius: "1 rem", background: "url(https://cdn.filestackcontent.com/6MG9zFKMTfSapBgsCvvS)", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
-                <div className="card-body p-5 text-center">
-                <img style={{with:"5%", height:"50px"}} src={"https://cdn.filestackcontent.com/tr0F3biuQEexN34fwBuy"}/>
+                className="card bg-light text-white rounded"
+                style={{ background: "url(https://cdn.filestackcontent.com/6MG9zFKMTfSapBgsCvvS)", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
+                <div className="card-body p-5 col text-center">
+                 <div className="col text-center">
+                   <img src="https://cdn.filestackcontent.com/tr0F3biuQEexN34fwBuy" class="rounded img-fluid" alt="logo"/>
+                   {/*<img style={{with:"5%", height:"50px"}} src={"https://cdn.filestackcontent.com/tr0F3biuQEexN34fwBuy"}/>*/}
+                 </div>
                   <div className="mb-md-5 mt-md-4 pb-5">
                     <h6 className="fw-bold mb-2 text-uppercase text-black">Login</h6>
                     <p className="text-black-50 mb-5">
