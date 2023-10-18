@@ -9,6 +9,8 @@ const client = filestack.init("AZOIMYcHQJq6ZI7YPI0BEz");
 const ncrypt = require("ncrypt-js");
 const _secretKey = "some-super-secret-key";
 const ncryptObject = new ncrypt(_secretKey);
+const convert = require("js-sha256");
+const crypto = require('crypto');
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -17,7 +19,7 @@ app.use(express.json());
 // MySQL connection configuration
 const connection = mysql.createConnection({
   host: "localhost",
-  user: "sergi",
+  user: "root",
   password: "1234",
   database: "futbol",
   port: "3306",
@@ -135,17 +137,17 @@ app.delete("/eliminarimagen/:eliminate", async (req, res) => {
     console.log(eliminate);
     const API_KEY = "AZOIMYcHQJq6ZI7YPI0BEz";
     const secretKey = "T5EHAT5TXZH6HJHUVBJRH5N6TE";
-    const policyObject = {"call":["remove"],"expiry":1697452200,"handle":"ReLG2cETTSxZ7WMBVPY7"}
+    const policyObject = {"expiry":1701390600,"handle":eliminate,"call":["remove"]}
 
-  const base64Policy = "eyJjYWxsIjpbInJlbW92ZSJdLCJleHBpcnkiOjE2OTc0NTIyMDAsImhhbmRsZSI6IlJlTEcyY0VUVFN4WjdXTUJWUFk3In0=";
-      // btoa(JSON.stringify(policyObject))
-      // .replace(/\+/g, "-")
-      // .replace(/\//g, "_");
+  const base64Policy = btoa(JSON.stringify(policyObject));
+
   console.log("base64Policy", base64Policy);
     const policyAndKey = base64Policy + secretKey;
-    //console.log("policyAndKey", policyAndKey);
-    const signature = "5c134c2650a182e04d8b3254781fc762b992824c88904dcccea9e94fec78badd";
-    console.log("signature", signature);
+    console.log("policyAndKey", policyAndKey);
+    const signature = crypto.createHmac('sha256', secretKey);
+    signature.update(base64Policy);
+    const hmac256 = signature.digest('hex');
+    console.log("hmac256", hmac256);
 
   try {
     const response = await fetch(
