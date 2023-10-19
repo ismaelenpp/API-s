@@ -1,10 +1,10 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "/src/login/pantallaPrincipal.css";
-import {background} from "@cloudinary/url-gen/qualifiers/focusOn";
-import {image} from "@cloudinary/url-gen/qualifiers/source";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./CSSlogin.css";
 
 function pantallaPrincipal() {
   // Estado para almacenar el correo electrónico
@@ -54,32 +54,41 @@ function pantallaPrincipal() {
     return patronCorreo.test(correo);
   }
 
-
-
   return (
-    <div className="background" id="background">
-      <section style={{ backgroundColor: "#004D7B" }}>
+    <div className="table-responsive"
+         style={{ backgroundColor: "#004D7B" }}>
+      <section>
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-12">
               <div
-                className="card bg-light text-white rounded"
-                style={{ background: "url(https://cdn.filestackcontent.com/6MG9zFKMTfSapBgsCvvS)", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
+                className="card bg-light text-white rounded "
+                style={{
+                  background:
+                    "url(https://cdn.filestackcontent.com/6MG9zFKMTfSapBgsCvvS)",
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                }}
+              >
                 <div className="card-body p-5 col text-center">
-                 <div className="col text-center">
-                   <img src="https://cdn.filestackcontent.com/tr0F3biuQEexN34fwBuy" class="rounded img-fluid" alt="logo"/>
-                   {/*<img style={{with:"5%", height:"50px"}} src={"https://cdn.filestackcontent.com/tr0F3biuQEexN34fwBuy"}/>*/}
-                 </div>
+                  <div className="col text-center">
+                    <img
+                      src="https://cdn.filestackcontent.com/tr0F3biuQEexN34fwBuy" class="rounded img-fluid w-75" alt="logo"/>
+                  </div>
                   <div className="mb-md-5 mt-md-4 pb-5">
-                    <h6 className="fw-bold mb-2 text-uppercase text-black">Login</h6>
+                    <h6 className="fw-bold mb-2 text-uppercase text-black">
+                      Login
+                    </h6>
                     <p className="text-black-50 mb-5">
                       Introduce el correo electrónico
                     </p>
                     <form onSubmit={handleSubmit}>
                       <div className="form-outline form-white text-black mb-4">
-                        <label className="form-label" htmlFor="typeEmailX">
-
-                        </label>
+                        <label
+                          className="form-label"
+                          htmlFor="typeEmailX"
+                        ></label>
                         <input
                           type="email"
                           id="typeEmailX"

@@ -1,63 +1,108 @@
 /* App.css */
-.background{
-  background-color: midnightblue;
+.container {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 100vh;
+
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
-  
-  .card {
+.card {
+
     width: 100%;
+
     max-width: 400px;
+
     padding: 20px;
+
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card-header {
-    background-color: #007bff;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-  }
-  
-  .form-group {
+
+}
+
+.form-group {
+
     margin-bottom: 20px;
-  }
-  
-  label {
+
+}
+
+label {
+
     font-weight: bold;
-  }
-  
-  input[type="text"] {
+
+}
+
+input[type="text"] {
+
     width: 100%;
+
     padding: 10px;
+
     border: 1px solid #ccc;
+
     border-radius: 5px;
-  }
-  
-  button {
+
+}
+
+button {
+
     width: 100%;
+
     padding: 10px;
+
     background-color: #007bff;
+
     color: #fff;
+
     border: none;
+
     border-radius: 5px;
+
     cursor: pointer;
-  }
-  
-  button:hover {
+
+}
+
+button:hover {
+
     background-color: #0056b3;
-  }
-  
-  .btn-danger {
+
+}
+
+.btn-danger {
+
     background-color: #dc3545;
-  }
-  
-  .btn-danger:hover {
+
+}
+
+.btn-danger:hover {
+
     background-color: #c82333;
-  }
-  
+
+}
+
+/* FADE OUT PARA EL MENSAJE DE CODIGO INCORRECTO*/
+.fade-out {
+    animation: fadeOut 2s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* NEGRITA PARA EL MENSAJE DE CODIGO INCORRECTO*/
+.bold-text {
+    font-weight: bold;
+}
