@@ -30,6 +30,7 @@ app.use(express.json());
 
 // MySQL connection configuration
 
+
 const connection = mysql.createConnection({
   host: "localhost",
   user: "ismael",
@@ -276,9 +277,11 @@ app.post("/meterGmail", async (req, res) => {
 
     const values = [newId, correo, codigoEncriptado, "usuario"];
 
+
     connection.query(query, values, (error, result) => {
       if (error) {
         console.error("Error executing MySQL query:", error);
+
 
         res.status(500).json({ error: "Internal Server Error" });
 
@@ -299,12 +302,19 @@ app.post("/meterGmail", async (req, res) => {
     });
   });
 
+
   enviartoken(correo, codigoEncriptado);
 });
 
 app.post("/verificarCodigo", (req, res) => {
   const { codigo } = req.body;
   const { email } = req.body;
+
+  try {
+    const codigo2 = ncryptObject.encrypt(codigo);
+    const query = "SELECT * FROM usuarios WHERE codigo = ? AND correo = ?";
+
+    connection.query(query, [codigo2, email], (error, result) => {
 
   try {
     const codigo2 = ncryptObject.encrypt(codigo);
@@ -320,13 +330,17 @@ app.post("/verificarCodigo", (req, res) => {
       if (!result || result.length === 0) {
         console.log("Código incorrecto");
         res.status(401).json({ error: "Token Incorrecto" });
+        console.log("Código incorrecto");
+        res.status(401).json({ error: "Token Incorrecto" });
         return;
       }
 
       if (result[0].codigo === codigo2 && result[0].correo === email) {
+      if (result[0].codigo === codigo2 && result[0].correo === email) {
         console.log("El logueo es correcto");
         res.status(200).json({ message: "Token Correcto" });
       } else {
+        console.log("Código incorrecto");
         console.log("Código incorrecto");
         res.status(401).json({ error: "Token Incorrecto" });
       }
@@ -338,6 +352,7 @@ app.post("/verificarCodigo", (req, res) => {
 });
 
 // Cerrar la conexión MySQL cuando la aplicación se termine
+
 
 process.on("SIGINT", () => {
   connection.end();
