@@ -12,6 +12,7 @@ const ncryptObject = new ncrypt(_secretKey);
 const convert = require("js-sha256");
 const crypto = require('crypto');
 
+
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -131,27 +132,24 @@ app.delete("/eliminarEquipo/:nombreEquipo", (req, res) => {
   });
 });
 
-// Eliminar imagen de Cloudinary
+// Eliminar imagen de FileStack
 app.delete("/eliminarimagen/:eliminate", async (req, res) => {
     const { eliminate } = req.params;
     console.log(eliminate);
     const API_KEY = "AZOIMYcHQJq6ZI7YPI0BEz";
     const secretKey = "T5EHAT5TXZH6HJHUVBJRH5N6TE";
-    const policyObject = {"expiry":1701390600,"handle":eliminate,"call":["remove"]}
+    const policyObject = {"expiry":1701390600,"handle":eliminate,"call":["remove"]};
 
-  const base64Policy = btoa(JSON.stringify(policyObject));
-
-  console.log("base64Policy", base64Policy);
-    const policyAndKey = base64Policy + secretKey;
-    console.log("policyAndKey", policyAndKey);
+    const base64Policy = btoa(JSON.stringify(policyObject).toString());
+    console.log("base64",base64Policy)
     const signature = crypto.createHmac('sha256', secretKey);
     signature.update(base64Policy);
     const hmac256 = signature.digest('hex');
-    console.log("hmac256", hmac256);
+  console.log(hmac256);
 
   try {
     const response = await fetch(
-      `https://www.filestackapi.com/api/file/${eliminate}?key=${API_KEY}&policy=${base64Policy}&signature=${signature}`,
+      `https://www.filestackapi.com/api/file/${eliminate}?key=${API_KEY}&policy=${base64Policy}&signature=${hmac256}`,
       {
         method: "DELETE",
       }

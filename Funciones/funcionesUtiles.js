@@ -42,10 +42,4 @@ function enviartoken(correo, numeroAleatorio, res) {
     res.status(500).send("Error interno del servidor");
   }
 }
-
-
-const sha256 = (message) => {
-  const hash = CryptoJS.SHA256(message);
-  return hash.toString(CryptoJS.enc.Hex);
-};
 module.exports = { enviartoken, sha256 };
