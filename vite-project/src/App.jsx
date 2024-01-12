@@ -12,7 +12,6 @@ function App() {
 
   const location = useLocation();
   const { email2 } = location.state || {};
-  //insert into usuarios ("id", "usuarios", "password", "rol") VALUES (1, "ismaelgarciabougrine2@gmail.com", "5544", "administrador");
   const handleGet = () => {
     fetch("http://localhost:3000/futbol")
       .then((response) => response.text())

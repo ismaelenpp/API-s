@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import DragAndDrop from "./drag_and_drop";
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as filestack from 'filestack-js';
+import * as filestack from "filestack-js";
 
-const client = filestack.init('AZOIMYcHQJq6ZI7YPI0BEz');
+const client = filestack.init("AZOIMYcHQJq6ZI7YPI0BEz");
 
 const Formulario = ({ onSubmit }) => {
   const [equipo, setEquipo] = useState("");
@@ -117,7 +117,7 @@ const Formulario = ({ onSubmit }) => {
 
     setShowWarning(false);
 
-   // window.location.reload();
+    window.location.reload();
   };
 
   const handleImageDrop = (file) => {
@@ -150,7 +150,6 @@ const Formulario = ({ onSubmit }) => {
       return error;
     }
   };
-
 
   return (
     <div className="container mt-0">

@@ -92,7 +92,6 @@ const TableComponent = () => {
     setShowModal(false);
   };
 
-  // Función para filtrar la tabla
   const filteredData = tableData.filter((equipo) =>
     equipo.nombre.toLowerCase().includes(filterText.toLowerCase())
   );

@@ -8,22 +8,25 @@ const transporter = nodemailer.createTransport({
   port: 587,
   service: "Gmail",
   auth: {
-    user: "collakebab@gmail.com",
-    pass: "ikac zxxq yuoc jins",
+    user: "inetfut@gmail.com",
+    pass: "bahq gqex rrxo lthb",
   },
 });
 
 function enviartoken(correo, numeroAleatorio, res) {
   try {
     var correoDestino = correo;
-    var correoOrigen = "collakebab@gmail.com";
+    var correoOrigen = "inetfut@gmail.com";
     var mensaje = ncryptObject.decrypt(numeroAleatorio);
 
     const mailOptions = {
       from: correoOrigen,
       to: correoDestino,
-      subject: "Asunto del correo",
-      text: mensaje,
+      subject: "Código de acceso",
+      text:
+        "¡Bienvenido a InetFUT!\n\n\n" +
+        "Este es tu codigo para acceder a la aplicación: " +
+        mensaje,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
