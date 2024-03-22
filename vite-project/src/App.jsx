@@ -29,7 +29,7 @@ function App() {
 
   useEffect(() => {
     handleGet();
-  }, []);
+  });
 
   const handlePost = (equipo, liga, pais, descripcion, imagen) => {
     if (equipo && liga && pais && descripcion && imagen) {
