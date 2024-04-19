@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -73,14 +74,21 @@ function PantallaCodigo() {
                   </div>
 
                   <div className="mb-md-5 mt-md-4 pb-5">
-                    <h6 className="fw-bold mb-2 text-uppercase text-black">Login</h6>
+                    <h6 className="fw-bold mb-2 text-uppercase text-black">
+                      Login
+                    </h6>
                     <p className="text-black-50 mb-5">Introduce el codigo</p>
                     {codigoIncorrecto && (
-                      <div className={`text-danger bold-text fade-out`}>Código incorrecto</div>
+                      <div className={`text-danger bold-text fade-out`}>
+                        Código incorrecto
+                      </div>
                     )}
                     <form onSubmit={handleSubmit}>
                       <div className="form-outline form-white text-black mb-4">
-                        <label className="form-label" htmlFor="typeEmailX"></label>
+                        <label
+                          className="form-label"
+                          htmlFor="typeEmailX"
+                        ></label>
                         <input
                           type="text"
                           className="form-control"

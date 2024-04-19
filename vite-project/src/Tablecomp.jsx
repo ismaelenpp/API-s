@@ -23,7 +23,6 @@ const TableComponent = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
   const fetchData = () => {
     fetch("http://localhost:3000/futbol")
       .then((response) => response.json())
@@ -55,7 +54,13 @@ const TableComponent = () => {
       });
     window.location.reload();
   };
+  const handleEstadioClick = (row) => {
+    setEquipoSeleccionado(row);
 
+    if (row.nombre) {
+      setShowEstadio(true);
+    }
+  };
   const cancelDelete = () => {
     setDeleteConfirmation(false);
     setTeamToDelete("");
@@ -196,7 +201,7 @@ const TableComponent = () => {
               />
             </div>
             <div className="col-sm-12 col-md-4 col-xl-4">
-              <EstadioScreen />
+              <EstadioScreen selectedTeam={equipoSeleccionado} />
             </div>
           </div>
         </React.Fragment>
@@ -276,7 +281,7 @@ const TableComponent = () => {
                     />
                     <BtnEstadio
                       text={"🏟"}
-                      onClick={() => setShowEstadio(true)}
+                      onClick={() => handleEstadioClick(row)}
                       className={
                         "btn btn-outline-success button-separation me-2"
                       }

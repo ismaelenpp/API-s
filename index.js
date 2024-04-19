@@ -11,6 +11,7 @@ const _secretKey = "some-super-secret-key";
 const ncryptObject = new ncrypt(_secretKey);
 const convert = require("js-sha256");
 const crypto = require("crypto");
+const { Console, log } = require("console");
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -202,6 +203,44 @@ app.post("/verificarCodigo", (req, res) => {
     console.error("Unexpected error:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
+});
+app.post("/insertarFutbolista", (req, res) => {
+  const { nombre_completo, apodo, url_foto } = req.body;
+  const query = 
+    "INSERT INTO futbolistas (nombre_completo, apodo, url_foto) VALUES  (?, ?, ?)";
+  values = [nombre_completo, apodo, url_foto];
+  connection.query(query, values, (error, result) => {
+    if (error) {
+      console.error("Error al ejecutar la query sql: ", error);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+    const newFutbolista = {
+      nombre_completo,
+      apodo,
+      url_foto,
+    };
+    res.status(201).json(newFutbolista);
+  });
+});
+app.get("/futbolistas/:nombre_equipo", (req, res) => {
+  console.log(req);
+  const { nombre_equipo } = req.params;
+  console.log("---->", nombre_equipo);
+  const query = "SELECT * FROM futbolistas where nombre_equipo = ?";
+  values = [nombre_equipo];
+  connection.query(query, values, (error, results) => {
+    if (error) {
+      console.error("Error executing MySQL query:", error);
+
+      res.status(500).json({ error: "Internal Server Error" });
+
+      return;
+    }
+    const futbolistas = results;
+
+    res.status(200).json({ futbolistas });
+  });
 });
 
 // Cerrar la conexión MySQL cuando la aplicación se termine

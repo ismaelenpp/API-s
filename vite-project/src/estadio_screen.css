@@ -1,0 +1,41 @@
+.posiciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12%;
+    justify-content: center; /* Centrar elementos horizontalmente */
+}
+
+.portero, .defensa, .mediocampista, .delantero {
+    padding: 10px;
+    border: 1px solid black;
+    text-align: center;
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    margin-left: 25px;
+}
+
+.portero {
+    background-image: url('./images/PORv2.png');
+    margin-top: 80%;
+    
+}
+
+.defensa {
+    background-image: url('./images/DEFv2.png');
+}
+
+.mediocampista {
+    background-image: url('./images/MEDv2.png');
+}
+
+.delantero {
+    background-image: url('./images/DELv2.png');
+}
+
+@media screen and (max-width: 8454px) {
+    .portero{
+        margin-top: -80%;
+    }
+    }
